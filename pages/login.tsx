@@ -14,7 +14,7 @@ const Login: NextPage = () => {
   return (
     <main className="grid h-screen place-items-center">
       <div className="w-full">
-        <section className="card mx-auto w-full max-w-sm bg-base-100 shadow-xl">
+        <section className="card mx-auto w-full  max-w-sm bg-base-100 shadow-xl">
           <div className="flex items-center gap-2 px-10">
             <Image src={RibbonImg} alt="ribbon" className="mr-2" />
             <Image src={BinusImg} alt="binus" />
@@ -51,8 +51,8 @@ const Login: NextPage = () => {
         <footer className="footer footer-center mt-4 p-4 text-base-content">
           <div>
             <p>
-              Copyright © {new Date().getFullYear()} Research and Development
-              Team (RnD) <br />
+              Copyright © {new Date().getFullYear()} <br />
+              Research and Development Team (RnD) <br />
               Software Laboratory Center (SLC)
             </p>
           </div>
