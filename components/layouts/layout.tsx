@@ -117,11 +117,11 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
           </div>
         </nav>
 
-        {children}
+        <main className="container mx-auto p-8">{children}</main>
       </div>
 
       {menus.length > 0 && (
-        <nav className="drawer-side">
+        <nav className="drawer-side shadow-xl">
           <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
           <ul className="menu w-80 overflow-y-auto bg-base-100 p-4">
             {menus.map((menu) => (
