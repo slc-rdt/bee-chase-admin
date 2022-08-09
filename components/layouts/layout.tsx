@@ -21,7 +21,6 @@ interface IMenu {
 function useMenus(): IMenu[] {
   const router = useRouter();
   const { isReady, pathname, query, asPath } = router;
-  console.log(router);
 
   const isGameDetail = pathname.startsWith("/games/[id]");
   if (!isReady || !isGameDetail || !query.id) return [];
@@ -126,6 +125,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
           <ul className="menu w-80 overflow-y-auto bg-base-100 p-4">
             {menus.map((menu) => (
               <li
+                key={menu.path}
                 className={`${
                   menu.isActive && "bg-primary text-base-100"
                 } rounded-box`}
