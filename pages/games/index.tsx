@@ -1,7 +1,8 @@
+import { PlusIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import Layout from "../../components/layouts/layout";
 
-const GameIndex = () => {
+const GameIndexPage = () => {
   const games = Array.from({ length: 10 });
 
   return (
@@ -9,7 +10,12 @@ const GameIndex = () => {
       <main className="container mx-auto mt-8">
         <section className="flex justify-between">
           <h1 className="text-2xl font-bold">My Games</h1>
-          <button className="btn btn-primary">+ New Game</button>
+          <Link href="/games/new">
+            <button className="btn btn-primary gap-2">
+              <PlusIcon className="h-5 w-5" />
+              New Game
+            </button>
+          </Link>
         </section>
 
         <section className="grid grid-cols-1 gap-4">
@@ -40,4 +46,4 @@ const GameIndex = () => {
   );
 };
 
-export default GameIndex;
+export default GameIndexPage;

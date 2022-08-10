@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import BinusImg from "../public/binus.png";
 import RibbonImg from "../public/ribbon.png";
 
-const Login: NextPage = () => {
+const LoginPage: NextPage = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -62,4 +62,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
