@@ -1,6 +1,6 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import React, { ComponentProps, ComponentType } from "react";
-import useFileChooser from "../../hooks/useFileChooser";
+import useFileChooser from "../../libs/hooks/useFileChooser";
 
 const GameForm: ComponentType<ComponentProps<"div">> = () => {
   const openFileChooser = useFileChooser();

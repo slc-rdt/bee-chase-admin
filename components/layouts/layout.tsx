@@ -7,9 +7,85 @@ import {
   MenuIcon,
   UserGroupIcon,
 } from "@heroicons/react/outline";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
+
+const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
+  const sidebarMenus = useSidebarMenus();
+
+  return (
+    <div className="drawer-mobile drawer">
+      <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content flex flex-col">
+        <nav className="navbar bg-base-100 shadow-xl">
+          <div className="flex-1">
+            {sidebarMenus.length > 0 && (
+              <div className="flex-none lg:hidden">
+                <label
+                  htmlFor="my-drawer-3"
+                  className="btn btn-square btn-ghost"
+                >
+                  <MenuIcon className="inline-block h-6 w-6 stroke-current" />
+                </label>
+              </div>
+            )}
+
+            <Link href="/games">
+              <button className="btn btn-ghost text-xl normal-case">
+                BeeChase
+              </button>
+            </Link>
+          </div>
+
+          <div className="flex-none gap-2">
+            <div className="dropdown-end dropdown">
+              <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
+                <div className="w-10 rounded-full">
+                  <img src="https://placeimg.com/80/80/people" />
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+              >
+                <li>
+                  <button onClick={() => signOut()}>Logout</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <main className="container mx-auto p-8">{children}</main>
+      </div>
+
+      {sidebarMenus.length > 0 && (
+        <nav className="drawer-side shadow-xl">
+          <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
+          <ul className="menu w-80 overflow-y-auto bg-base-100 p-4">
+            {sidebarMenus.map((menu) => (
+              <li
+                key={menu.path}
+                className={`${
+                  menu.isActive && "bg-primary text-base-100"
+                } rounded-box`}
+              >
+                <Link href={menu.path}>
+                  <button>
+                    {menu.icon}
+                    {menu.label}
+                  </button>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  );
+};
 
 interface IMenu {
   label: string;
@@ -18,7 +94,7 @@ interface IMenu {
   isActive: boolean;
 }
 
-function useMenus(): IMenu[] {
+function useSidebarMenus(): IMenu[] {
   const router = useRouter();
   const { isReady, pathname, query, asPath } = router;
 
@@ -69,80 +145,5 @@ function useMenus(): IMenu[] {
     return menu;
   });
 }
-
-const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
-  const menus = useMenus();
-
-  return (
-    <div className="drawer drawer-mobile">
-      <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
-        <nav className="navbar bg-base-100 shadow-xl">
-          <div className="flex-1">
-            {menus.length > 0 && (
-              <div className="flex-none lg:hidden">
-                <label
-                  htmlFor="my-drawer-3"
-                  className="btn btn-ghost btn-square"
-                >
-                  <MenuIcon className="inline-block h-6 w-6 stroke-current" />
-                </label>
-              </div>
-            )}
-
-            <Link href="/games">
-              <button className="btn btn-ghost text-xl normal-case">
-                BeeChase
-              </button>
-            </Link>
-          </div>
-
-          <div className="flex-none gap-2">
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
-                <div className="w-10 rounded-full">
-                  <img src="https://placeimg.com/80/80/people" />
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
-              >
-                <li>
-                  <a>Logout</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-
-        <main className="container mx-auto p-8">{children}</main>
-      </div>
-
-      {menus.length > 0 && (
-        <nav className="drawer-side shadow-xl">
-          <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
-          <ul className="menu w-80 overflow-y-auto bg-base-100 p-4">
-            {menus.map((menu) => (
-              <li
-                key={menu.path}
-                className={`${
-                  menu.isActive && "bg-primary text-base-100"
-                } rounded-box`}
-              >
-                <Link href={menu.path}>
-                  <button>
-                    {menu.icon}
-                    {menu.label}
-                  </button>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
-    </div>
-  );
-};
 
 export default Layout;

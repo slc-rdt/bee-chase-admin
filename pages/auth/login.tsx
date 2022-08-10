@@ -1,14 +1,36 @@
 import { NextPage } from "next";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import BinusImg from "../public/binus.png";
-import RibbonImg from "../public/ribbon.png";
+import toast from "react-hot-toast";
+import BinusImg from "../../public/binus.png";
+import RibbonImg from "../../public/ribbon.png";
 
 const LoginPage: NextPage = () => {
+  const router = useRouter();
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = handleSubmit(async ({ email, password }) => {
+    setIsLoading(true);
+
+    const response = await signIn("credentials", {
+      redirect: false,
+      username: email,
+      password,
+    });
+
+    setIsLoading(false);
+
+    if (response?.ok) {
+      toast.success("Login success.");
+      router.push("/games");
+    } else {
+      toast.error("Invalid credentials.");
+    }
   });
 
   return (
@@ -25,9 +47,9 @@ const LoginPage: NextPage = () => {
             className="card-body items-center text-center"
           >
             <input
-              type="text"
-              {...register("nim")}
-              placeholder="NIM"
+              type="email"
+              {...register("email")}
+              placeholder="Email"
               className="input input-bordered w-full max-w-xs"
               required
             />
@@ -41,7 +63,11 @@ const LoginPage: NextPage = () => {
             />
 
             <div className="card-actions w-full">
-              <button type="submit" className="btn btn-primary w-full">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`btn btn-primary w-full ${isLoading && "loading"}`}
+              >
                 Login
               </button>
             </div>
