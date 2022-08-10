@@ -11,7 +11,6 @@ import RibbonImg from "../../public/ribbon.png";
 const LoginPage: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm();
-
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = handleSubmit(async ({ email, password }) => {

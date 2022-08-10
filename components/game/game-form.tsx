@@ -1,20 +1,48 @@
-import { PlusIcon } from "@heroicons/react/solid";
-import React, { ComponentProps, ComponentType } from "react";
-import useFileChooser from "../../libs/hooks/useFileChooser";
+import { ComponentProps, ComponentType } from "react";
+import { useForm } from "react-hook-form";
+import CreateGameDto from "../../libs/dtos/create-game-dto";
+import UpdateGameDto from "../../libs/dtos/update-game-dto";
 
-const GameForm: ComponentType<ComponentProps<"div">> = () => {
-  const openFileChooser = useFileChooser();
+type GameFormValues = CreateGameDto | UpdateGameDto;
 
-  const onAddPhoto = async () => {
-    const files = await openFileChooser();
-    console.log({ files });
-  };
+// export interface GameFormValues {
+//   // photo: File;
+//   name: string;
+//   description: string;
+//   password: string;
+// }
+
+interface IGameForm {
+  game?: any;
+  isLoading?: boolean;
+  onGameFormSubmit: (data: GameFormValues) => void;
+}
+
+const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
+  game,
+  isLoading,
+  onGameFormSubmit,
+}) => {
+  // const [photo, setPhoto] = useState<File | null>(null);
+  const { register, handleSubmit } = useForm<GameFormValues>();
+  // const openFileChooser = useFileChooser();
+
+  // const onAddPhoto = async () => {
+  //   const files = await openFileChooser();
+  //   const photo = files?.item(0);
+  //   if (photo) setPhoto(photo);
+  // };
+
+  const onSubmit = handleSubmit((data) => {
+    // if (photo) data.photo = photo;
+    onGameFormSubmit(data);
+  });
 
   return (
     <div className="card w-full bg-base-100 shadow-xl">
-      <div className="card-body">
+      <form onSubmit={onSubmit} className="card-body">
         <div className="grid grid-cols-1 gap-4">
-          <section>
+          {/* <section>
             <h3 className="mb-2 font-medium">Photo</h3>
 
             <div className="flex flex-wrap gap-4">
@@ -35,13 +63,18 @@ const GameForm: ComponentType<ComponentProps<"div">> = () => {
                 </p>
               </div>
             </div>
-          </section>
+          </section> */}
 
           <section className="form-control w-full">
             <label className="label">
               <span className="label-text">Name</span>
             </label>
-            <input type="text" className="input input-bordered w-full" />
+            <input
+              {...register("name")}
+              type="text"
+              disabled={isLoading}
+              className="input input-bordered w-full"
+            />
             <label className="label">
               <span className="label-text-alt">
                 Every Experience is unique. Give yours a name participants can
@@ -54,7 +87,11 @@ const GameForm: ComponentType<ComponentProps<"div">> = () => {
             <label className="label">
               <span className="label-text">Description</span>
             </label>
-            <textarea className="textarea textarea-bordered h-24"></textarea>
+            <textarea
+              {...register("description")}
+              disabled={isLoading}
+              className="textarea textarea-bordered h-24"
+            ></textarea>
             <label className="label">
               <span className="label-text-alt">
                 Use this space to describe and build excitement for your
@@ -68,7 +105,12 @@ const GameForm: ComponentType<ComponentProps<"div">> = () => {
             <label className="label">
               <span className="label-text">Password (Optional)</span>
             </label>
-            <input type="text" className="input input-bordered w-full" />
+            <input
+              {...register("password")}
+              type="password"
+              disabled={isLoading}
+              className="input input-bordered w-full"
+            />
             <label className="label">
               <span className="label-text-alt">
                 Don't forget to share it with your participants!
@@ -78,9 +120,15 @@ const GameForm: ComponentType<ComponentProps<"div">> = () => {
         </div>
 
         <div className="card-actions justify-end">
-          <button className="btn btn-primary">Save</button>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`btn btn-primary ${isLoading && "loading"}`}
+          >
+            Save
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

@@ -22,6 +22,7 @@ export default NextAuth({
       },
       async authorize(credentials, _req) {
         const authService = useService(AuthService);
+
         const user = await authService.login({
           email: credentials?.username ?? "",
           password: credentials?.password ?? "",
@@ -42,4 +43,11 @@ export default NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async session({ session, token }) {
+      // @ts-ignore https://github.com/nextauthjs/next-auth/discussions/2762#discussioncomment-1332952
+      session.user = token.user;
+      return session;
+    },
+  },
 });

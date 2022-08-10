@@ -10,7 +10,7 @@ const GameIndexPage = () => {
       <main className="container mx-auto mt-8">
         <section className="flex justify-between">
           <h1 className="text-2xl font-bold">My Games</h1>
-          <Link href="/games/new">
+          <Link href="/games/create">
             <button className="btn btn-primary gap-2">
               <PlusIcon className="h-5 w-5" />
               New Game
