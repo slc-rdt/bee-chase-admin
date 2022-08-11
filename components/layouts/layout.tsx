@@ -5,12 +5,12 @@ import {
   FilmIcon,
   FlagIcon,
   MenuIcon,
-  UserGroupIcon
+  UserGroupIcon,
 } from "@heroicons/react/outline";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType, useEffect, useState } from "react";
 
 const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
   };
 
   return (
-    <div className="drawer drawer-mobile">
+    <div className="drawer-mobile drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <nav className="navbar bg-base-100 shadow-xl">
@@ -34,7 +34,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
               <div className="flex-none lg:hidden">
                 <label
                   htmlFor="my-drawer-3"
-                  className="btn btn-ghost btn-square"
+                  className="btn btn-square btn-ghost"
                 >
                   <MenuIcon className="inline-block h-6 w-6 stroke-current" />
                 </label>
@@ -49,7 +49,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
           </div>
 
           <div className="flex-none gap-2">
-            <div className="dropdown dropdown-end">
+            <div className="dropdown-end dropdown">
               <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
                 <div className="w-10 rounded-full">
                   <img src="https://placeimg.com/80/80/people" />
@@ -105,12 +105,10 @@ interface IMenu {
 
 function useSidebarMenus(): IMenu[] {
   const router = useRouter();
+  const [menus, setMenus] = useState<IMenu[]>([]);
   const { isReady, pathname, query, asPath } = router;
 
-  const isGameDetail = pathname.startsWith("/games/[id]");
-  if (!isReady || !isGameDetail || !query.id) return [];
-
-  return [
+  const originalMenus: IMenu[] = [
     {
       label: "Details",
       path: `/games/${query.id}/edit`,
@@ -147,12 +145,32 @@ function useSidebarMenus(): IMenu[] {
       icon: <ClockIcon className="h-6 w-6" />,
       isActive: false,
     },
-  ].map((menu) => {
-    const sanitizedPath = new URL(menu.path, location.href).pathname;
-    const sanitizedAsPath = new URL(asPath, location.href).pathname;
-    menu.isActive = sanitizedPath.startsWith(sanitizedAsPath);
-    return menu;
-  });
+  ];
+
+  useEffect(() => {
+    const isGameDetail = pathname.startsWith("/games/[id]");
+
+    if (
+      typeof window === "undefined" ||
+      !isReady ||
+      !isGameDetail ||
+      !query.id
+    ) {
+      setMenus([]);
+      return;
+    }
+
+    setMenus(
+      originalMenus.map((menu) => {
+        const sanitizedPath = new URL(menu.path, location.href).pathname;
+        const sanitizedAsPath = new URL(asPath, location.href).pathname;
+        menu.isActive = sanitizedPath.startsWith(sanitizedAsPath);
+        return menu;
+      })
+    );
+  }, [isReady, pathname, query.id]);
+
+  return menus;
 }
 
 export default Layout;
