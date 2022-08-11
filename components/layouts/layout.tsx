@@ -5,7 +5,7 @@ import {
   FilmIcon,
   FlagIcon,
   MenuIcon,
-  UserGroupIcon,
+  UserGroupIcon
 } from "@heroicons/react/outline";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
