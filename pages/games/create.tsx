@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 import GameForm from "../../components/game/game-form";
 import Layout from "../../components/layouts/layout";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
-import useLoading from "../../libs/hooks/useLoading";
-import useService from "../../libs/hooks/useService";
+import useLoading from "../../libs/hooks/use-loading";
+import useService from "../../libs/hooks/use-service";
 import GameService from "../../libs/services/game-service";
 
 const GameCreatePage: NextPage = () => {
