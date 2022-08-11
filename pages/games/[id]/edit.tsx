@@ -63,7 +63,7 @@ const GameDetailEditPage = ({
     await doAction(async () => {
       return await gameService.update({ ...game, ...data });
     });
-    router.reload();
+    router.push(router.asPath);
   };
 
   return (

@@ -56,7 +56,7 @@ const GameIndexPage = ({
   const onDelete = (game: Game) => async (e: MouseEvent) => {
     e.preventDefault();
     await doAction(async () => await gameService.delete(game));
-    router.reload();
+    router.push(router.asPath);
   };
 
   return (
@@ -78,7 +78,7 @@ const GameIndexPage = ({
           )}
 
           {paginatedGames?.data.map((game) => (
-            <Link href={`/games/${game.id}/edit`} key={game.id}>
+            <Link href={`/games/${game.id}/missions`} key={game.id}>
               <div className="card w-full cursor-pointer bg-base-100 shadow-xl">
                 <div className="card-body">
                   <div className="flex items-center gap-4">

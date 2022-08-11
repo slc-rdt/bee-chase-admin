@@ -1,7 +1,8 @@
 import React from "react";
+import Layout from "../../../components/layouts/layout";
 
 const Missions = () => {
-  return <div>Missions</div>;
+  return <Layout>Missions</Layout>;
 };
 
 export default Missions;
