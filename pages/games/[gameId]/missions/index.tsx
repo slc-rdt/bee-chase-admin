@@ -1,19 +1,55 @@
-import { PlusIcon } from "@heroicons/react/solid";
-import { GetServerSideProps } from "next";
+import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layouts/layout";
+import LoginDto from "../../../../libs/dtos/login-dto";
+import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
+import Mission from "../../../../libs/models/mission";
+import MissionService from "../../../../libs/services/mission-service";
+import { authOptions } from "../../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
-  {},
-  { id: string }
+  { paginatedMissions?: PaginateResponseDto<Mission> },
+  { gameId: string }
 > = async (context) => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session?.user) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const user = session.user as LoginDto;
+  const missionService = new MissionService(user.access_token);
+
+  const gameId = context.params?.gameId ?? "";
+  const page = 1;
+
+  const paginatedMissions = await missionService.getAllPaginated(gameId, {
+    page,
+  });
+  console.log(paginatedMissions);
   return {
-    props: {},
+    props: {
+      paginatedMissions,
+    },
   };
 };
 
-const MissionsPage = () => {
+const MissionsPage = ({
+  paginatedMissions,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
 
   return (
@@ -28,37 +64,28 @@ const MissionsPage = () => {
         </Link>
       </section>
 
-      <section className="rounded-box mt-4 overflow-x-auto shadow-xl">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-            </tr>
-            <tr>
-              <th>2</th>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>Purple</td>
-            </tr>
-            <tr>
-              <th>3</th>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>Red</td>
-            </tr>
-          </tbody>
-        </table>
+      <section className="grid grid-cols-1 gap-4">
+        {paginatedMissions?.data.length === 0 && (
+          <h2 className="font-lg text-center font-medium">No missions yet.</h2>
+        )}
+
+        {paginatedMissions?.data.map((mission) => (
+          <div key={mission.id} className="card w-full bg-base-100 shadow-xl">
+            <div className="card-body">
+              <h2 className="card-title capitalize">{mission.name}</h2>
+              <p>{mission.description}</p>
+
+              <div className="card-actions justify-end">
+                <button className="btn btn-secondary gap-2">
+                  <PencilIcon className="h-5 w-5" /> Edit
+                </button>
+                <button className="btn btn-error gap-2">
+                  <TrashIcon className="h-5 w-5" /> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </section>
     </Layout>
   );
