@@ -3,8 +3,8 @@ import { unstable_getServerSession } from "next-auth";
 import { useRouter } from "next/router";
 import GameForm from "../../../components/game/game-form";
 import Layout from "../../../components/layouts/layout";
-import CreateGameDto from "../../../libs/dtos/create-game-dto";
 import LoginDto from "../../../libs/dtos/login-dto";
+import UpdateGameDto from "../../../libs/dtos/update-game-dto";
 import useLoading from "../../../libs/hooks/use-loading";
 import useService from "../../../libs/hooks/use-service";
 import Game from "../../../libs/models/game";
@@ -59,14 +59,10 @@ const GameDetailEditPage = ({
   const gameService = useService(GameService);
   const { isLoading, doAction } = useLoading();
 
-  const onGameFormSubmit = async (data: CreateGameDto) => {
-    await doAction(
-      async () =>
-        await gameService.update({
-          ...game,
-          ...data,
-        })
-    );
+  const onGameFormSubmit = async (data: UpdateGameDto) => {
+    await doAction(async () => {
+      return await gameService.update({ ...game, ...data });
+    });
     router.reload();
   };
 
