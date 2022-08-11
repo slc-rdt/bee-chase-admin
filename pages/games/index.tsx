@@ -7,6 +7,8 @@ import { MouseEvent } from "react";
 import Layout from "../../components/layouts/layout";
 import LoginDto from "../../libs/dtos/login-dto";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
+import useLoading from "../../libs/hooks/useLoading";
+import useService from "../../libs/hooks/useService";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
 import { authOptions } from "../api/auth/[...nextauth]";
@@ -47,13 +49,13 @@ const GameIndexPage = ({
   page,
   paginatedGames,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const gameService = new GameService(user?.access_token);
-
+  const gameService = useService(GameService);
   const router = useRouter();
+  const { isLoading, doAction } = useLoading();
 
   const onDelete = (game: Game) => async (e: MouseEvent) => {
     e.preventDefault();
-    await gameService.delete(game);
+    await doAction(async () => await gameService.delete(game));
     router.reload();
   };
 
@@ -90,9 +92,10 @@ const GameIndexPage = ({
 
                     <div className="flex flex-grow justify-end">
                       <button
+                        disabled={isLoading}
                         onClick={onDelete(game)}
                         type="button"
-                        className="btn btn-error"
+                        className={`btn btn-error ${isLoading && "loading"}`}
                       >
                         Delete
                       </button>

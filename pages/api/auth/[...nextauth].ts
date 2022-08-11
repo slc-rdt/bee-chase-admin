@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import useService from "../../../libs/hooks/useService";
 import AuthService from "../../../libs/services/auth-service";
 
 export const authOptions: NextAuthOptions = {
@@ -16,7 +15,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, _req) {
-        const authService = useService(AuthService);
+        const authService = new AuthService();
 
         return await authService.login({
           username: credentials?.username ?? "",
