@@ -107,55 +107,51 @@ function useSidebarMenus(): IMenu[] {
   const router = useRouter();
   const [menus, setMenus] = useState<IMenu[]>([]);
   const { isReady, pathname, query, asPath } = router;
+  const gameId = query.gameId;
 
   const originalMenus: IMenu[] = [
     {
       label: "Details",
-      path: `/games/${query.id}/edit`,
+      path: `/games/${gameId}/edit`,
       icon: <ClipboardIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Missions",
-      path: `/games/${query.id}/missions`,
+      path: `/games/${gameId}/missions`,
       icon: <FlagIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Script",
-      path: `/games/${query.id}/script`,
+      path: `/games/${gameId}/script`,
       icon: <FilmIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Branding",
-      path: `/games/${query.id}/branding`,
+      path: `/games/${gameId}/branding`,
       icon: <ColorSwatchIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Participants",
-      path: `/games/${query.id}/participants`,
+      path: `/games/${gameId}/participants`,
       icon: <UserGroupIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Start & End",
-      path: `/games/${query.id}/start-end`,
+      path: `/games/${gameId}/start-end`,
       icon: <ClockIcon className="h-6 w-6" />,
       isActive: false,
     },
   ];
 
   useEffect(() => {
-    const isGameDetail = pathname.startsWith("/games/[id]");
+    const isGameDetail = pathname.startsWith("/games/[gameId]");
 
-    if (
-      typeof window === "undefined" ||
-      !isReady ||
-      !isGameDetail ||
-      !query.id
-    ) {
+    if (typeof window === "undefined" || !isReady || !isGameDetail || !gameId) {
       setMenus([]);
       return;
     }
@@ -164,11 +160,11 @@ function useSidebarMenus(): IMenu[] {
       originalMenus.map((menu) => {
         const sanitizedPath = new URL(menu.path, location.href).pathname;
         const sanitizedAsPath = new URL(asPath, location.href).pathname;
-        menu.isActive = sanitizedPath.startsWith(sanitizedAsPath);
+        menu.isActive = sanitizedAsPath.startsWith(sanitizedPath);
         return menu;
       })
     );
-  }, [isReady, pathname, query.id]);
+  }, [isReady, pathname, gameId]);
 
   return menus;
 }
