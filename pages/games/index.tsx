@@ -1,9 +1,61 @@
 import { PlusIcon } from "@heroicons/react/solid";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { MouseEvent } from "react";
 import Layout from "../../components/layouts/layout";
+import LoginDto from "../../libs/dtos/login-dto";
+import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
+import Game from "../../libs/models/game";
+import GameService from "../../libs/services/game-service";
+import { authOptions } from "../api/auth/[...nextauth]";
 
-const GameIndexPage = () => {
-  const games = Array.from({ length: 10 });
+export const getServerSideProps: GetServerSideProps<{
+  user?: LoginDto;
+  page?: number;
+  paginatedGames?: PaginateResponseDto<Game>;
+}> = async (context) => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session?.user)
+    return {
+      props: {},
+      redirect: { destination: "/auth/login", permanent: false },
+    };
+
+  const user = session.user as LoginDto;
+  const gameService = new GameService(user.access_token);
+  const page = Number(context.query.page ?? 1);
+  const paginatedGames = await gameService.getAllPaginated({ page });
+
+  return {
+    props: {
+      user,
+      page,
+      paginatedGames,
+    },
+  };
+};
+
+const GameIndexPage = ({
+  user,
+  page,
+  paginatedGames,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const gameService = new GameService(user?.access_token);
+
+  const router = useRouter();
+
+  const onDelete = (game: Game) => async (e: MouseEvent) => {
+    e.preventDefault();
+    await gameService.delete(game);
+    router.reload();
+  };
 
   return (
     <Layout>
@@ -18,9 +70,13 @@ const GameIndexPage = () => {
           </Link>
         </section>
 
-        <section className="grid grid-cols-1 gap-4">
-          {games.map((_, idx) => (
-            <Link href={`/games/${idx}/edit`} key={idx}>
+        <section className="mt-4 grid grid-cols-1 gap-4">
+          {paginatedGames?.data.length === 0 && (
+            <h2 className="font-lg text-center font-medium">No games yet.</h2>
+          )}
+
+          {paginatedGames?.data.map((game) => (
+            <Link href={`/games/${game.id}/edit`} key={game.id}>
               <div className="card w-full cursor-pointer bg-base-100 shadow-xl">
                 <div className="card-body">
                   <div className="flex items-center gap-4">
@@ -30,10 +86,16 @@ const GameIndexPage = () => {
                       </div>
                     </div>
 
-                    <h2 className="card-title">Game #{idx + 1}</h2>
+                    <h2 className="card-title">{game.name}</h2>
 
                     <div className="flex flex-grow justify-end">
-                      <button className="btn btn-error">Delete</button>
+                      <button
+                        onClick={onDelete(game)}
+                        type="button"
+                        className="btn btn-error"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </div>

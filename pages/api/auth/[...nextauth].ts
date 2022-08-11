@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import useService from "../../../libs/hooks/useService";
 import AuthService from "../../../libs/services/auth-service";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -32,8 +32,11 @@ export default NextAuth({
       return session;
     },
     async jwt({ token, user }) {
-      if (user) token.user = user;
+      if (user)
+        token.user = user;
       return token;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

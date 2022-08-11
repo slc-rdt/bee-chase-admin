@@ -1,17 +1,20 @@
 import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React from "react";
 import toast from "react-hot-toast";
 import GameForm from "../../components/game/game-form";
 import Layout from "../../components/layouts/layout";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
+import LoginDto from "../../libs/dtos/login-dto";
 import useLoading from "../../libs/hooks/useLoading";
-import useService from "../../libs/hooks/useService";
 import GameService from "../../libs/services/game-service";
 
 const GameCreatePage: NextPage = () => {
   const router = useRouter();
-  const gameService = useService(GameService);
+  const { data, status } = useSession();
+  const user = data?.user ? (data.user as LoginDto) : null;
+  const gameService = new GameService(user?.access_token);
+
   const { isLoading, doAction } = useLoading();
 
   const onGameFormSubmit = async (data: CreateGameDto) => {
@@ -31,7 +34,7 @@ const GameCreatePage: NextPage = () => {
     <Layout>
       <h2 className="text-3xl font-bold">Details</h2>
 
-      <GameForm isLoading={isLoading} onGameFormSubmit={onGameFormSubmit} />
+      <GameForm isLoading={isLoading || status === 'loading'} onGameFormSubmit={onGameFormSubmit} />
     </Layout>
   );
 };
