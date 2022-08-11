@@ -1,5 +1,6 @@
-export default interface Game {
-  id: string;
+import BaseModel from "./base-model";
+
+export default interface Game extends BaseModel {
   access_code: string;
   name: string;
   description: string;
