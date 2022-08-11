@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<{
   };
 };
 
-const GameIndexPage = ({
+const GamesPage = ({
   user,
   page,
   paginatedGames,
@@ -111,4 +111,4 @@ const GameIndexPage = ({
   );
 };
 
-export default GameIndexPage;
+export default GamesPage;
