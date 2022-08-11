@@ -2,6 +2,7 @@ import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
 import UpdateGameDto from "../../libs/dtos/update-game-dto";
+import Game from "../../libs/models/game";
 
 type GameFormValues = CreateGameDto | UpdateGameDto;
 
@@ -13,7 +14,7 @@ type GameFormValues = CreateGameDto | UpdateGameDto;
 // }
 
 interface IGameForm {
-  game?: any;
+  game?: Game;
   isLoading?: boolean;
   onGameFormSubmit: (data: GameFormValues) => void;
 }
@@ -74,6 +75,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
               type="text"
               disabled={isLoading}
               className="input input-bordered w-full"
+              defaultValue={game?.name}
             />
             <label className="label">
               <span className="label-text-alt">
@@ -91,6 +93,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
               {...register("description")}
               disabled={isLoading}
               className="textarea textarea-bordered h-24"
+              defaultValue={game?.description}
             ></textarea>
             <label className="label">
               <span className="label-text-alt">
@@ -110,6 +113,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
               type="password"
               disabled={isLoading}
               className="input input-bordered w-full"
+              defaultValue={game?.password}
             />
             <label className="label">
               <span className="label-text-alt">

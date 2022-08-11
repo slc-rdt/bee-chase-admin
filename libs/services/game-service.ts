@@ -13,13 +13,31 @@ export default class GameService extends AbstractService {
     return data;
   }
 
+  public async getOneById(id: string) {
+    const { data } = await this.axios.get<Game>(`${this.apiUrl}/games/${id}`);
+    return data;
+  }
+
   public async create(payload: CreateGameDto) {
-    const { data } = await this.axios.post<Game>(`${this.apiUrl}/games`, payload);
+    const { data } = await this.axios.post<Game>(
+      `${this.apiUrl}/games`,
+      payload
+    );
+    return data;
+  }
+
+  public async update(game: Game) {
+    const { data } = await this.axios.put<Game>(
+      `${this.apiUrl}/games/${game.id}`,
+      game
+    );
     return data;
   }
 
   public async delete(game: Game) {
-    const { data } = await this.axios.delete<Game>(`${this.apiUrl}/games/${game.id}`);
+    const { data } = await this.axios.delete<Game>(
+      `${this.apiUrl}/games/${game.id}`
+    );
     return data;
   }
 }
