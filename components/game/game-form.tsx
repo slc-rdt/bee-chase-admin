@@ -76,6 +76,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
               disabled={isLoading}
               className="input input-bordered w-full"
               defaultValue={game?.name}
+              required
             />
             <label className="label">
               <span className="label-text-alt">
@@ -94,6 +95,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
               disabled={isLoading}
               className="textarea textarea-bordered h-24"
               defaultValue={game?.description}
+              required
             ></textarea>
             <label className="label">
               <span className="label-text-alt">
