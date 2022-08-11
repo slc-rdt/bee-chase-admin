@@ -1,28 +1,30 @@
 import { NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import useLoading from "../../libs/hooks/useLoading";
 import BinusImg from "../../public/binus.png";
 import RibbonImg from "../../public/ribbon.png";
 
+interface LoginFormValues {
+  username: string;
+  password: string;
+}
+
 const LoginPage: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
-  const [isLoading, setIsLoading] = useState(false);
+  const { register, handleSubmit } = useForm<LoginFormValues>();
+  const { isLoading, doAction } = useLoading();
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    setIsLoading(true);
-
-    const response = await signIn("credentials", {
-      redirect: false,
-      username: email,
-      password,
+  const onSubmit = handleSubmit(async (data) => {
+    const response = await doAction(async () => {
+      return await signIn("credentials", {
+        redirect: false,
+        ...data,
+      });
     });
-
-    setIsLoading(false);
 
     if (response?.ok) {
       toast.success("Login success.");
@@ -46,9 +48,9 @@ const LoginPage: NextPage = () => {
             className="card-body items-center text-center"
           >
             <input
-              type="email"
-              {...register("email")}
-              placeholder="Email"
+              type="text"
+              {...register("username")}
+              placeholder="NIM"
               className="input input-bordered w-full max-w-xs"
               required
             />
