@@ -1,6 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 import GameForm from "../../../components/game/game-form";
 import Layout from "../../../components/layouts/layout";
 import LoginDto from "../../../libs/dtos/login-dto";
@@ -13,7 +14,7 @@ import { authOptions } from "../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game },
-  { id: string }
+  { gameId: string }
 > = async (context) => {
   const session = await unstable_getServerSession(
     context.req,
@@ -33,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const user = session.user as LoginDto;
   const gameService = new GameService(user.access_token);
-  const game = await gameService.getOneById(context.params?.id ?? "");
+  const game = await gameService.getOneById(context.params?.gameId ?? "");
 
   if (!game) {
     return {
@@ -60,15 +61,20 @@ const GameDetailEditPage = ({
   const { isLoading, doAction } = useLoading();
 
   const onGameFormSubmit = async (data: UpdateGameDto) => {
-    await doAction(async () => {
-      return await gameService.update({ ...game, ...data });
-    });
+    await toast.promise(
+      doAction(async () => await gameService.update({ ...game, ...data })),
+      {
+        loading: "Updating game...",
+        success: "Game saved!",
+        error: "Failed to save game.",
+      }
+    );
     router.push(router.asPath);
   };
 
   return (
     <Layout>
-      <h2 className="text-3xl font-bold">Details</h2>
+      <h2 className="mb-2 text-3xl font-bold">Details</h2>
       <GameForm
         game={game}
         isLoading={isLoading}
