@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps<
   const paginatedMissions = await missionService.getAllPaginated(gameId, {
     page,
   });
-  console.log(paginatedMissions);
+
   return {
     props: {
       paginatedMissions,
@@ -51,6 +51,16 @@ const MissionsPage = ({
   paginatedMissions,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+
+  const gameId = router.query.gameId;
+
+  const onEdit = (mission: Mission) => {
+    router.push(`/games/${gameId}/missions/${mission.id}/edit`);
+  };
+
+  const onDelete = (mission: Mission) => {
+    router.push(`/games/${gameId}/missions`);
+  };
 
   return (
     <Layout>
@@ -76,10 +86,16 @@ const MissionsPage = ({
               <p>{mission.description}</p>
 
               <div className="card-actions justify-end">
-                <button className="btn btn-secondary gap-2">
+                <button
+                  onClick={() => onEdit(mission)}
+                  className="btn btn-secondary gap-2"
+                >
                   <PencilIcon className="h-5 w-5" /> Edit
                 </button>
-                <button className="btn btn-error gap-2">
+                <button
+                  onClick={() => onDelete(mission)}
+                  className="btn btn-error gap-2"
+                >
                   <TrashIcon className="h-5 w-5" /> Delete
                 </button>
               </div>

@@ -1,6 +1,6 @@
 import MissionData from "../models/mission-data";
 
-export default interface CreateMissionDto {
+export default interface UpdateMissionDto {
   name: string;
   point_value: number;
   description: string;

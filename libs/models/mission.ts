@@ -1,10 +1,5 @@
 import BaseModel from "./base-model";
-
-interface MissionData {
-  accepted_answers?: string[];
-  latitude?: number;
-  longitude?: number;
-}
+import GameMission from "./game-mission";
 
 export default interface Mission extends BaseModel {
   name: string;
@@ -14,5 +9,6 @@ export default interface Mission extends BaseModel {
   attached_link: string;
   shown_in_feed: boolean;
   answer_type: number;
-  mission_data: MissionData;
+  mission_data: string;
+  pivot: GameMission;
 }

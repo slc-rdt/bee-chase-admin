@@ -12,7 +12,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useEffect, useState } from "react";
 
-const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
+const Layout: ComponentType<ComponentProps<"div">> = ({
+  children,
+  ...rest
+}) => {
   const router = useRouter();
   const sidebarMenus = useSidebarMenus();
 
@@ -25,7 +28,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
   };
 
   return (
-    <div className="drawer-mobile drawer">
+    <div className="drawer drawer-mobile" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <nav className="navbar bg-base-100 shadow-xl">
@@ -34,7 +37,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
               <div className="flex-none lg:hidden">
                 <label
                   htmlFor="my-drawer-3"
-                  className="btn btn-square btn-ghost"
+                  className="btn btn-ghost btn-square"
                 >
                   <MenuIcon className="inline-block h-6 w-6 stroke-current" />
                 </label>
@@ -49,7 +52,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({ children }) => {
           </div>
 
           <div className="flex-none gap-2">
-            <div className="dropdown-end dropdown">
+            <div className="dropdown dropdown-end">
               <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
                 <div className="w-10 rounded-full">
                   <img src="https://placeimg.com/80/80/people" />

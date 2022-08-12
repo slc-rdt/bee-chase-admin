@@ -18,30 +18,44 @@ export const getServerSideProps: GetServerSideProps<{
   page?: number;
   paginatedGames?: PaginateResponseDto<Game>;
 }> = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  try {
+    const session = await unstable_getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  if (!session?.user)
+    if (!session?.user) {
+      return {
+        props: {},
+        redirect: {
+          destination: "/auth/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const user = session.user as LoginDto;
+    const gameService = new GameService(user.access_token);
+    const page = Number(context.query.page ?? 1);
+    const paginatedGames = await gameService.getAllPaginated({ page });
+
+    return {
+      props: {
+        user,
+        page,
+        paginatedGames,
+      },
+    };
+  } catch (error) {
     return {
       props: {},
-      redirect: { destination: "/auth/login", permanent: false },
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
     };
-
-  const user = session.user as LoginDto;
-  const gameService = new GameService(user.access_token);
-  const page = Number(context.query.page ?? 1);
-  const paginatedGames = await gameService.getAllPaginated({ page });
-
-  return {
-    props: {
-      user,
-      page,
-      paginatedGames,
-    },
-  };
+  }
 };
 
 const GamesPage = ({

@@ -23,6 +23,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
   game,
   isLoading,
   onGameFormSubmit,
+  ...rest
 }) => {
   // const [photo, setPhoto] = useState<File | null>(null);
   const { register, handleSubmit } = useForm<GameFormValues>();
@@ -40,7 +41,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
   });
 
   return (
-    <div className="card w-full bg-base-100 shadow-xl">
+    <div className="card w-full bg-base-100 shadow-xl" {...rest}>
       <form onSubmit={onSubmit} className="card-body">
         <div className="grid grid-cols-1 gap-4">
           {/* <section>
