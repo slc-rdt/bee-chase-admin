@@ -5,6 +5,6 @@ export default interface Game extends BaseModel {
   name: string;
   description: string;
   password: string;
-  start_time: Date;
-  end_time: Date;
+  start_time: Date | string | null; // ISO date string
+  end_time: Date | string | null; // ISO date string
 }

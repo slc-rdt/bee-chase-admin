@@ -131,12 +131,12 @@ function useSidebarMenus(): IMenu[] {
       icon: <FilmIcon className="h-6 w-6" />,
       isActive: false,
     },
-    {
-      label: "Branding",
-      path: `/games/${gameId}/branding`,
-      icon: <ColorSwatchIcon className="h-6 w-6" />,
-      isActive: false,
-    },
+    // {
+    //   label: "Branding",
+    //   path: `/games/${gameId}/branding`,
+    //   icon: <ColorSwatchIcon className="h-6 w-6" />,
+    //   isActive: false,
+    // },
     {
       label: "Participants",
       path: `/games/${gameId}/participants`,
