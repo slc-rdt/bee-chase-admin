@@ -28,8 +28,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
     ? JSON.parse(mission.mission_data)
     : {};
 
-  console.log(missionData);
-
   const { register, handleSubmit, watch } = useForm<MissionFormValues>({
     defaultValues: {
       mission_data: missionData,

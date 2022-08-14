@@ -32,8 +32,6 @@ const GameTeamCard: ComponentType<ComponentProps<"div"> & ITeamCard> = ({
     router.push(router.asPath);
   };
 
-  console.log(gameTeam);
-
   return (
     <div
       key={gameTeam.id}
