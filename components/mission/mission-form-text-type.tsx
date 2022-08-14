@@ -31,7 +31,7 @@ const MissionFormTextType: ComponentType<
       <label className="label">
         <div className="label-text-alt flex flex-wrap gap-1">
           {acceptedAnswers.map((answer) => (
-            <div className="badge badge-primary">{answer}</div>
+            <div key={answer}  className="badge badge-primary">{answer}</div>
           ))}
         </div>
       </label>
