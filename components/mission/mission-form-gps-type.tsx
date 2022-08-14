@@ -19,6 +19,7 @@ const MissionFormGpsType: ComponentType<
         <input
           {...registerLatFn()}
           type="number"
+          step="any"
           disabled={isLoading}
           className="input input-bordered w-full"
         />
@@ -30,6 +31,7 @@ const MissionFormGpsType: ComponentType<
         <input
           {...registerLongFn()}
           type="number"
+          step="any"
           disabled={isLoading}
           className="input input-bordered w-full"
         />
