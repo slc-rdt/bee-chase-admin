@@ -1,3 +1,4 @@
+import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
 import { PlusIcon } from "@heroicons/react/solid";
 import {
   GetServerSideProps,
@@ -8,9 +9,10 @@ import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layouts/layout";
+import GameParticipantsAllowUserCreateTeamForm from "../../../../components/participants/game-participants-allow-user-create-team-form";
+import GameParticipantsTeamOrSoloModeForm from "../../../../components/participants/game-participants-team-or-solo-mode-form";
 import GameTeamCard from "../../../../components/participants/game-team-card";
 import LoginDto from "../../../../libs/dtos/login-dto";
-import useService from "../../../../libs/hooks/use-service";
 import Game from "../../../../libs/models/game";
 import GameTeam from "../../../../libs/models/game-team";
 import GameService from "../../../../libs/services/game-service";
@@ -67,14 +69,29 @@ const ParticipantsPage: NextPage<
       <section className="card my-4 bg-primary-content shadow-xl">
         <div className="card-body">
           <p>
-            Participants can join this Experience by downloading the Goosechase
-            app and searching by join code:{" "}
+            Participants can join this Game by visiting asdfsadfasdf and
+            searching by join code:{" "}
             <span className="font-bold">{game.password}</span>.
           </p>
         </div>
       </section>
 
-      <section className="flex justify-end">
+      <GameParticipantsTeamOrSoloModeForm />
+
+      <section className="flex items-center gap-4">
+        <h3 className="flex items-center gap-2">
+          <span>Pre-create teams (optional)</span>
+
+          <span
+            className="tooltip"
+            data-tip="If you're a more active organizer that has already split up your
+            participants into teams, you may want to pre-create those teams here
+            for your participants to join."
+          >
+            <QuestionMarkCircleIcon className="h-6 w-6" />
+          </span>
+        </h3>
+
         <Link href={`/games/${gameId}/participants/create-team`}>
           <button className="btn btn-primary gap-2">
             <PlusIcon className="h-5 w-5" />
@@ -82,6 +99,9 @@ const ParticipantsPage: NextPage<
           </button>
         </Link>
       </section>
+
+      <GameParticipantsAllowUserCreateTeamForm />
+
       <section className="grid grid-cols-1 gap-4">
         {gameTeams.length === 0 && (
           <h2 className="font-lg text-center font-medium">No teams yet.</h2>

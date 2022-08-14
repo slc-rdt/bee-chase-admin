@@ -192,7 +192,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             <input
               {...register("shown_in_feed")}
               type="checkbox"
-              className="checkbox"
+              className="checkbox checkbox-primary"
               disabled={isLoading}
               defaultChecked
             />
