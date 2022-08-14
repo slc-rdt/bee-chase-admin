@@ -1,5 +1,7 @@
 import React, { ComponentProps, ComponentType } from "react";
 
+interface IGameParticipantsAllowUserCreateTeamForm
+
 const GameParticipantsAllowUserCreateTeamForm: ComponentType<
   ComponentProps<"section">
 > = () => {
