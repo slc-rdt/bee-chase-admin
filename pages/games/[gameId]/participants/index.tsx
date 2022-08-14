@@ -100,7 +100,7 @@ const ParticipantsPage: NextPage<
         </Link>
       </section>
 
-      <GameParticipantsAllowUserCreateTeamForm />
+      <GameParticipantsAllowUserCreateTeamForm game={game} />
 
       <section className="grid grid-cols-1 gap-4">
         {gameTeams.length === 0 && (

@@ -16,10 +16,6 @@ interface IGameParticipantsTeamOrSoloModeForm {
   game: Game;
 }
 
-interface GameParticipantsTeamOrSoloModeFormValues {
-  is_solo: boolean;
-}
-
 const GameParticipantsTeamOrSoloModeForm: ComponentType<
   ComponentProps<"section"> & IGameParticipantsTeamOrSoloModeForm
 > = ({ game, ...rest }) => {
