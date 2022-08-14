@@ -113,7 +113,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
             </label>
             <input
               {...register("password")}
-              type="password"
+              type="text"
               disabled={isLoading}
               className="input input-bordered w-full"
               defaultValue={game?.password}
