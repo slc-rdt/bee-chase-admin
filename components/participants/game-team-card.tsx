@@ -32,8 +32,20 @@ const GameTeamCard: ComponentType<ComponentProps<"div"> & ITeamCard> = ({
     router.push(router.asPath);
   };
 
+  console.log(gameTeam);
+
   return (
-    <div key={gameTeam.id} className={`card shadow-xl ${isLoading && "animate-pulse"}`}>
+    <div
+      key={gameTeam.id}
+      className={`card card-side shadow-xl ${isLoading && "animate-pulse"}`}
+    >
+      {gameTeam.color && (
+        <div
+          className="w-4 sm:w-6"
+          style={{ backgroundColor: gameTeam.color }}
+        />
+      )}
+
       <div className="card-body">
         <h3 className="card-title">{gameTeam.name}</h3>
         <p>
