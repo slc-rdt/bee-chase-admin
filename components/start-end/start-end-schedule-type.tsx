@@ -42,13 +42,13 @@ const StartEndScheduleType: ComponentType<
         </label>
       </section>
 
-      <div className="card my-4 bg-primary-content shadow-xl">
+      <section className="card my-4 bg-primary-content shadow-xl">
         <div className="card-body">
           At the Start Time, Missions will be released for participants to see
           in the app. Missions can be completed as long as the Experience is
           active.
         </div>
-      </div>
+      </section>
     </section>
   );
 };
