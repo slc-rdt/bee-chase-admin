@@ -82,7 +82,11 @@ const MissionsPage = ({
         {paginatedMissions?.data.map((mission) => (
           <div key={mission.id} className="card w-full bg-base-100 shadow-xl">
             <div className="card-body">
-              <h2 className="card-title capitalize">{mission.name}</h2>
+              <h2 className="card-title flex items-center justify-between capitalize">
+                <span>{mission.name}</span>
+                <small>({mission.point_value}) Points</small>
+              </h2>
+
               <p>{mission.description}</p>
 
               <div className="card-actions justify-end">
