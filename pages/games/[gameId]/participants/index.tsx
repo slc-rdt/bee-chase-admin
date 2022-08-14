@@ -1,3 +1,4 @@
+import { PlusIcon } from "@heroicons/react/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -56,13 +57,22 @@ const ParticipantsPage: NextPage<
     <Layout>
       <h2 className="mb-2 text-3xl font-bold">Participants</h2>
 
-      <Link href={`/games/${gameId}/participants/create-team`}>
-        <button className="btn btn-primary">Create Team</button>
-      </Link>
+      <section className="flex justify-end">
+        <Link href={`/games/${gameId}/participants/create-team`}>
+          <button className="btn btn-primary gap-2">
+            <PlusIcon className="h-5 w-5" />
+            Create Team
+          </button>
+        </Link>
+      </section>
 
       <section className="grid grid-cols-1 gap-4">
+        {gameTeams.length === 0 && (
+          <h2 className="font-lg text-center font-medium">No teams yet.</h2>
+        )}
+
         {gameTeams.map((gameTeam) => (
-          <GameTeamCard gameTeam={gameTeam} />
+          <GameTeamCard key={gameTeam.id} gameTeam={gameTeam} />
         ))}
       </section>
     </Layout>
