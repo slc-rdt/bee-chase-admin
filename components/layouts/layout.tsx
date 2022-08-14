@@ -28,7 +28,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
   };
 
   return (
-    <div className="drawer drawer-mobile" {...rest}>
+    <div className="drawer-mobile drawer" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <nav className="navbar bg-base-100 shadow-xl">
@@ -37,7 +37,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
               <div className="flex-none lg:hidden">
                 <label
                   htmlFor="my-drawer-3"
-                  className="btn btn-ghost btn-square"
+                  className="btn btn-square btn-ghost"
                 >
                   <MenuIcon className="inline-block h-6 w-6 stroke-current" />
                 </label>
@@ -52,7 +52,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
           </div>
 
           <div className="flex-none gap-2">
-            <div className="dropdown dropdown-end">
+            <div className="dropdown-end dropdown">
               <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
                 <div className="w-10 rounded-full">
                   <img src="https://placeimg.com/80/80/people" />
@@ -70,7 +70,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
           </div>
         </nav>
 
-        <main className="container mx-auto p-8">{children}</main>
+        <main className="mx-auto w-full max-w-screen-lg p-8">{children}</main>
       </div>
 
       {sidebarMenus.length > 0 && (
@@ -112,45 +112,6 @@ function useSidebarMenus(): IMenu[] {
   const { isReady, pathname, query, asPath } = router;
   const gameId = query.gameId;
 
-  const originalMenus: IMenu[] = [
-    {
-      label: "Details",
-      path: `/games/${gameId}/edit`,
-      icon: <ClipboardIcon className="h-6 w-6" />,
-      isActive: false,
-    },
-    {
-      label: "Missions",
-      path: `/games/${gameId}/missions`,
-      icon: <FlagIcon className="h-6 w-6" />,
-      isActive: false,
-    },
-    {
-      label: "Script",
-      path: `/games/${gameId}/script`,
-      icon: <FilmIcon className="h-6 w-6" />,
-      isActive: false,
-    },
-    // {
-    //   label: "Branding",
-    //   path: `/games/${gameId}/branding`,
-    //   icon: <ColorSwatchIcon className="h-6 w-6" />,
-    //   isActive: false,
-    // },
-    {
-      label: "Participants",
-      path: `/games/${gameId}/participants`,
-      icon: <UserGroupIcon className="h-6 w-6" />,
-      isActive: false,
-    },
-    {
-      label: "Start & End",
-      path: `/games/${gameId}/start-end`,
-      icon: <ClockIcon className="h-6 w-6" />,
-      isActive: false,
-    },
-  ];
-
   useEffect(() => {
     const isGameDetail = pathname.startsWith("/games/[gameId]");
 
@@ -158,6 +119,45 @@ function useSidebarMenus(): IMenu[] {
       setMenus([]);
       return;
     }
+
+    const originalMenus: IMenu[] = [
+      {
+        label: "Details",
+        path: `/games/${gameId}/edit`,
+        icon: <ClipboardIcon className="h-6 w-6" />,
+        isActive: false,
+      },
+      {
+        label: "Missions",
+        path: `/games/${gameId}/missions`,
+        icon: <FlagIcon className="h-6 w-6" />,
+        isActive: false,
+      },
+      {
+        label: "Script",
+        path: `/games/${gameId}/script`,
+        icon: <FilmIcon className="h-6 w-6" />,
+        isActive: false,
+      },
+      // {
+      //   label: "Branding",
+      //   path: `/games/${gameId}/branding`,
+      //   icon: <ColorSwatchIcon className="h-6 w-6" />,
+      //   isActive: false,
+      // },
+      {
+        label: "Participants",
+        path: `/games/${gameId}/participants`,
+        icon: <UserGroupIcon className="h-6 w-6" />,
+        isActive: false,
+      },
+      {
+        label: "Start & End",
+        path: `/games/${gameId}/start-end`,
+        icon: <ClockIcon className="h-6 w-6" />,
+        isActive: false,
+      },
+    ];
 
     setMenus(
       originalMenus.map((menu) => {
@@ -167,7 +167,7 @@ function useSidebarMenus(): IMenu[] {
         return menu;
       })
     );
-  }, [isReady, pathname, gameId]);
+  }, [asPath, gameId, isReady, pathname]);
 
   return menus;
 }
