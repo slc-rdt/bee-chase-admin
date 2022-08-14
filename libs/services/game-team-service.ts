@@ -24,6 +24,14 @@ export default class GameTeamService extends AbstractService {
     return data;
   }
 
+  public async update(payload: GameTeam) {
+    const { data } = await this.axios.put<GameTeam>(
+      `${this.apiUrl}/games/${payload.game_id}/game_teams/${payload.id}`,
+      payload
+    );
+    return data;
+  }
+
   public async delete(payload: GameTeam) {
     const { data } = await this.axios.delete<GameTeam>(
       `${this.apiUrl}/games/${payload.game_id}/game_teams/${payload.id}`

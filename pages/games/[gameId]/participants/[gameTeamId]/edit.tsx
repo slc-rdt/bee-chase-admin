@@ -6,6 +6,7 @@ import {
 import { unstable_getServerSession } from "next-auth";
 import { useRouter } from "next/router";
 import React from "react";
+import toast from "react-hot-toast";
 import Layout from "../../../../../components/layouts/layout";
 import GameTeamForm from "../../../../../components/participants/game-team-form";
 import LoginDto from "../../../../../libs/dtos/login-dto";
@@ -56,7 +57,18 @@ const ParticipantsTeamEditPage: NextPage<
   const { isLoading, doAction } = useLoading();
 
   const onSubmit = async (data: GameTeam) => {
-    console.log(data);
+    const game_id = router.query.gameId?.toString() ?? "";
+
+    await toast.promise(
+      doAction(async () => await teamService.update(data)),
+      {
+        loading: "Updating team...",
+        success: "Team updated!",
+        error: "Failed to update team.",
+      }
+    );
+
+    router.push(`/games/${game_id}/participants`);
   };
 
   return (

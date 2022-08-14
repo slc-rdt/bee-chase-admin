@@ -19,7 +19,6 @@ const GameTeamForm: ComponentType<ComponentProps<"div"> & IGameTeamForm> = ({
   const { register, handleSubmit } = useForm<GameTeam>({
     defaultValues: gameTeam,
   });
-  console.log(gameTeam);
 
   const onSubmit = handleSubmit(onGameTeamFormSubmit);
 
@@ -71,7 +70,7 @@ const GameTeamForm: ComponentType<ComponentProps<"div"> & IGameTeamForm> = ({
             className={`btn btn-primary ${isLoading && "loading"}`}
             disabled={isLoading}
           >
-            Create
+            {gameTeam ? "Update" : "Create"}
           </button>
         </div>
       </form>
