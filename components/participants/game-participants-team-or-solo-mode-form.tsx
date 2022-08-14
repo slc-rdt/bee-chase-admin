@@ -1,10 +1,52 @@
-import React, { ComponentProps, ComponentType } from "react";
+import { useRouter } from "next/router";
+import React, {
+  ComponentProps,
+  ComponentType,
+  useEffect,
+  useState,
+} from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import useLoading from "../../libs/hooks/use-loading";
+import useService from "../../libs/hooks/use-service";
+import Game from "../../libs/models/game";
+import GameService from "../../libs/services/game-service";
+
+interface IGameParticipantsTeamOrSoloModeForm {
+  game: Game;
+}
+
+interface GameParticipantsTeamOrSoloModeFormValues {
+  is_solo: boolean;
+}
 
 const GameParticipantsTeamOrSoloModeForm: ComponentType<
-  ComponentProps<"section">
-> = () => {
+  ComponentProps<"section"> & IGameParticipantsTeamOrSoloModeForm
+> = ({ game, ...rest }) => {
+  const router = useRouter();
+  const gameService = useService(GameService);
+  const { isLoading, doAction } = useLoading();
+
+  const doUpdate = async (is_solo: boolean) => {
+    await toast.promise(
+      doAction(async () => {
+        return await gameService.update({
+          ...game,
+          is_solo,
+        });
+      }),
+      {
+        loading: "Updating game team participants mode...",
+        success: "Game team participants mode updated!",
+        error: "Failed to update game team participants mode.",
+      }
+    );
+
+    router.push(router.asPath);
+  };
+
   return (
-    <section className="form-control my-4 w-full">
+    <section className="form-control my-4 w-full" {...rest}>
       <label className="label">
         <span className="label-text">How would you like people to join?</span>
       </label>
@@ -12,19 +54,24 @@ const GameParticipantsTeamOrSoloModeForm: ComponentType<
       <div className="flex flex-wrap gap-4">
         <label className="label cursor-pointer gap-2">
           <input
+            onChange={() => doUpdate(false)}
+            disabled={isLoading}
             type="radio"
-            name="radio-6"
-            className="radio checked:bg-red-500"
-            checked
+            name="is_solo"
+            className="radio radio-primary"
+            defaultChecked={!game.is_solo}
           />
           <span className="label-text">In teams</span>
         </label>
         <label className="label cursor-pointer gap-2">
           <input
+            onChange={() => doUpdate(true)}
+            disabled={isLoading}
             type="radio"
-            name="radio-6"
-            className="radio checked:bg-blue-500"
-            checked
+            name="is_solo"
+            value="true"
+            className="radio radio-primary"
+            defaultChecked={game.is_solo}
           />
           <span className="label-text">Solo</span>
         </label>

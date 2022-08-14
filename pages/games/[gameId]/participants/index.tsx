@@ -76,7 +76,7 @@ const ParticipantsPage: NextPage<
         </div>
       </section>
 
-      <GameParticipantsTeamOrSoloModeForm />
+      <GameParticipantsTeamOrSoloModeForm game={game} />
 
       <section className="flex items-center gap-4">
         <h3 className="flex items-center gap-2">
