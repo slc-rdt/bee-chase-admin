@@ -75,7 +75,9 @@ const MissionEditPage = ({
       <MissionForm
         mission={mission}
         isLoading={isLoading}
-        onMissionFormSubmit={onSubmit}
+        onMissionFormSubmit={data => {
+          onSubmit(data as UpdateMissionDto);
+        }}
       />
     </Layout>
   );
