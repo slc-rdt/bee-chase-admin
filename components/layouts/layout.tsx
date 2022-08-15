@@ -1,4 +1,3 @@
-import useSWR from "swr";
 import {
   ClipboardIcon,
   ClockIcon,
@@ -6,17 +5,17 @@ import {
   MenuIcon,
   QuestionMarkCircleIcon,
   UserGroupIcon,
-  UsersIcon,
+  UsersIcon
 } from "@heroicons/react/outline";
 import { getSession, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useEffect, useState } from "react";
-import useLoading from "../../libs/hooks/use-loading";
+import toast from "react-hot-toast";
+import useSWR from "swr";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
-import toast from "react-hot-toast";
 
 const Layout: ComponentType<ComponentProps<"div">> = ({
   children,
@@ -27,7 +26,10 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
   const { game, isLoading } = useCurrentGame();
   const sidebarMenus = useSidebarMenus(game);
 
-  if (status === "unauthenticated") {
+  if (
+    status === "unauthenticated" &&
+    !router.pathname.startsWith("/auth/login")
+  ) {
     router.push("/auth/login");
   }
 
@@ -58,35 +60,31 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
     <div className="drawer-mobile drawer" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <nav className="navbar bg-base-100 shadow-xl">
-          <div className="flex-1">
-            {sidebarMenus.length > 0 && (
-              <div className="flex-none lg:hidden">
-                <label
-                  htmlFor="my-drawer-3"
-                  className="btn btn-square btn-ghost"
-                >
-                  <MenuIcon className="inline-block h-6 w-6 stroke-current" />
-                </label>
-              </div>
-            )}
+        {status === "authenticated" && (
+          <nav className="navbar bg-base-100 shadow-xl">
+            <div className="flex-1">
+              {sidebarMenus.length > 0 && (
+                <div className="flex-none lg:hidden">
+                  <label
+                    htmlFor="my-drawer-3"
+                    className="btn btn-square btn-ghost"
+                  >
+                    <MenuIcon className="inline-block h-6 w-6 stroke-current" />
+                  </label>
+                </div>
+              )}
 
-            <Link href="/games">
-              <button className="btn btn-ghost text-xl normal-case">
-                BeeChase
-              </button>
-            </Link>
-          </div>
+              <Link href="/games">
+                <button className="btn btn-ghost text-xl normal-case">
+                  BeeChase
+                </button>
+              </Link>
+            </div>
 
-          <div className="flex-none gap-2">
-            <div className="dropdown-end dropdown">
-              <label tabIndex={0} className="avatar btn btn-circle btn-ghost">
-                <div className="w-10 rounded-full">
-                  {status === "loading" && (
-                    <div className="h-full w-full animate-pulse bg-base-300" />
-                  )}
-
-                  {status !== "loading" && (
+            <div className="flex-none gap-2">
+              <div className="dropdown-end dropdown">
+                <label tabIndex={0} className="avatar btn btn-circle btn-ghost">
+                  <div className="w-10 rounded-full">
                     <Image
                       src={
                         user?.picture_url ??
@@ -96,20 +94,20 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
                       width={40}
                       height={40}
                     />
-                  )}
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
-              >
-                <li>
-                  <button onClick={onLogout}>Logout</button>
-                </li>
-              </ul>
+                  </div>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+                >
+                  <li>
+                    <button onClick={onLogout}>Logout</button>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-        </nav>
+          </nav>
+        )}
 
         <main className="mx-auto w-full max-w-screen-lg p-8">{children}</main>
       </div>

@@ -27,9 +27,9 @@ const MissionCreatePage = () => {
   };
 
   return (
-    <Layout>
+    <>
       <MissionForm isLoading={isLoading} onMissionFormSubmit={onSubmit} />
-    </Layout>
+    </>
   );
 };
 

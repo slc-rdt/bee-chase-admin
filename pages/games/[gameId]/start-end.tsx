@@ -47,10 +47,10 @@ const GameDetailStartStopPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ game }) => {
   return (
-    <Layout>
+    <>
       <h2 className="mb-2 text-3xl font-bold">Start & End</h2>
       <StartEndForm game={game} />
-    </Layout>
+    </>
   );
 };
 

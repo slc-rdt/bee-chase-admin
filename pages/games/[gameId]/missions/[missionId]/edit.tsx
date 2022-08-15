@@ -69,7 +69,7 @@ const MissionEditPage = ({
   };
 
   return (
-    <Layout>
+    <>
       <MissionForm
         mission={mission}
         isLoading={isLoading}
@@ -77,7 +77,7 @@ const MissionEditPage = ({
           onSubmit(data as UpdateMissionDto);
         }}
       />
-    </Layout>
+    </>
   );
 };
 

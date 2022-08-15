@@ -5,11 +5,8 @@ import {
 } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { useRouter } from "next/router";
-import React from "react";
 import toast from "react-hot-toast";
-import Layout from "../../../../../components/layouts/layout";
 import GameTeamForm from "../../../../../components/participants/game-team-form";
-import LoginDto from "../../../../../libs/dtos/login-dto";
 import useLoading from "../../../../../libs/hooks/use-loading";
 import useService from "../../../../../libs/hooks/use-service";
 import GameTeam from "../../../../../libs/models/game-team";
@@ -69,14 +66,14 @@ const ParticipantsTeamEditPage: NextPage<
   };
 
   return (
-    <Layout>
+    <>
       <h2 className="mb-2 text-3xl font-bold">Edit Team</h2>
       <GameTeamForm
         gameTeam={gameTeam}
         isLoading={isLoading}
         onGameTeamFormSubmit={onSubmit}
       />
-    </Layout>
+    </>
   );
 };
 

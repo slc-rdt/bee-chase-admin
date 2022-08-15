@@ -3,16 +3,14 @@ import { PlusIcon } from "@heroicons/react/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Layout from "../../../../components/layouts/layout";
 import GameParticipantsAllowUserCreateTeamForm from "../../../../components/participants/game-participants-allow-user-create-team-form";
 import GameParticipantsTeamOrSoloModeForm from "../../../../components/participants/game-participants-team-or-solo-mode-form";
 import GameTeamCard from "../../../../components/participants/game-team-card";
-import LoginDto from "../../../../libs/dtos/login-dto";
 import Game from "../../../../libs/models/game";
 import GameTeam from "../../../../libs/models/game-team";
 import GameService from "../../../../libs/services/game-service";
@@ -63,7 +61,7 @@ const ParticipantsPage: NextPage<
   const gameId = router.query.gameId;
 
   return (
-    <Layout>
+    <>
       <h2 className="mb-2 text-3xl font-bold">Participants</h2>
 
       <section className="card my-4 bg-primary-content shadow-xl">
@@ -111,7 +109,7 @@ const ParticipantsPage: NextPage<
           <GameTeamCard key={gameTeam.id} gameTeam={gameTeam} />
         ))}
       </section>
-    </Layout>
+    </>
   );
 };
 

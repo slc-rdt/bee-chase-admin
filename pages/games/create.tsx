@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameForm from "../../components/game/game-form";
-import Layout from "../../components/layouts/layout";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
 import useLoading from "../../libs/hooks/use-loading";
 import useService from "../../libs/hooks/use-service";
@@ -25,11 +24,10 @@ const GameCreatePage: NextPage = () => {
   };
 
   return (
-    <Layout>
+    <>
       <h2 className="text-3xl font-bold">Details</h2>
-
       <GameForm isLoading={isLoading} onGameFormSubmit={onGameFormSubmit} />
-    </Layout>
+    </>
   );
 };
 

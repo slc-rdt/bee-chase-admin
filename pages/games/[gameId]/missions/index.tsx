@@ -57,7 +57,7 @@ const MissionsPage = ({
   const router = useRouter();
 
   return (
-    <Layout>
+    <>
       <section className="flex flex-wrap justify-between">
         <h2 className="mb-2 text-3xl font-bold">Mission</h2>
         <Link href={`/games/${router.query.gameId}/missions/create`}>
@@ -73,7 +73,7 @@ const MissionsPage = ({
         currentPage={page}
         render={(mission) => <MissionCard key={mission.id} mission={mission} />}
       />
-    </Layout>
+    </>
   );
 };
 
