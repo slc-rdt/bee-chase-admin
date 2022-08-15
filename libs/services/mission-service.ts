@@ -48,4 +48,11 @@ export default class MissionService extends AbstractService {
     );
     return data;
   }
+
+  public async delete(gameId: string, mission: Mission) {
+    const { data } = await this.axios.delete<Mission>(
+      `${this.apiUrl}/games/${gameId}/missions/${mission.id}`
+    );
+    return data;
+  }
 }
