@@ -50,12 +50,6 @@ const GamesPage = ({
   page,
   paginatedGames,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-
-  const onChangePage = (page: number) => {
-    router.push(`/games?page=${page}`);
-  };
-
   return (
     <Layout>
       <main className="container mx-auto mt-8">
@@ -74,22 +68,6 @@ const GamesPage = ({
           currentPage={page}
           render={(game) => <GameCard key={game.id} game={game} />}
         />
-
-        {/* <section className="mt-4 grid grid-cols-1 gap-4">
-          {paginatedGames?.data.length === 0 && (
-            <h2 className="font-lg text-center font-medium">No games yet.</h2>
-          )}
-
-          {paginatedGames?.data.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-
-          <PaginationButtons
-            length={paginatedGames?.last_page}
-            currentPage={page}
-            onChangePage={onChangePage}
-          />
-        </section> */}
       </main>
     </Layout>
   );
