@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import useLoading from "../../libs/hooks/use-loading";
+import useLoading from "../../libs/hooks/common/use-loading";
 import BinusImg from "../../public/binus.png";
 import RibbonImg from "../../public/ribbon.png";
 

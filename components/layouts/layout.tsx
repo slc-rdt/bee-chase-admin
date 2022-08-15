@@ -1,21 +1,12 @@
-import {
-  ClipboardIcon,
-  ClockIcon,
-  FlagIcon,
-  MenuIcon,
-  QuestionMarkCircleIcon,
-  UserGroupIcon,
-  UsersIcon,
-} from "@heroicons/react/outline";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { MenuIcon, QuestionMarkCircleIcon } from "@heroicons/react/outline";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ComponentProps, ComponentType, useEffect, useState } from "react";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
-import useSWR from "swr";
-import Game from "../../libs/models/game";
-import GameService from "../../libs/services/game-service";
+import useCurrentGame from "../../libs/hooks/layout/use-current-game";
+import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
 
 const Layout: ComponentType<ComponentProps<"div">> = ({
   children,
@@ -162,102 +153,5 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
     </div>
   );
 };
-
-interface IMenu {
-  label: string;
-  path: string;
-  icon: JSX.Element;
-  isActive: boolean;
-}
-
-function useSidebarMenus(game?: Game): IMenu[] {
-  const router = useRouter();
-  const [menus, setMenus] = useState<IMenu[]>([]);
-
-  useEffect(() => {
-    const gameId = game?.id;
-
-    if (!gameId) {
-      setMenus([]);
-      return;
-    }
-
-    const originalMenus: IMenu[] = [
-      {
-        label: "Details",
-        path: `/games/${gameId}/edit`,
-        icon: <ClipboardIcon className="h-6 w-6" />,
-        isActive: false,
-      },
-      {
-        label: "Missions",
-        path: `/games/${gameId}/missions`,
-        icon: <FlagIcon className="h-6 w-6" />,
-        isActive: false,
-      },
-      // {
-      //   label: "Script",
-      //   path: `/games/${gameId}/script`,
-      //   icon: <FilmIcon className="h-6 w-6" />,
-      //   isActive: false,
-      // },
-      // {
-      //   label: "Branding",
-      //   path: `/games/${gameId}/branding`,
-      //   icon: <ColorSwatchIcon className="h-6 w-6" />,
-      //   isActive: false,
-      // },
-      {
-        label: "Participants",
-        path: `/games/${gameId}/participants`,
-        icon: <UserGroupIcon className="h-6 w-6" />,
-        isActive: false,
-      },
-      {
-        label: "Start & End",
-        path: `/games/${gameId}/start-end`,
-        icon: <ClockIcon className="h-6 w-6" />,
-        isActive: false,
-      },
-      {
-        label: "Admins",
-        path: `/games/${gameId}/admins`,
-        icon: <UsersIcon className="h-6 w-6" />,
-        isActive: false,
-      },
-    ];
-
-    setMenus(
-      originalMenus.map((menu) => {
-        const sanitizedPath = new URL(menu.path, location.href).pathname;
-        const sanitizedAsPath = new URL(router.asPath, location.href).pathname;
-        menu.isActive = sanitizedAsPath.startsWith(sanitizedPath);
-        return menu;
-      })
-    );
-  }, [game, router.asPath]);
-
-  return menus;
-}
-
-function useCurrentGame() {
-  const router = useRouter();
-  const gameId = router.query.gameId;
-
-  const { data, error } = useSWR(`/games/${gameId}`, async () => {
-    if (!gameId) {
-      return;
-    }
-
-    const session = await getSession();
-    const gameService = new GameService(session?.user.access_token);
-    return await gameService.getOneById(`${router.query.gameId}`);
-  });
-
-  return {
-    game: data,
-    isLoading: !data && !error,
-  };
-}
 
 export default Layout;

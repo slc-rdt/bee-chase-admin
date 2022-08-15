@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import React, { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
 import { AvailabilityTypes } from "../../libs/enums";
-import useLoading from "../../libs/hooks/use-loading";
-import useService from "../../libs/hooks/use-service";
+import useLoading from "../../libs/hooks/common/use-loading";
+import useService from "../../libs/hooks/common/use-service";
 import Mission from "../../libs/models/mission";
 import MissionService from "../../libs/services/mission-service";
 
@@ -64,9 +64,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             }`}
           />
 
-          <span>
-            {AvailabilityTypes[mission.availability].toLowerCase()}
-          </span>
+          <span>{AvailabilityTypes[mission.availability].toLowerCase()}</span>
         </section>
 
         <section className="card-actions justify-end">

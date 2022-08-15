@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import useLoading from "../../libs/hooks/use-loading";
-import useService from "../../libs/hooks/use-service";
+import useLoading from "../../libs/hooks/common/use-loading";
+import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
 

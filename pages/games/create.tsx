@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameForm from "../../components/game/game-form";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
-import useLoading from "../../libs/hooks/use-loading";
-import useService from "../../libs/hooks/use-service";
+import useLoading from "../../libs/hooks/common/use-loading";
+import useService from "../../libs/hooks/common/use-service";
 import GameService from "../../libs/services/game-service";
 
 const GameCreatePage: NextPage = () => {

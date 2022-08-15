@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
-import useLoading from "../../libs/hooks/use-loading";
-import useService from "../../libs/hooks/use-service";
+import useLoading from "../../libs/hooks/common/use-loading";
+import useService from "../../libs/hooks/common/use-service";
 import GameTeam from "../../libs/models/game-team";
 import GameTeamService from "../../libs/services/game-team-service";
 

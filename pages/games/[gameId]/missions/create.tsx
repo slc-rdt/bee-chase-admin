@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import Layout from "../../../../components/layouts/layout";
 import MissionForm from "../../../../components/mission/mission-form";
 import CreateMissionDto from "../../../../libs/dtos/create-mission-dto";
-import useLoading from "../../../../libs/hooks/use-loading";
-import useService from "../../../../libs/hooks/use-service";
+import useLoading from "../../../../libs/hooks/common/use-loading";
+import useService from "../../../../libs/hooks/common/use-service";
 import MissionService from "../../../../libs/services/mission-service";
 
 const MissionCreatePage = () => {
