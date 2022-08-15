@@ -9,7 +9,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/games",
+        destination: "/auth/login",
         permanent: true,
       },
     ];
