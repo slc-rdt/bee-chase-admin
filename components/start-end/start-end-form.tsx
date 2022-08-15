@@ -69,14 +69,11 @@ const StartEndForm: ComponentType<
       };
     }
 
-    await toast.promise(
-      doAction(async () => await gameService.update(payload)),
-      {
-        loading: "Upading game start and end time...",
-        success: "Update success!",
-        error: "Failed to update game start and end time.",
-      }
-    );
+    await toast.promise(doAction(gameService.update(payload)), {
+      loading: "Upading game start and end time...",
+      success: "Update success!",
+      error: "Failed to update game start and end time.",
+    });
 
     router.push(router.asPath);
   });
@@ -88,14 +85,11 @@ const StartEndForm: ComponentType<
       end_time: null,
     };
 
-    await toast.promise(
-      doAction(async () => await gameService.update(payload)),
-      {
-        loading: "Stopping game...",
-        success: "Game stopped!",
-        error: "Failed to stop game.",
-      }
-    );
+    await toast.promise(doAction(gameService.update(payload)), {
+      loading: "Stopping game...",
+      success: "Game stopped!",
+      error: "Failed to stop game.",
+    });
 
     router.push(router.asPath);
   };

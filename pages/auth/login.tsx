@@ -19,12 +19,12 @@ const LoginPage: NextPage = () => {
   const { isLoading, doAction } = useLoading();
 
   const onSubmit = handleSubmit(async (data) => {
-    const response = await doAction(async () => {
-      return await signIn("credentials", {
+    const response = await doAction(
+      signIn("credentials", {
         redirect: false,
         ...data,
-      });
-    });
+      })
+    );
 
     if (response?.ok) {
       toast.success("Login success.");

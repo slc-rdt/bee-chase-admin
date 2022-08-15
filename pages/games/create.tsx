@@ -15,14 +15,11 @@ const GameCreatePage: NextPage = () => {
   const { isLoading, doAction } = useLoading();
 
   const onGameFormSubmit = async (data: CreateGameDto) => {
-    const response = await toast.promise(
-      doAction(async () => await gameService.create(data)),
-      {
-        loading: "Creating game...",
-        success: "Game created!",
-        error: "Failed to create game.",
-      }
-    );
+    const response = await toast.promise(doAction(gameService.create(data)), {
+      loading: "Creating game...",
+      success: "Game created!",
+      error: "Failed to create game.",
+    });
 
     router.push(`/games/${response.id}/missions`);
   };

@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  const user = session.user as LoginDto;
+  const user = session.user;
   const missionService = new MissionService(user.access_token);
   const gameId = context.params?.gameId ?? "";
   const missionId = context.params?.missionId ?? "";
@@ -57,9 +57,7 @@ const MissionEditPage = ({
     const gameId = router.query.gameId as string;
 
     await toast.promise(
-      doAction(
-        async () => await missionService.update(gameId, { ...mission, ...data })
-      ),
+      doAction(missionService.update(gameId, { ...mission, ...data })),
       {
         loading: "Updating mission...",
         success: "Mission updated!",
@@ -75,7 +73,7 @@ const MissionEditPage = ({
       <MissionForm
         mission={mission}
         isLoading={isLoading}
-        onMissionFormSubmit={data => {
+        onMissionFormSubmit={(data) => {
           onSubmit(data as UpdateMissionDto);
         }}
       />

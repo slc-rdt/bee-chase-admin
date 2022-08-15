@@ -15,14 +15,11 @@ const ParticipantsCreateTeamPage = () => {
   const onSubmit = async (data: GameTeam) => {
     const game_id = router.query.gameId?.toString() ?? "";
 
-    await toast.promise(
-      doAction(async () => await teamService.create({ ...data, game_id })),
-      {
-        loading: "Creating team...",
-        success: "Team created!",
-        error: "Failed to created team.",
-      }
-    );
+    await toast.promise(doAction(teamService.create({ ...data, game_id })), {
+      loading: "Creating team...",
+      success: "Team created!",
+      error: "Failed to created team.",
+    });
 
     router.push(`/games/${game_id}/participants`);
   };

@@ -19,7 +19,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
   const { isLoading, doAction } = useLoading();
 
   const onDelete = async (game: Game) => {
-    await doAction(async () => await gameService.delete(game));
+    await doAction(gameService.delete(game));
     router.push(router.asPath);
   };
 

@@ -27,14 +27,11 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
   };
 
   const onDelete = async (mission: Mission) => {
-    await toast.promise(
-      doAction(async () => await missionService.delete(gameId, mission)),
-      {
-        loading: "Deleting mission...",
-        success: "Mission deleted!",
-        error: "Failed to delete mission",
-      }
-    );
+    await toast.promise(doAction(missionService.delete(gameId, mission)), {
+      loading: "Deleting mission...",
+      success: "Mission deleted!",
+      error: "Failed to delete mission",
+    });
 
     router.push(`/games/${gameId}/missions`);
   };

@@ -20,14 +20,11 @@ const GameTeamCard: ComponentType<ComponentProps<"div"> & ITeamCard> = ({
   const { isLoading, doAction } = useLoading();
 
   const onDelete = async (team: GameTeam) => {
-    await toast.promise(
-      doAction(async () => await gameTeamService.delete(team)),
-      {
-        loading: `Deleting team ${gameTeam.name}...`,
-        success: `Success deleted team ${gameTeam.name}!`,
-        error: `Failed to delete team ${gameTeam.name}.`,
-      }
-    );
+    await toast.promise(doAction(gameTeamService.delete(team)), {
+      loading: `Deleting team ${gameTeam.name}...`,
+      success: `Success deleted team ${gameTeam.name}!`,
+      error: `Failed to delete team ${gameTeam.name}.`,
+    });
 
     router.push(router.asPath);
   };

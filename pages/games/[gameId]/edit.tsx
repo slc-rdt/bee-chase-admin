@@ -1,5 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { unstable_getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameForm from "../../../components/game/game-form";
@@ -32,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  const user = session.user as LoginDto;
+  const user = session.user;
   const gameService = new GameService(user.access_token);
   const game = await gameService.getOneById(context.params?.gameId ?? "");
 
@@ -61,26 +62,23 @@ const GameDetailEditPage = ({
   const { isLoading, doAction } = useLoading();
 
   const onGameFormSubmit = async (data: UpdateGameDto) => {
-    await toast.promise(
-      doAction(async () => await gameService.update({ ...game, ...data })),
-      {
-        loading: "Updating game...",
-        success: "Game saved!",
-        error: "Failed to save game.",
-      }
-    );
+    await toast.promise(doAction(gameService.update({ ...game, ...data })), {
+      loading: "Updating game...",
+      success: "Game saved!",
+      error: "Failed to save game.",
+    });
     router.push(router.asPath);
   };
 
   return (
-    <Layout>
+    <>
       <h2 className="mb-2 text-3xl font-bold">Details</h2>
       <GameForm
         game={game}
         isLoading={isLoading}
         onGameFormSubmit={onGameFormSubmit}
       />
-    </Layout>
+    </>
   );
 };
 

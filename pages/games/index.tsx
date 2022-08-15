@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<{
     };
   }
 
-  const user = session.user as LoginDto;
+  const user = session.user;
   const gameService = new GameService(user.access_token);
   const page = Number(context.query.page ?? 1);
   const paginatedGames = await gameService.getAllPaginated({ page });
@@ -51,7 +51,7 @@ const GamesPage = ({
   paginatedGames,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <Layout>
+    <>
       <main className="container mx-auto mt-8">
         <section className="flex justify-between">
           <h1 className="text-2xl font-bold">My Games</h1>
@@ -69,7 +69,7 @@ const GamesPage = ({
           render={(game) => <GameCard key={game.id} game={game} />}
         />
       </main>
-    </Layout>
+    </>
   );
 };
 

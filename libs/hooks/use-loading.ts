@@ -5,10 +5,10 @@ export default function useLoading() {
 
   return {
     isLoading,
-    doAction: async <T>(fn: () => Promise<T>) => {
+    doAction: async <T>(promise: Promise<T>) => {
       try {
         setIsLoading(true);
-        const result = await fn();
+        const result = await promise;
         setIsLoading(false);
         return result;
       } finally {

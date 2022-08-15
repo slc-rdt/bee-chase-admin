@@ -17,14 +17,11 @@ const MissionCreatePage = () => {
 
     data.mission_data ??= {};
 
-    await toast.promise(
-      doAction(async () => await missionService.create(gameId, { ...data })),
-      {
-        loading: "Creating mission...",
-        success: "Mission created!",
-        error: "Failed to create mission.",
-      }
-    );
+    await toast.promise(doAction(missionService.create(gameId, { ...data })), {
+      loading: "Creating mission...",
+      success: "Mission created!",
+      error: "Failed to create mission.",
+    });
 
     router.push(`/games/${gameId}/missions`);
   };

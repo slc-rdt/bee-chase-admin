@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  const user = session.user as LoginDto;
+  const user = session.user;
   const missionService = new MissionService(user.access_token);
 
   const gameId = context.params?.gameId ?? "";

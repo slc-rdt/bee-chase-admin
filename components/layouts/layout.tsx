@@ -1,38 +1,57 @@
+import useSWR from "swr";
 import {
   ClipboardIcon,
   ClockIcon,
-  FilmIcon,
   FlagIcon,
   MenuIcon,
+  QuestionMarkCircleIcon,
   UserGroupIcon,
+  UsersIcon,
 } from "@heroicons/react/outline";
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useEffect, useState } from "react";
-import LoginDto from "../../libs/dtos/login-dto";
+import useLoading from "../../libs/hooks/use-loading";
+import Game from "../../libs/models/game";
+import GameService from "../../libs/services/game-service";
+import toast from "react-hot-toast";
 
 const Layout: ComponentType<ComponentProps<"div">> = ({
   children,
   ...rest
 }) => {
-  const { data, status } = useSession();
   const router = useRouter();
-  const sidebarMenus = useSidebarMenus();
+  const { data, status } = useSession();
+  const { game, isLoading } = useCurrentGame();
+  const sidebarMenus = useSidebarMenus(game);
 
   if (status === "unauthenticated") {
     router.push("/auth/login");
   }
 
-  const user = data?.user as LoginDto;
+  const user = data?.user;
 
   const onLogout = async () => {
     const data = await signOut({
       callbackUrl: "/auth/login",
       redirect: false,
     });
+
     router.push(data.url);
+  };
+
+  const onGameCodeClick = async () => {
+    try {
+      if (game?.access_code) {
+        await navigator.clipboard.writeText(game.access_code);
+        toast.success("Code copied to clipboard!");
+      }
+    } catch (error) {
+      toast.success("Failed to copy code to clipboard.");
+      console.error(error);
+    }
   };
 
   return (
@@ -61,7 +80,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
 
           <div className="flex-none gap-2">
             <div className="dropdown-end dropdown">
-              <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
+              <label tabIndex={0} className="avatar btn btn-circle btn-ghost">
                 <div className="w-10 rounded-full">
                   {status === "loading" && (
                     <div className="h-full w-full animate-pulse bg-base-300" />
@@ -69,7 +88,10 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
 
                   {status !== "loading" && (
                     <Image
-                      src={user?.picture_url}
+                      src={
+                        user?.picture_url ??
+                        `https://ui-avatars.com/api?name=${user?.name}`
+                      }
                       alt="avatar"
                       width={40}
                       height={40}
@@ -95,23 +117,48 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
       {sidebarMenus.length > 0 && (
         <nav className="drawer-side shadow-xl">
           <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
-          <ul className="menu w-80 overflow-y-auto bg-base-100 p-4">
-            {sidebarMenus.map((menu) => (
-              <li
-                key={menu.path}
-                className={`${
-                  menu.isActive && "bg-primary text-base-100"
-                } rounded-box`}
+
+          <div className="menu w-80 overflow-y-auto bg-base-100 p-4">
+            <ul>
+              {sidebarMenus.map((menu) => (
+                <li
+                  key={menu.path}
+                  className={`${
+                    menu.isActive && "bg-primary text-base-100"
+                  } rounded-box`}
+                >
+                  <Link href={menu.path}>
+                    <button>
+                      {menu.icon}
+                      {menu.label}
+                    </button>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex h-full flex-col justify-end">
+              <h2 className="mb-4 flex items-center gap-2">
+                <span>Join Code</span>
+                <div
+                  className="tooltip"
+                  data-tip="Share this with participants to make it easy to find your Experience! Instead of searching for it by name, they can use this Join Code and be taken directly to your Experience."
+                >
+                  <QuestionMarkCircleIcon className="h-6 w-6" />
+                </div>
+              </h2>
+
+              <button
+                onClick={onGameCodeClick}
+                disabled={isLoading}
+                className={`btn btn-secondary btn-block ${
+                  isLoading && "loading"
+                }`}
               >
-                <Link href={menu.path}>
-                  <button>
-                    {menu.icon}
-                    {menu.label}
-                  </button>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                {game?.access_code}
+              </button>
+            </div>
+          </div>
         </nav>
       )}
     </div>
@@ -125,16 +172,14 @@ interface IMenu {
   isActive: boolean;
 }
 
-function useSidebarMenus(): IMenu[] {
+function useSidebarMenus(game?: Game): IMenu[] {
   const router = useRouter();
   const [menus, setMenus] = useState<IMenu[]>([]);
-  const { isReady, pathname, query, asPath } = router;
-  const gameId = query.gameId;
 
   useEffect(() => {
-    const isGameDetail = pathname.startsWith("/games/[gameId]");
+    const gameId = game?.id;
 
-    if (typeof window === "undefined" || !isReady || !isGameDetail || !gameId) {
+    if (!gameId) {
       setMenus([]);
       return;
     }
@@ -152,12 +197,12 @@ function useSidebarMenus(): IMenu[] {
         icon: <FlagIcon className="h-6 w-6" />,
         isActive: false,
       },
-      {
-        label: "Script",
-        path: `/games/${gameId}/script`,
-        icon: <FilmIcon className="h-6 w-6" />,
-        isActive: false,
-      },
+      // {
+      //   label: "Script",
+      //   path: `/games/${gameId}/script`,
+      //   icon: <FilmIcon className="h-6 w-6" />,
+      //   isActive: false,
+      // },
       // {
       //   label: "Branding",
       //   path: `/games/${gameId}/branding`,
@@ -176,19 +221,45 @@ function useSidebarMenus(): IMenu[] {
         icon: <ClockIcon className="h-6 w-6" />,
         isActive: false,
       },
+      {
+        label: "Admins",
+        path: `/games/${gameId}/admins`,
+        icon: <UsersIcon className="h-6 w-6" />,
+        isActive: false,
+      },
     ];
 
     setMenus(
       originalMenus.map((menu) => {
         const sanitizedPath = new URL(menu.path, location.href).pathname;
-        const sanitizedAsPath = new URL(asPath, location.href).pathname;
+        const sanitizedAsPath = new URL(router.asPath, location.href).pathname;
         menu.isActive = sanitizedAsPath.startsWith(sanitizedPath);
         return menu;
       })
     );
-  }, [asPath, gameId, isReady, pathname]);
+  }, [game, router.asPath]);
 
   return menus;
+}
+
+function useCurrentGame() {
+  const router = useRouter();
+  const gameId = router.query.gameId;
+
+  const { data, error } = useSWR(`/games/${gameId}`, async () => {
+    if (!gameId) {
+      return;
+    }
+
+    const session = await getSession();
+    const gameService = new GameService(session?.user.access_token);
+    return await gameService.getOneById(`${router.query.gameId}`);
+  });
+
+  return {
+    game: data,
+    isLoading: !data && !error,
+  };
 }
 
 export default Layout;

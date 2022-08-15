@@ -25,12 +25,12 @@ const GameParticipantsTeamOrSoloModeForm: ComponentType<
 
   const doUpdate = async (is_solo: boolean) => {
     await toast.promise(
-      doAction(async () => {
-        return await gameService.update({
+      doAction(
+        gameService.update({
           ...game,
           is_solo,
-        });
-      }),
+        })
+      ),
       {
         loading: "Updating game team participants mode...",
         success: "Game team participants mode updated!",

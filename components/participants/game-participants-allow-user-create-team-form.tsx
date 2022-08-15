@@ -19,12 +19,12 @@ const GameParticipantsAllowUserCreateTeamForm: ComponentType<
 
   const doUpdate = async (allow_user_create_team: boolean) => {
     await toast.promise(
-      doAction(async () => {
-        return await gameService.update({
+      doAction(
+        gameService.update({
           ...game,
           allow_user_create_team,
-        });
-      }),
+        })
+      ),
       {
         loading: `Updating...`,
         success: `Update success!`,

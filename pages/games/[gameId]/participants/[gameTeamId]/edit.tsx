@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  const user = session.user as LoginDto;
+  const user = session.user;
   const gameTeamService = new GameTeamService(user.access_token);
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";
@@ -59,14 +59,11 @@ const ParticipantsTeamEditPage: NextPage<
   const onSubmit = async (data: GameTeam) => {
     const game_id = router.query.gameId?.toString() ?? "";
 
-    await toast.promise(
-      doAction(async () => await teamService.update(data)),
-      {
-        loading: "Updating team...",
-        success: "Team updated!",
-        error: "Failed to update team.",
-      }
-    );
+    await toast.promise(doAction(teamService.update(data)), {
+      loading: "Updating team...",
+      success: "Team updated!",
+      error: "Failed to update team.",
+    });
 
     router.push(`/games/${game_id}/participants`);
   };

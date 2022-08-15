@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["bluejack.binus.ac.id"],
+    domains: ["bluejack.binus.ac.id", "ui-avatars.com"],
   },
   async redirects() {
     return [

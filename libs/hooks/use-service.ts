@@ -1,6 +1,5 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import LoginDto from "../dtos/login-dto";
 
 interface CanBeInstantiated<T> {
   new (accessToken?: string): T;
@@ -12,10 +11,12 @@ export default function useService<T>(serviceType: CanBeInstantiated<T>): T {
 
   useEffect(() => {
     if (status === "authenticated") {
-      const user = data.user as LoginDto;
-      setService(new serviceType(user.access_token));
+      const user = data.user;
+      if (user.access_token) {
+        setService(new serviceType(user.access_token));
+      }
     }
-  }, [status]);
+  }, [data?.user, serviceType, status]);
 
   return service as T;
 }

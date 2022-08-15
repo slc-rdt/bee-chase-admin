@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<
     };
   }
 
-  const user = session.user as LoginDto;
+  const user = session.user;
   const gameService = new GameService(user.access_token);
   const gameId = context.params?.gameId ?? "";
   const game = await gameService.getOneById(gameId);

@@ -24,6 +24,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: "/auth/login",
+  },
   callbacks: {
     async session({ session, token }) {
       // @ts-ignore https://github.com/nextauthjs/next-auth/discussions/2762#discussioncomment-1332952
@@ -31,8 +34,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user }) {
-      if (user)
-        token.user = user;
+      if (user) token.user = user;
       return token;
     },
   },
