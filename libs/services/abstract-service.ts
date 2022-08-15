@@ -1,10 +1,10 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 export default abstract class AbstractService {
   protected axios: AxiosInstance;
 
   constructor(protected accessToken?: string) {
-    const axiosConfig = accessToken
+    const axiosConfig: AxiosRequestConfig = accessToken
       ? {
           headers: {
             Authorization: `Bearer ${accessToken}`,
