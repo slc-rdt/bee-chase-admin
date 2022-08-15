@@ -60,12 +60,12 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
                 0: "bg-green-500",
                 1: "bg-yellow-500",
                 2: "bg-base-300",
-              }[mission.pivot.availability]
+              }[mission.availability]
             }`}
           />
 
           <span>
-            {AvailabilityTypes[mission.pivot.availability].toLowerCase()}
+            {AvailabilityTypes[mission.availability].toLowerCase()}
           </span>
         </section>
 
