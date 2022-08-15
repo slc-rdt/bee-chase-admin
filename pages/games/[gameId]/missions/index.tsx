@@ -3,7 +3,9 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Pagination from "../../../../components/common/pagination";
 import Layout from "../../../../components/layouts/layout";
+import MissionCard from "../../../../components/mission/mission-card";
 import LoginDto from "../../../../libs/dtos/login-dto";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../libs/models/mission";
@@ -11,7 +13,7 @@ import MissionService from "../../../../libs/services/mission-service";
 import { authOptions } from "../../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
-  { paginatedMissions?: PaginateResponseDto<Mission> },
+  { page: number; paginatedMissions: PaginateResponseDto<Mission> },
   { gameId: string }
 > = async (context) => {
   const session = await unstable_getServerSession(
@@ -34,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<
   const missionService = new MissionService(user.access_token);
 
   const gameId = context.params?.gameId ?? "";
-  const page = 1;
+  const page = Number(context.query.page ?? 1);
 
   const paginatedMissions = await missionService.getAllPaginated(gameId, {
     page,
@@ -42,25 +44,17 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
+      page,
       paginatedMissions,
     },
   };
 };
 
 const MissionsPage = ({
+  page,
   paginatedMissions,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-
-  const gameId = router.query.gameId;
-
-  const onEdit = (mission: Mission) => {
-    router.push(`/games/${gameId}/missions/${mission.id}/edit`);
-  };
-
-  const onDelete = (mission: Mission) => {
-    router.push(`/games/${gameId}/missions`);
-  };
 
   return (
     <Layout>
@@ -74,39 +68,11 @@ const MissionsPage = ({
         </Link>
       </section>
 
-      <section className="grid grid-cols-1 gap-4">
-        {paginatedMissions?.data.length === 0 && (
-          <h2 className="font-lg text-center font-medium">No missions yet.</h2>
-        )}
-
-        {paginatedMissions?.data.map((mission) => (
-          <div key={mission.id} className="card w-full bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title flex items-center justify-between capitalize">
-                <span>{mission.name}</span>
-                <small>({mission.point_value}) Points</small>
-              </h2>
-
-              <p>{mission.description}</p>
-
-              <div className="card-actions justify-end">
-                <button
-                  onClick={() => onEdit(mission)}
-                  className="btn btn-secondary gap-2"
-                >
-                  <PencilIcon className="h-5 w-5" /> Edit
-                </button>
-                <button
-                  onClick={() => onDelete(mission)}
-                  className="btn btn-error gap-2"
-                >
-                  <TrashIcon className="h-5 w-5" /> Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </section>
+      <Pagination
+        pagination={paginatedMissions}
+        currentPage={page}
+        render={(mission) => <MissionCard key={mission.id} mission={mission} />}
+      />
     </Layout>
   );
 };
