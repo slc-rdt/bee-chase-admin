@@ -65,15 +65,12 @@ const PaginationButtons: ComponentType<
             <select
               onChange={(e) => onChangePage(Number(e.target.value))}
               className="select select-bordered"
+              value={currentPage}
             >
               {Array.from({ length }).map((_, idx) => {
                 const page = idx + 1;
                 return (
-                  <option
-                    key={page}
-                    value={page}
-                    selected={currentPage === page}
-                  >
+                  <option key={page} value={page}>
                     {page}
                   </option>
                 );
