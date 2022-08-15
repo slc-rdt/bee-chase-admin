@@ -202,7 +202,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           </label>
           <label className="label">
             <span className="label-text">
-              Participants {isShowInFeed ? "can" : "can't"} see each other's
+              Participants {isShowInFeed ? "can" : "can't"} see each other&apos;s
               submissions.
             </span>
           </label>
