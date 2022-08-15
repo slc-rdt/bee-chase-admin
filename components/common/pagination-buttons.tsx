@@ -44,21 +44,23 @@ const PaginationButtons: ComponentType<
       </section>
 
       {/* Desktop */}
-      <section className="btn-group hidden justify-end sm:flex" {...rest}>
-        <button
-          onClick={() => onChangePage(1)}
-          disabled={!hasPrev}
-          className="btn btn-secondary"
-        >
-          <ChevronDoubleLeftIcon className="h-5 w-5" />
-        </button>
-        <button
-          onClick={() => onChangePage(currentPage - 1)}
-          disabled={!hasPrev}
-          className="btn btn-secondary"
-        >
-          <ChevronLeftIcon className="h-5 w-5" />
-        </button>
+      <section className="hidden justify-end sm:flex" {...rest}>
+        <section className="btn-group">
+          <button
+            onClick={() => onChangePage(1)}
+            disabled={!hasPrev}
+            className="btn btn-secondary"
+          >
+            <ChevronDoubleLeftIcon className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => onChangePage(currentPage - 1)}
+            disabled={!hasPrev}
+            className="btn btn-secondary"
+          >
+            <ChevronLeftIcon className="h-5 w-5" />
+          </button>
+        </section>
 
         <section className="form-control mx-4">
           <div className="input-group">
@@ -80,20 +82,22 @@ const PaginationButtons: ComponentType<
           </div>
         </section>
 
-        <button
-          onClick={() => onChangePage(currentPage + 1)}
-          disabled={!hasNext}
-          className="btn btn-secondary"
-        >
-          <ChevronRightIcon className="h-5 w-5" />
-        </button>
-        <button
-          onClick={() => onChangePage(length)}
-          disabled={!hasNext}
-          className="btn btn-secondary"
-        >
-          <ChevronDoubleRightIcon className="h-5 w-5" />
-        </button>
+        <section className="btn-group">
+          <button
+            onClick={() => onChangePage(currentPage + 1)}
+            disabled={!hasNext}
+            className="btn btn-secondary"
+          >
+            <ChevronRightIcon className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => onChangePage(length)}
+            disabled={!hasNext}
+            className="btn btn-secondary"
+          >
+            <ChevronDoubleRightIcon className="h-5 w-5" />
+          </button>
+        </section>
       </section>
     </>
   );

@@ -41,7 +41,11 @@ const Pagination = <T extends unknown>({
   return (
     <section className="mt-4 grid grid-cols-1 gap-4">
       {pagination.data.length === 0 && (
-        <h2 className="font-lg text-center font-medium">No data.</h2>
+        <div className="card shadow-xl">
+          <div className="card-body">
+            <h2 className="font-lg text-center font-medium">No data.</h2>
+          </div>
+        </div>
       )}
 
       {pagination.data.map(render)}
