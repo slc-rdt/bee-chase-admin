@@ -120,7 +120,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
             />
             <label className="label">
               <span className="label-text-alt">
-                Don't forget to share it with your participants!
+                Do not forget to share it with your participants!
               </span>
             </label>
           </section>
