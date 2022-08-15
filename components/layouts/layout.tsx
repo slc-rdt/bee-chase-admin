@@ -17,13 +17,6 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
   const { game, isLoading } = useCurrentGame();
   const sidebarMenus = useSidebarMenus(game);
 
-  if (
-    status === "unauthenticated" &&
-    !router.pathname.startsWith("/auth/login")
-  ) {
-    router.push("/auth/login");
-  }
-
   const user = data?.user;
 
   const onLogout = async () => {
