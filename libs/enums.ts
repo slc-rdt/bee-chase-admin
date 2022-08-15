@@ -9,3 +9,9 @@ export enum MissionTypes {
   TEXT,
   GPS,
 }
+
+export enum AutomationType {
+  SET_MISSION_AVAILABLE,
+  SET_MISSION_EXPIRED,
+  NOTIFY_ALL_USERS,
+}
