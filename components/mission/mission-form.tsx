@@ -2,6 +2,7 @@ import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import CreateMissionDto from "../../libs/dtos/create-mission-dto";
 import UpdateMissionDto from "../../libs/dtos/update-mission-dto";
+import { AvailabilityTypes, MissionTypes } from "../../libs/enums";
 import Mission from "../../libs/models/mission";
 import MissionData from "../../libs/models/mission-data";
 import MissionFormGpsType from "./mission-form-gps-type";
@@ -14,9 +15,6 @@ interface IMissionForm {
   isLoading: boolean;
   onMissionFormSubmit: (data: MissionFormValues) => void;
 }
-
-const missionTypes = ["image", "text", "gps"];
-const availabilityTypes = ["available", "hidden", "expired"];
 
 const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   mission,
@@ -39,14 +37,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   });
 
   const answerType = Number(watch("answer_type"));
-  const isTypeText = answerType === 1;
-  const isTypeGps = answerType === 2;
-
   const availability = Number(watch("availability"));
-  const isAvailable = availability === 0;
-  const isHidden = availability === 1;
-  const isExpired = availability === 2;
-
   const isShowInFeed = Boolean(watch("shown_in_feed"));
 
   const onSubmit = handleSubmit((data) => {
@@ -73,11 +64,13 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             disabled={isLoading}
             defaultValue={mission?.answer_type}
           >
-            {missionTypes.map((type, idx) => (
-              <option key={type} value={idx}>
-                {type}
-              </option>
-            ))}
+            {Object.entries(MissionTypes)
+              .filter(([_, value]) => typeof value === "number")
+              .map(([type, value]) => (
+                <option key={type} value={value}>
+                  {type.toLowerCase()}
+                </option>
+              ))}
           </select>
         </section>
 
@@ -150,7 +143,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           />
         </section>
 
-        {isTypeText && (
+        {answerType === MissionTypes.TEXT && (
           <MissionFormTextType
             registerFn={() => register("mission_data.accepted_answers")}
             watch={watch}
@@ -158,7 +151,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           />
         )}
 
-        {isTypeGps && (
+        {answerType === MissionTypes.GPS && (
           <MissionFormGpsType
             registerLatFn={() => register("mission_data.latitude")}
             registerLongFn={() => register("mission_data.longitude")}
@@ -176,19 +169,21 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             disabled={isLoading}
             defaultValue={mission?.pivot.availability}
           >
-            {availabilityTypes.map((type, idx) => (
-              <option key={type} value={idx}>
-                {type}
-              </option>
-            ))}
+            {Object.entries(AvailabilityTypes)
+              .filter(([_, value]) => typeof value === "number")
+              .map(([type, value]) => (
+                <option key={type} value={value}>
+                  {type.toLowerCase()}
+                </option>
+              ))}
           </select>
           <label className="label">
             <span className="label-text">
-              {isAvailable &&
+              {availability === AvailabilityTypes.AVAILABLE &&
                 "Participants can see and complete this Mission when the Game is live."}
-              {isHidden &&
+              {availability === AvailabilityTypes.HIDDEN &&
                 "Participants can't see or complete this Mission when the Game is live."}
-              {isExpired &&
+              {availability === AvailabilityTypes.EXPIRED &&
                 "Participants can see but not complete this Mission when the Game is live."}
             </span>
           </label>

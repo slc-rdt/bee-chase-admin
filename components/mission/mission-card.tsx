@@ -2,6 +2,7 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import React, { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
+import { AvailabilityTypes } from "../../libs/enums";
 import useLoading from "../../libs/hooks/use-loading";
 import useService from "../../libs/hooks/use-service";
 import Mission from "../../libs/models/mission";
@@ -10,8 +11,6 @@ import MissionService from "../../libs/services/mission-service";
 interface IMissionCard {
   mission: Mission;
 }
-
-const availabilityTypes = ["available", "hidden", "expired"];
 
 const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
   mission,
@@ -68,7 +67,9 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             }`}
           />
 
-          <span>{availabilityTypes[mission.pivot.availability]}</span>
+          <span>
+            {AvailabilityTypes[mission.pivot.availability].toLowerCase()}
+          </span>
         </section>
 
         <section className="card-actions justify-end">
