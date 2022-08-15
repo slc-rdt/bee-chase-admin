@@ -5,7 +5,7 @@ import {
   MenuIcon,
   QuestionMarkCircleIcon,
   UserGroupIcon,
-  UsersIcon
+  UsersIcon,
 } from "@heroicons/react/outline";
 import { getSession, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
