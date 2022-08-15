@@ -1,23 +1,31 @@
 import {
   ClipboardIcon,
   ClockIcon,
-  ColorSwatchIcon,
   FilmIcon,
   FlagIcon,
   MenuIcon,
   UserGroupIcon,
 } from "@heroicons/react/outline";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useEffect, useState } from "react";
+import LoginDto from "../../libs/dtos/login-dto";
 
 const Layout: ComponentType<ComponentProps<"div">> = ({
   children,
   ...rest
 }) => {
+  const { data, status } = useSession();
   const router = useRouter();
   const sidebarMenus = useSidebarMenus();
+
+  if (status === "unauthenticated") {
+    router.push("/auth/login");
+  }
+
+  const user = data?.user as LoginDto;
 
   const onLogout = async () => {
     const data = await signOut({
@@ -55,7 +63,18 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
             <div className="dropdown-end dropdown">
               <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
                 <div className="w-10 rounded-full">
-                  <img src="https://placeimg.com/80/80/people" />
+                  {status === "loading" && (
+                    <div className="h-full w-full animate-pulse bg-base-300" />
+                  )}
+
+                  {status !== "loading" && (
+                    <Image
+                      src={user?.picture_url}
+                      alt="avatar"
+                      width={40}
+                      height={40}
+                    />
+                  )}
                 </div>
               </label>
               <ul
