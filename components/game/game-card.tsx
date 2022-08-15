@@ -30,30 +30,25 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
         {...rest}
       >
         <div className="card-body">
-          <div className="flex items-center gap-4">
-            <div className="avatar">
-              <div className="w-24 rounded-xl">
-                <img src="https://placeimg.com/192/192/people" />
-              </div>
-            </div>
-
+          <section>
             <h2 className="card-title">{game.name}</h2>
+            <p className="truncate">{game.description}</p>
+          </section>
 
-            <div className="flex flex-grow justify-end">
-              <button
-                type="button"
-                disabled={isLoading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onDelete(game);
-                }}
-                className={`btn btn-error ${isLoading && "loading"}`}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
+          <section className="flex flex-grow justify-end">
+            <button
+              type="button"
+              disabled={isLoading}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onDelete(game);
+              }}
+              className={`btn btn-error ${isLoading && "loading"}`}
+            >
+              Delete
+            </button>
+          </section>
         </div>
       </div>
     </Link>
