@@ -11,6 +11,8 @@ interface IMissionCard {
   mission: Mission;
 }
 
+const availabilityTypes = ["available", "hidden", "expired"];
+
 const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
   mission,
   ...rest
@@ -46,14 +48,30 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
       {...rest}
     >
       <div className="card-body">
-        <h2 className="card-title flex items-center justify-between capitalize">
+        <h2 className="card-title flex flex-wrap items-center justify-between capitalize">
           <span>{mission.name}</span>
           <small>({mission.point_value}) Points</small>
         </h2>
 
         <p>{mission.description}</p>
 
-        <div className="card-actions justify-end">
+        <div className="divider"></div>
+
+        <section className="flex items-center gap-2 capitalize">
+          <div
+            className={`h-4 w-4 rounded-full ${
+              {
+                0: "bg-green-500",
+                1: "bg-yellow-500",
+                2: "bg-base-300",
+              }[mission.pivot.availability]
+            }`}
+          />
+
+          <span>{availabilityTypes[mission.pivot.availability]}</span>
+        </section>
+
+        <section className="card-actions justify-end">
           <button
             disabled={isLoading}
             onClick={() => onEdit(mission)}
@@ -68,7 +86,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
           >
             <TrashIcon className="h-5 w-5" /> Delete
           </button>
-        </div>
+        </section>
       </div>
     </div>
   );
