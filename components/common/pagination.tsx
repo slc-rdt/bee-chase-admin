@@ -3,7 +3,7 @@ import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import PaginationButtons from "./pagination-buttons";
 
 interface IPagination<T> {
-  currentPage?: number;
+  currentPage: number;
   pagination: PaginateResponseDto<T>;
   render: (data: T) => JSX.Element;
 }
