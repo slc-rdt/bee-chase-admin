@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import PaginationButtons from "./pagination-buttons";
 
@@ -14,6 +15,18 @@ const Pagination = <T extends unknown>({
   render,
 }: IPagination<T>) => {
   const router = useRouter();
+
+  useEffect(() => {
+    if (currentPage > pagination.last_page || currentPage < 1) {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          page: 1,
+        },
+      });
+    }
+  }, [currentPage, pagination.last_page, router]);
 
   const onChangePage = (page: number) => {
     router.push({
