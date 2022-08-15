@@ -12,7 +12,7 @@ export type MissionFormValues = CreateMissionDto | UpdateMissionDto;
 interface IMissionForm {
   mission?: Mission;
   isLoading: boolean;
-  onMissionFormSubmit: (data: MissionFormValues) => {};
+  onMissionFormSubmit: (data: MissionFormValues) => void;
 }
 
 const missionTypes = ["image", "text", "gps"];

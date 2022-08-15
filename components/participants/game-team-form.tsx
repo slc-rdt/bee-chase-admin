@@ -6,7 +6,7 @@ type GameTeamFormValues = GameTeam;
 
 interface IGameTeamForm {
   gameTeam?: GameTeam;
-  onGameTeamFormSubmit: (data: GameTeamFormValues) => {};
+  onGameTeamFormSubmit: (data: GameTeamFormValues) => void;
   isLoading: boolean;
 }
 
