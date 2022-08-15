@@ -49,7 +49,14 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
 
   const isShowInFeed = Boolean(watch("shown_in_feed"));
 
-  const onSubmit = handleSubmit(onMissionFormSubmit);
+  const onSubmit = handleSubmit((data) => {
+    const acceptedAnswers = data.mission_data.accepted_answers;
+    if (typeof acceptedAnswers === "string") {
+      data.mission_data.accepted_answers = acceptedAnswers.split("\n");
+    }
+
+    onMissionFormSubmit(data);
+  });
 
   return (
     <div className="card shadow-xl" {...rest}>

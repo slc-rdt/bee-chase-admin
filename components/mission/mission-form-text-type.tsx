@@ -12,11 +12,15 @@ interface IMissionFormTextType {
 const MissionFormTextType: ComponentType<
   ComponentProps<"section"> & IMissionFormTextType
 > = ({ registerFn, watch, isLoading, defaultValue, ...rest }) => {
-  const acceptedAnswersStr = watch("mission_data.accepted_answers") ?? "";
-  const acceptedAnswers = acceptedAnswersStr
-    .split("\n")
-    .map((x) => x.trim())
-    .filter((x) => !!x);
+  const originalAcceptedAnswers = watch("mission_data.accepted_answers") ?? "";
+
+  const acceptedAnswers =
+    typeof originalAcceptedAnswers === "string"
+      ? originalAcceptedAnswers
+          .split("\n")
+          .map((x) => x.trim())
+          .filter((x) => !!x)
+      : originalAcceptedAnswers;
 
   return (
     <section className="form-control w-full" {...rest}>
@@ -31,7 +35,9 @@ const MissionFormTextType: ComponentType<
       <label className="label">
         <div className="label-text-alt flex flex-wrap gap-1">
           {acceptedAnswers.map((answer) => (
-            <div key={answer}  className="badge badge-primary">{answer}</div>
+            <div key={answer} className="badge badge-primary">
+              {answer}
+            </div>
           ))}
         </div>
       </label>
