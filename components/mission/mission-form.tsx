@@ -167,7 +167,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             {...register("availability")}
             className="select select-bordered w-full capitalize"
             disabled={isLoading}
-            defaultValue={mission?.pivot.availability}
+            defaultValue={mission?.availability}
           >
             {Object.entries(AvailabilityTypes)
               .filter(([_, value]) => typeof value === "number")
