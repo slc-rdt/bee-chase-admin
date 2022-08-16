@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import PaginationButtons from "./pagination-buttons";
 
@@ -16,27 +16,24 @@ const Pagination = <T extends unknown>({
 }: IPagination<T>) => {
   const router = useRouter();
 
-  useEffect(() => {
-    if (currentPage > pagination.last_page || currentPage < 1) {
+  const onChangePage = useCallback(
+    (page: number) => {
       router.push({
         pathname: router.pathname,
         query: {
           ...router.query,
-          page: 1,
+          page,
         },
       });
-    }
-  }, [currentPage, pagination.last_page, router]);
+    },
+    [router]
+  );
 
-  const onChangePage = (page: number) => {
-    router.push({
-      pathname: router.pathname,
-      query: {
-        ...router.query,
-        page,
-      },
-    });
-  };
+  useEffect(() => {
+    if (currentPage > pagination.last_page || currentPage < 1) {
+      onChangePage(1);
+    }
+  }, [currentPage, onChangePage, pagination.last_page]);
 
   return (
     <section className="mt-4 grid grid-cols-1 gap-4">
