@@ -2,6 +2,7 @@ import CreateGameDto from "../dtos/create-game-dto";
 import PaginateRequestDto from "../dtos/paginate-request-dto";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Game from "../models/game";
+import User from "../models/user";
 import AbstractService from "./abstract-service";
 
 export default class GameService extends AbstractService {
@@ -37,6 +38,20 @@ export default class GameService extends AbstractService {
   public async delete(game: Game) {
     const { data } = await this.axios.delete<Game>(
       `${this.apiUrl}/games/${game.id}`
+    );
+    return data;
+  }
+
+  public async addAdmin(game: Game, user: User) {
+    const { data } = await this.axios.post<Game>(
+      `${this.apiUrl}/games/${game.id}/admins/${user.id}`
+    );
+    return data;
+  }
+
+  public async removeAdmin(game: Game, user: User) {
+    const { data } = await this.axios.delete<Game>(
+      `${this.apiUrl}/games/${game.id}/admins/${user.id}`
     );
     return data;
   }
