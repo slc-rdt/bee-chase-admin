@@ -35,7 +35,7 @@ const MissionFormTextType: ComponentType<
       <textarea
         {...register("mission_data.accepted_answers")}
         disabled={isLoading}
-        className="textarea textarea-bordered h-24"
+        className="textarea textarea-bordered h-32"
       ></textarea>
 
       <label className="label">
