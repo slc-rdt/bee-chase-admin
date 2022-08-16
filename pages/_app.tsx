@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <Head>
-        <title>BeeChase | Mission Impossible</title>
+        <title>BeeChase | Admin</title>
         <meta
           name="description"
           content="Complete your missions in BINUS University!"
