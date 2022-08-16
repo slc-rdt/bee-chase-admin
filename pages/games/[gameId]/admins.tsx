@@ -7,6 +7,9 @@ import {
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import AddAdminUserCard from "../../../components/add-admin/add-admin-user-card";
+import Pagination from "../../../components/common/pagination";
+import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import useLoading from "../../../libs/hooks/common/use-loading";
 import Game from "../../../libs/models/game";
 import User from "../../../libs/models/user";
 import GameService from "../../../libs/services/game-service";
@@ -16,7 +19,8 @@ import createServerSideService from "../../../libs/utils/create-server-side-serv
 export const getServerSideProps: GetServerSideProps<
   {
     game: Game;
-    users: User[];
+    pagintedUsers: PaginateResponseDto<User>;
+    page: number;
   },
   { gameId: string }
 > = async (context) => {
@@ -25,29 +29,35 @@ export const getServerSideProps: GetServerSideProps<
     createServerSideService(context.req, GameService),
   ]);
 
-  const keyword = context.query?.search ?? "";
   const gameId = context.params?.gameId ?? "";
+  const keyword = context.query.search ?? "";
+  const page = Number(context.query.page ?? 1);
 
   const [users, game] = await Promise.all([
-    userService.search(`${keyword}`),
+    userService.search({ search: `${keyword}`, page }),
     gameService.getOneById(gameId),
   ]);
 
   return {
     props: {
       game,
-      users,
+      pagintedUsers: users,
+      page,
     },
   };
 };
 
 const AdminsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ game, users }) => {
+> = ({ game, pagintedUsers, page }) => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<{ keyword: string }>();
-  const onSubmit = handleSubmit(async (data) => {
-    router.push(`/games/${router.query.gameId}/admins?search=${data.keyword}`);
+  const { isLoading, doAction } = useLoading();
+
+  const onSubmit = handleSubmit((data) => {
+    doAction(
+      router.push(`/games/${router.query.gameId}/admins?search=${data.keyword}`)
+    );
   });
 
   return (
@@ -60,24 +70,26 @@ const AdminsPage: NextPage<
             placeholder="Search..."
             className="input input-bordered w-full"
           />
-          <button type="submit" className="btn btn-primary btn-square">
-            <SearchIcon className="h-6 w-6" />
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`btn btn-primary btn-square ${
+              isLoading && "btn-square loading"
+            }`}
+          >
+            {!isLoading && <SearchIcon className="h-6 w-6" />}
           </button>
         </form>
       </section>
 
       <section className="grid grid-cols-1 gap-4">
-        {users.length === 0 && (
-          <div className="card shadow-xl">
-            <div className="card-body">
-              <h2 className="font-lg text-center font-medium">No users.</h2>
-            </div>
-          </div>
-        )}
-
-        {users.map((user) => (
-          <AddAdminUserCard key={user.id} game={game} user={user} />
-        ))}
+        <Pagination
+          currentPage={page}
+          pagination={pagintedUsers}
+          render={(user) => (
+            <AddAdminUserCard key={user.id} game={game} user={user} />
+          )}
+        />
       </section>
     </>
   );
