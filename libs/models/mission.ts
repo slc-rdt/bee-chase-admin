@@ -1,4 +1,5 @@
 import BaseModel from "./base-model";
+import Submission from "./submission";
 
 export default interface Mission extends BaseModel {
   name: string;
@@ -10,4 +11,5 @@ export default interface Mission extends BaseModel {
   answer_type: number;
   availability: number;
   mission_data: string;
+  submissions?: Submission[];
 }
