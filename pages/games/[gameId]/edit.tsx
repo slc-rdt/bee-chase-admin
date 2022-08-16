@@ -1,36 +1,26 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameForm from "../../../components/game/game-form";
+import { redirectToLogin } from "../../../libs/constants";
 import UpdateGameDto from "../../../libs/dtos/update-game-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Game from "../../../libs/models/game";
 import GameService from "../../../libs/services/game-service";
-import { authOptions } from "../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game },
   { gameId: string }
 > = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const token = await getToken({ req: context.req });
 
-  if (!session?.user) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
+  if (!token?.user) {
+    return redirectToLogin;
   }
 
-  const user = session.user;
+  const user = token.user;
   const gameService = new GameService(user.access_token);
   const game = await gameService.getOneById(context.params?.gameId ?? "");
 

@@ -3,41 +3,31 @@ import { PlusIcon } from "@heroicons/react/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import GameParticipantsAllowUserCreateTeamForm from "../../../../components/participants/game-participants-allow-user-create-team-form";
 import GameParticipantsTeamOrSoloModeForm from "../../../../components/participants/game-participants-team-or-solo-mode-form";
 import GameTeamCard from "../../../../components/participants/game-team-card";
+import { redirectToLogin } from "../../../../libs/constants";
 import Game from "../../../../libs/models/game";
 import GameTeam from "../../../../libs/models/game-team";
 import GameService from "../../../../libs/services/game-service";
 import GameTeamService from "../../../../libs/services/game-team-service";
-import { authOptions } from "../../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game; gameTeams: GameTeam[] },
   { gameId: string }
 > = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const token = await getToken({ req: context.req });
 
-  if (!session?.user) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
+  if (!token?.user) {
+    return redirectToLogin;
   }
 
-  const user = session.user;
+  const user = token.user;
   const gameService = new GameService(user.access_token);
   const gameTeamService = new GameTeamService(user.access_token);
   const gameId = context.params?.gameId ?? "";

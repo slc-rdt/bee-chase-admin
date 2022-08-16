@@ -1,38 +1,26 @@
-import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/solid";
+import { PlusIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Pagination from "../../../../components/common/pagination";
-import Layout from "../../../../components/layouts/layout";
 import MissionCard from "../../../../components/mission/mission-card";
-import LoginDto from "../../../../libs/dtos/login-dto";
+import { redirectToLogin } from "../../../../libs/constants";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../libs/models/mission";
 import MissionService from "../../../../libs/services/mission-service";
-import { authOptions } from "../../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
   { page: number; paginatedMissions: PaginateResponseDto<Mission> },
   { gameId: string }
 > = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const token = await getToken({ req: context.req });
 
-  if (!session?.user) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
+  if (!token?.user) {
+    return redirectToLogin;
   }
 
-  const user = session.user;
+  const user = token.user;
   const missionService = new MissionService(user.access_token);
 
   const gameId = context.params?.gameId ?? "";

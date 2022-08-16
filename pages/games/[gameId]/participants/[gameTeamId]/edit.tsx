@@ -1,39 +1,29 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameTeamForm from "../../../../../components/participants/game-team-form";
+import { redirectToLogin } from "../../../../../libs/constants";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
 import useService from "../../../../../libs/hooks/common/use-service";
 import GameTeam from "../../../../../libs/models/game-team";
 import GameTeamService from "../../../../../libs/services/game-team-service";
-import { authOptions } from "../../../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
   { gameTeam: GameTeam },
   { gameId: string; gameTeamId: string }
 > = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const token = await getToken({ req: context.req });
 
-  if (!session?.user) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
+  if (!token?.user) {
+    return redirectToLogin;
   }
 
-  const user = session.user;
+  const user = token.user;
   const gameTeamService = new GameTeamService(user.access_token);
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";

@@ -1,35 +1,25 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import Link from "next/link";
 import Pagination from "../../components/common/pagination";
 import GameCard from "../../components/game/game-card";
+import { redirectToLogin } from "../../libs/constants";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
-import { authOptions } from "../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<{
   page: number;
   paginatedGames: PaginateResponseDto<Game>;
 }> = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const token = await getToken({ req: context.req });
 
-  if (!session?.user) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
+  if (!token?.user) {
+    return redirectToLogin;
   }
 
-  const user = session.user;
+  const user = token.user;
   const gameService = new GameService(user.access_token);
   const page = Number(context.query.page ?? 1);
   const paginatedGames = await gameService.getAllPaginated({ page });

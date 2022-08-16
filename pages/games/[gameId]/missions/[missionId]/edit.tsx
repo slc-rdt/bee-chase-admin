@@ -1,36 +1,26 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import MissionForm from "../../../../../components/mission/mission-form";
+import { redirectToLogin } from "../../../../../libs/constants";
 import UpdateMissionDto from "../../../../../libs/dtos/update-mission-dto";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
 import useService from "../../../../../libs/hooks/common/use-service";
 import Mission from "../../../../../libs/models/mission";
 import MissionService from "../../../../../libs/services/mission-service";
-import { authOptions } from "../../../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps<
   { mission: Mission },
   { gameId: string; missionId: string }
 > = async (context) => {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const token = await getToken({ req: context.req });
 
-  if (!session?.user) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/auth/login",
-        permanent: false,
-      },
-    };
+  if (!token?.user) {
+    return redirectToLogin;
   }
 
-  const user = session.user;
+  const user = token.user;
   const missionService = new MissionService(user.access_token);
   const gameId = context.params?.gameId ?? "";
   const missionId = context.params?.missionId ?? "";
