@@ -41,7 +41,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
   };
 
   return (
-    <div className="drawer-mobile drawer" {...rest}>
+    <div className="drawer drawer-mobile" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {status === "authenticated" && (
@@ -51,7 +51,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
                 <div className="flex-none lg:hidden">
                   <label
                     htmlFor="my-drawer-3"
-                    className="btn btn-square btn-ghost"
+                    className="btn btn-ghost btn-square"
                   >
                     <MenuIcon className="inline-block h-6 w-6 stroke-current" />
                   </label>
@@ -66,8 +66,8 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
             </div>
 
             <div className="flex-none gap-2">
-              <div className="dropdown-end dropdown">
-                <label tabIndex={0} className="avatar btn btn-circle btn-ghost">
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
                   <div className="w-10 rounded-full">
                     <Image
                       src={
@@ -102,21 +102,25 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
 
           <div className="menu w-80 overflow-y-auto bg-base-100 p-4">
             <ul>
-              {sidebarMenus.map((menu) => (
-                <li
-                  key={menu.path}
-                  className={`${
-                    menu.isActive && "bg-primary text-base-100"
-                  } rounded-box`}
-                >
-                  <Link href={menu.path}>
-                    <button>
-                      {menu.icon}
-                      {menu.label}
-                    </button>
-                  </Link>
-                </li>
-              ))}
+              {sidebarMenus.map((menu, idx) =>
+                menu ? (
+                  <li
+                    key={menu.path}
+                    className={`${
+                      menu.isActive && "bg-primary text-base-100"
+                    } rounded-box`}
+                  >
+                    <Link href={menu.path}>
+                      <button>
+                        {menu.icon}
+                        {menu.label}
+                      </button>
+                    </Link>
+                  </li>
+                ) : (
+                  <div className="divider" key={idx} />
+                )
+              )}
             </ul>
 
             <div className="flex h-full flex-col justify-end">

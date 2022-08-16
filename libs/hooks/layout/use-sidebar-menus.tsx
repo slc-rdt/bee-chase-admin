@@ -1,4 +1,11 @@
-import { ClipboardIcon, FlagIcon, UserGroupIcon, ClockIcon, UsersIcon } from "@heroicons/react/solid";
+import {
+  ClipboardIcon,
+  FlagIcon,
+  UserGroupIcon,
+  ClockIcon,
+  UsersIcon,
+  PhotographIcon,
+} from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Game from "../../models/game";
@@ -10,9 +17,11 @@ interface IMenu {
   isActive: boolean;
 }
 
-export default function useSidebarMenus(game?: Game): IMenu[] {
+type MenuItem = IMenu | null;
+
+export default function useSidebarMenus(game?: Game) {
   const router = useRouter();
-  const [menus, setMenus] = useState<IMenu[]>([]);
+  const [menus, setMenus] = useState<MenuItem[]>([]);
 
   useEffect(() => {
     const gameId = game?.id;
@@ -22,7 +31,7 @@ export default function useSidebarMenus(game?: Game): IMenu[] {
       return;
     }
 
-    const originalMenus: IMenu[] = [
+    const originalMenus: MenuItem[] = [
       {
         label: "Details",
         path: `/games/${gameId}/edit`,
@@ -65,10 +74,18 @@ export default function useSidebarMenus(game?: Game): IMenu[] {
         icon: <UsersIcon className="h-6 w-6" />,
         isActive: false,
       },
+      null,
+      {
+        label: "Submissions",
+        path: `/games/${gameId}/submissions`,
+        icon: <PhotographIcon className="h-6 w-6" />,
+        isActive: false,
+      },
     ];
 
     setMenus(
       originalMenus.map((menu) => {
+        if (!menu) return menu;
         const sanitizedPath = new URL(menu.path, location.href).pathname;
         const sanitizedAsPath = new URL(router.asPath, location.href).pathname;
         menu.isActive = sanitizedAsPath.startsWith(sanitizedPath);
