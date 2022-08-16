@@ -36,12 +36,13 @@ const AddAdminUserCard: ComponentType<
   };
 
   return (
-    <div className="card shadow-xl" {...rest}>
+    <div className={`card shadow-xl ${isLoading && "animate-pulse"}`} {...rest}>
       <div className="card-body">
         <div className="flex items-center gap-4">
           <section>
             <input
               onChange={(e) => onCheck(e.target.checked)}
+              disabled={isLoading}
               type="checkbox"
               className="checkbox checkbox-primary"
               defaultChecked={isAlreadyAdmin}
