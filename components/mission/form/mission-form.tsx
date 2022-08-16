@@ -30,6 +30,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
 
   const { register, handleSubmit, watch } = useForm<MissionFormValues>({
     defaultValues: {
+      ...(mission ?? {}),
       mission_data: missionData,
       shown_in_feed:
         typeof mission?.shown_in_feed === "undefined"
@@ -53,7 +54,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   return (
     <div className="card shadow-xl" {...rest}>
       <form onSubmit={onSubmit} className="card-body">
-        <h2 className="card-title">Create Mission</h2>
+        <h2 className="card-title">{mission ? "Edit" : "Create"} Mission</h2>
 
         <MissionFormChooseAnswerType {...{ register, isLoading, mission }} />
 
@@ -67,7 +68,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
               type="text"
               disabled={isLoading}
               className="input input-bordered w-full"
-              defaultValue={mission?.name}
               required
             />
           </section>
@@ -81,7 +81,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
               type="number"
               disabled={isLoading}
               className="input input-bordered w-full"
-              defaultValue={mission?.point_value}
               required
             />
           </section>
@@ -95,7 +94,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             {...register("description")}
             disabled={isLoading}
             className="textarea textarea-bordered h-24"
-            defaultValue={mission?.description}
             required
           ></textarea>
         </section>
@@ -109,7 +107,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             type="url"
             disabled={isLoading}
             className="input input-bordered w-full"
-            defaultValue={mission?.attached_image_link}
           />
         </section>
 
@@ -122,7 +119,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             type="url"
             disabled={isLoading}
             className="input input-bordered w-full"
-            defaultValue={mission?.attached_link}
           />
         </section>
 
@@ -135,11 +131,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
         )}
 
         {answerType === MissionTypes.GPS && (
-          <MissionFormGpsType
-            registerLatFn={() => register("mission_data.latitude")}
-            registerLongFn={() => register("mission_data.longitude")}
-            isLoading={isLoading}
-          />
+          <MissionFormGpsType register={register} isLoading={isLoading} />
         )}
 
         <MissionFormChooseAvailability
