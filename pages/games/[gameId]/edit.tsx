@@ -1,11 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameForm from "../../../components/game/game-form";
-import Layout from "../../../components/layouts/layout";
-import LoginDto from "../../../libs/dtos/login-dto";
 import UpdateGameDto from "../../../libs/dtos/update-game-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";

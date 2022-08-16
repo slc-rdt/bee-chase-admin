@@ -1,12 +1,10 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import { unstable_getServerSession } from "next-auth";
-import Layout from "../../../components/layouts/layout";
 import StartEndForm from "../../../components/start-end/start-end-form";
-import LoginDto from "../../../libs/dtos/login-dto";
 import Game from "../../../libs/models/game";
 import GameService from "../../../libs/services/game-service";
 import { authOptions } from "../../api/auth/[...nextauth]";
