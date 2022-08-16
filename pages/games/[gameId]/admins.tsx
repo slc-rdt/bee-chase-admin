@@ -47,9 +47,7 @@ const AdminsPage: NextPage<
   const router = useRouter();
   const { register, handleSubmit } = useForm<{ keyword: string }>();
   const onSubmit = handleSubmit(async (data) => {
-    router.push(
-      `/games/${router.query.gameId}/admins/add-admin?search=${data.keyword}`
-    );
+    router.push(`/games/${router.query.gameId}/admins?search=${data.keyword}`);
   });
 
   return (
