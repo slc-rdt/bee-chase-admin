@@ -59,6 +59,8 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
 
         <MissionFormChooseAnswerType {...{ register, isLoading, mission }} />
 
+        <div className="divider" />
+
         <div className="grid grid-cols-12 gap-4">
           <section className="form-control col-span-12 w-full sm:col-span-9 md:col-span-10">
             <label className="label">
@@ -123,6 +125,8 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           />
         </section>
 
+        <div className="divider" />
+
         {answerType === MissionTypes.IMAGE && (
           <MissionFormImageType {...{ register, isLoading }} />
         )}
@@ -135,9 +139,13 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           <MissionFormGpsType {...{ register, isLoading }} />
         )}
 
+        <div className="divider" />
+
         <MissionFormChooseAvailability
           {...{ register, watch, isLoading, mission }}
         />
+
+        <div className="divider" />
 
         <section className="form-control">
           <label className="label cursor-pointer justify-start gap-2">

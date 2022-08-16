@@ -43,9 +43,6 @@ export const getServerSideProps: GetServerSideProps<
 const ParticipantsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ game, gameTeams }) => {
-  const router = useRouter();
-  const gameId = router.query.gameId;
-
   return (
     <>
       <h2 className="mb-2 text-3xl font-bold">Participants</h2>
@@ -55,12 +52,14 @@ const ParticipantsPage: NextPage<
           <p>
             Participants can join this Game by visiting asdfsadfasdf and
             searching by join code:{" "}
-            <span className="font-bold">{game.password}</span>.
+            <span className="font-bold">{game.access_code}</span>.
           </p>
         </div>
       </section>
 
       <GameParticipantsTeamOrSoloModeForm game={game} />
+
+      <div className="divider" />
 
       <section className="flex items-center gap-4">
         <h3 className="flex items-center gap-2">
@@ -76,7 +75,7 @@ const ParticipantsPage: NextPage<
           </span>
         </h3>
 
-        <Link href={`/games/${gameId}/participants/create-team`}>
+        <Link href={`/games/${game.id}/participants/create-team`}>
           <button className="btn btn-primary gap-2">
             <PlusIcon className="h-5 w-5" />
             Create Team
@@ -88,7 +87,11 @@ const ParticipantsPage: NextPage<
 
       <section className="grid grid-cols-1 gap-4">
         {gameTeams.length === 0 && (
-          <h2 className="font-lg text-center font-medium">No teams yet.</h2>
+          <div className="card shadow-xl">
+            <div className="card-body">
+              <h2 className="font-lg text-center font-medium">No teams yet.</h2>
+            </div>
+          </div>
         )}
 
         {gameTeams.map((gameTeam) => (
