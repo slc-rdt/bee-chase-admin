@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
+import toast from "react-hot-toast";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
@@ -19,7 +20,11 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
   const { isLoading, doAction } = useLoading();
 
   const onDelete = async (game: Game) => {
-    await doAction(gameService.delete(game));
+    await toast.promise(doAction(gameService.delete(game)), {
+      loading: "Deleting game...",
+      success: "Game deleted!",
+      error: "Failed to delete game",
+    });
     router.push(router.asPath);
   };
 
