@@ -28,10 +28,11 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const missionData: MissionData = mission?.mission_data
     ? JSON.parse(mission.mission_data)
     : {};
-  console.log(missionData);
+
   const { register, handleSubmit, watch } = useForm<MissionFormValues>({
     defaultValues: {
       ...(mission ?? {}),
+      answer_type: mission?.answer_type ?? MissionTypes.IMAGE,
       mission_data: missionData,
       shown_in_feed:
         typeof mission?.shown_in_feed === "undefined"
