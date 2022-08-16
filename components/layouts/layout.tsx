@@ -1,4 +1,4 @@
-import { MenuIcon, QuestionMarkCircleIcon } from "@heroicons/react/outline";
+import { MenuIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -120,15 +120,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
             </ul>
 
             <div className="flex h-full flex-col justify-end">
-              <h2 className="mb-4 flex items-center gap-2">
-                <span>Join Code</span>
-                <div
-                  className="tooltip"
-                  data-tip="Share this with participants to make it easy to find your Experience! Instead of searching for it by name, they can use this Join Code and be taken directly to your Experience."
-                >
-                  <QuestionMarkCircleIcon className="h-6 w-6" />
-                </div>
-              </h2>
+              <h2 className="mb-4">Join Code</h2>
 
               <button
                 onClick={onGameCodeClick}
