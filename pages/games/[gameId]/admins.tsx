@@ -62,6 +62,8 @@ const AdminsPage: NextPage<
 
   return (
     <>
+      <h2 className="mb-2 text-3xl font-bold">Manage Admins</h2>
+
       <section className="form-control">
         <form onSubmit={onSubmit} className="input-group">
           <input
@@ -73,7 +75,7 @@ const AdminsPage: NextPage<
           <button
             type="submit"
             disabled={isLoading}
-            className={`btn btn-primary btn-square ${
+            className={`btn btn-square btn-primary ${
               isLoading && "btn-square loading"
             }`}
           >
