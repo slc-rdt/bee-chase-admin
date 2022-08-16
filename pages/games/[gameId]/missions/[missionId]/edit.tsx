@@ -1,27 +1,22 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import MissionForm from "../../../../../components/mission/mission-form";
-import { redirectToLogin } from "../../../../../libs/constants";
 import UpdateMissionDto from "../../../../../libs/dtos/update-mission-dto";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
 import useService from "../../../../../libs/hooks/common/use-service";
 import Mission from "../../../../../libs/models/mission";
 import MissionService from "../../../../../libs/services/mission-service";
+import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
   { mission: Mission },
   { gameId: string; missionId: string }
 > = async (context) => {
-  const token = await getToken({ req: context.req });
-
-  if (!token?.user) {
-    return redirectToLogin;
-  }
-
-  const user = token.user;
-  const missionService = new MissionService(user.access_token);
+  const missionService = await createServerSideService(
+    context.req,
+    MissionService
+  );
   const gameId = context.params?.gameId ?? "";
   const missionId = context.params?.missionId ?? "";
   const mission = await missionService.getOneById(gameId, missionId);

@@ -1,27 +1,22 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { getToken } from "next-auth/jwt";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Pagination from "../../../../components/common/pagination";
 import MissionCard from "../../../../components/mission/mission-card";
-import { redirectToLogin } from "../../../../libs/constants";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../libs/models/mission";
 import MissionService from "../../../../libs/services/mission-service";
+import createServerSideService from "../../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
   { page: number; paginatedMissions: PaginateResponseDto<Mission> },
   { gameId: string }
 > = async (context) => {
-  const token = await getToken({ req: context.req });
-
-  if (!token?.user) {
-    return redirectToLogin;
-  }
-
-  const user = token.user;
-  const missionService = new MissionService(user.access_token);
+  const missionService = await createServerSideService(
+    context.req,
+    MissionService
+  );
 
   const gameId = context.params?.gameId ?? "";
   const page = Number(context.query.page ?? 1);

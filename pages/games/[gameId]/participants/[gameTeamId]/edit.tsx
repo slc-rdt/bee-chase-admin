@@ -1,30 +1,25 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
-import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameTeamForm from "../../../../../components/participants/game-team-form";
-import { redirectToLogin } from "../../../../../libs/constants";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
 import useService from "../../../../../libs/hooks/common/use-service";
 import GameTeam from "../../../../../libs/models/game-team";
 import GameTeamService from "../../../../../libs/services/game-team-service";
+import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
   { gameTeam: GameTeam },
   { gameId: string; gameTeamId: string }
 > = async (context) => {
-  const token = await getToken({ req: context.req });
-
-  if (!token?.user) {
-    return redirectToLogin;
-  }
-
-  const user = token.user;
-  const gameTeamService = new GameTeamService(user.access_token);
+  const gameTeamService = await createServerSideService(
+    context.req,
+    GameTeamService
+  );
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";
   const gameTeam = await gameTeamService.getOneById(gameId, gameTeamId);

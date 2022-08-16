@@ -1,27 +1,19 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import GameForm from "../../../components/game/game-form";
-import { redirectToLogin } from "../../../libs/constants";
 import UpdateGameDto from "../../../libs/dtos/update-game-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Game from "../../../libs/models/game";
 import GameService from "../../../libs/services/game-service";
+import createServerSideService from "../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game },
   { gameId: string }
 > = async (context) => {
-  const token = await getToken({ req: context.req });
-
-  if (!token?.user) {
-    return redirectToLogin;
-  }
-
-  const user = token.user;
-  const gameService = new GameService(user.access_token);
+  const gameService = await createServerSideService(context.req, GameService);
   const game = await gameService.getOneById(context.params?.gameId ?? "");
 
   if (!game) {
