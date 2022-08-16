@@ -1,7 +1,7 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import MissionForm from "../../../../../components/mission/mission-form";
+import MissionForm from "../../../../../components/mission/form/mission-form";
 import UpdateMissionDto from "../../../../../libs/dtos/update-mission-dto";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
 import useService from "../../../../../libs/hooks/common/use-service";

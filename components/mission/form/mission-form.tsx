@@ -1,10 +1,12 @@
 import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
-import CreateMissionDto from "../../libs/dtos/create-mission-dto";
-import UpdateMissionDto from "../../libs/dtos/update-mission-dto";
-import { AvailabilityTypes, MissionTypes } from "../../libs/enums";
-import Mission from "../../libs/models/mission";
-import MissionData from "../../libs/models/mission-data";
+import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
+import UpdateMissionDto from "../../../libs/dtos/update-mission-dto";
+import { MissionTypes } from "../../../libs/enums";
+import Mission from "../../../libs/models/mission";
+import MissionData from "../../../libs/models/mission-data";
+import MissionFormChooseAnswerType from "./mission-form-choose-answer-type";
+import MissionFormChooseAvailability from "./mission-form-choose-availability";
 import MissionFormGpsType from "./mission-form-gps-type";
 import MissionFormTextType from "./mission-form-text-type";
 
@@ -37,7 +39,6 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   });
 
   const answerType = Number(watch("answer_type"));
-  const availability = Number(watch("availability"));
   const isShowInFeed = Boolean(watch("shown_in_feed"));
 
   const onSubmit = handleSubmit((data) => {
@@ -54,25 +55,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
       <form onSubmit={onSubmit} className="card-body">
         <h2 className="card-title">Create Mission</h2>
 
-        <section className="form-control w-full">
-          <label className="label">
-            <span className="label-text">Mission Type</span>
-          </label>
-          <select
-            {...register("answer_type")}
-            className="select select-bordered w-full capitalize"
-            disabled={isLoading}
-            defaultValue={mission?.answer_type}
-          >
-            {Object.entries(MissionTypes)
-              .filter(([_, value]) => typeof value === "number")
-              .map(([type, value]) => (
-                <option key={type} value={value}>
-                  {type.toLowerCase()}
-                </option>
-              ))}
-          </select>
-        </section>
+        <MissionFormChooseAnswerType {...{ register, isLoading, mission }} />
 
         <div className="grid grid-cols-12 gap-4">
           <section className="form-control col-span-12 w-full sm:col-span-9 md:col-span-10">
@@ -159,35 +142,9 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           />
         )}
 
-        <section className="form-control w-full">
-          <label className="label">
-            <span className="label-text">Mission Availability</span>
-          </label>
-          <select
-            {...register("availability")}
-            className="select select-bordered w-full capitalize"
-            disabled={isLoading}
-            defaultValue={mission?.availability}
-          >
-            {Object.entries(AvailabilityTypes)
-              .filter(([_, value]) => typeof value === "number")
-              .map(([type, value]) => (
-                <option key={type} value={value}>
-                  {type.toLowerCase()}
-                </option>
-              ))}
-          </select>
-          <label className="label">
-            <span className="label-text">
-              {availability === AvailabilityTypes.AVAILABLE &&
-                "Participants can see and complete this Mission when the Game is live."}
-              {availability === AvailabilityTypes.HIDDEN &&
-                "Participants can't see or complete this Mission when the Game is live."}
-              {availability === AvailabilityTypes.EXPIRED &&
-                "Participants can see but not complete this Mission when the Game is live."}
-            </span>
-          </label>
-        </section>
+        <MissionFormChooseAvailability
+          {...{ register, watch, isLoading, mission }}
+        />
 
         <section className="form-control">
           <label className="label cursor-pointer justify-start gap-2">
@@ -202,8 +159,8 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           </label>
           <label className="label">
             <span className="label-text">
-              Participants {isShowInFeed ? "can" : "can't"} see each other&apos;s
-              submissions.
+              Participants {isShowInFeed ? "can" : "can't"} see each
+              other&apos;s submissions.
             </span>
           </label>
         </section>
