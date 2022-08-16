@@ -1,9 +1,13 @@
 import { ComponentProps, ComponentType } from "react";
-import { UseFormRegisterReturn, UseFormWatch } from "react-hook-form";
+import {
+  UseFormRegister,
+  UseFormRegisterReturn,
+  UseFormWatch,
+} from "react-hook-form";
 import { MissionFormValues } from "./mission-form";
 
 interface IMissionFormTextType {
-  registerFn: () => UseFormRegisterReturn<"mission_data.accepted_answers">;
+  register: UseFormRegister<MissionFormValues>;
   watch: UseFormWatch<MissionFormValues>;
   isLoading: boolean;
   defaultValue?: string[];
@@ -11,7 +15,7 @@ interface IMissionFormTextType {
 
 const MissionFormTextType: ComponentType<
   ComponentProps<"section"> & IMissionFormTextType
-> = ({ registerFn, watch, isLoading, defaultValue, ...rest }) => {
+> = ({ register, watch, isLoading, defaultValue, ...rest }) => {
   const originalAcceptedAnswers = watch("mission_data.accepted_answers") ?? "";
 
   const acceptedAnswers =
@@ -27,11 +31,13 @@ const MissionFormTextType: ComponentType<
       <label className="label">
         <span className="label-text">Accepted Answers (Optional)</span>
       </label>
+
       <textarea
-        {...registerFn()}
+        {...register("mission_data.accepted_answers")}
         disabled={isLoading}
         className="textarea textarea-bordered h-24"
       ></textarea>
+
       <label className="label">
         <div className="label-text-alt flex flex-wrap gap-1">
           {acceptedAnswers.map((answer) => (

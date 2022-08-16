@@ -8,6 +8,7 @@ import MissionData from "../../../libs/models/mission-data";
 import MissionFormChooseAnswerType from "./mission-form-choose-answer-type";
 import MissionFormChooseAvailability from "./mission-form-choose-availability";
 import MissionFormGpsType from "./mission-form-gps-type";
+import MissionFormImageType from "./mission-form-image-type";
 import MissionFormTextType from "./mission-form-text-type";
 
 export type MissionFormValues = CreateMissionDto | UpdateMissionDto;
@@ -27,7 +28,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const missionData: MissionData = mission?.mission_data
     ? JSON.parse(mission.mission_data)
     : {};
-
+  console.log(missionData);
   const { register, handleSubmit, watch } = useForm<MissionFormValues>({
     defaultValues: {
       ...(mission ?? {}),
@@ -122,16 +123,16 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           />
         </section>
 
+        {answerType === MissionTypes.IMAGE && (
+          <MissionFormImageType {...{ register, isLoading }} />
+        )}
+
         {answerType === MissionTypes.TEXT && (
-          <MissionFormTextType
-            registerFn={() => register("mission_data.accepted_answers")}
-            watch={watch}
-            isLoading={isLoading}
-          />
+          <MissionFormTextType {...{ register, watch, isLoading }} />
         )}
 
         {answerType === MissionTypes.GPS && (
-          <MissionFormGpsType register={register} isLoading={isLoading} />
+          <MissionFormGpsType {...{ register, isLoading }} />
         )}
 
         <MissionFormChooseAvailability

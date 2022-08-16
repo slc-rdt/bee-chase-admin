@@ -25,7 +25,6 @@ const MissionFormChooseAvailability: ComponentType<
         {...register("availability")}
         className="select select-bordered w-full capitalize"
         disabled={isLoading}
-        defaultValue={mission?.availability}
       >
         {Object.entries(AvailabilityTypes)
           .filter(([_, value]) => typeof value === "number")
@@ -35,6 +34,7 @@ const MissionFormChooseAvailability: ComponentType<
             </option>
           ))}
       </select>
+
       <label className="label">
         <span className="label-text">
           {availability === AvailabilityTypes.AVAILABLE &&

@@ -22,7 +22,6 @@ const MissionFormChooseAnswerType: ComponentType<
         {...register("answer_type")}
         className="select select-bordered w-full capitalize"
         disabled={isLoading}
-        defaultValue={mission?.answer_type}
       >
         {Object.entries(MissionTypes)
           .filter(([_, value]) => typeof value === "number")
