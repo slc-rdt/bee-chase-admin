@@ -33,7 +33,12 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
     defaultValues: {
       ...(mission ?? {}),
       answer_type: mission?.answer_type ?? MissionTypes.IMAGE,
-      mission_data: missionData,
+      mission_data: {
+        ...missionData,
+        accepted_answers: Array.isArray(missionData.accepted_answers)
+          ? missionData.accepted_answers.join("\n")
+          : missionData.accepted_answers,
+      },
       shown_in_feed:
         typeof mission?.shown_in_feed === "undefined"
           ? true
@@ -97,7 +102,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           <textarea
             {...register("description")}
             disabled={isLoading}
-            className="textarea textarea-bordered h-24"
+            className="textarea textarea-bordered h-32"
             required
           ></textarea>
         </section>
