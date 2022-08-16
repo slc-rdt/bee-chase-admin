@@ -1,11 +1,8 @@
 import { useRouter } from "next/router";
-import React, {
+import {
   ComponentProps,
-  ComponentType,
-  useEffect,
-  useState,
+  ComponentType
 } from "react";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
@@ -23,12 +20,12 @@ const GameParticipantsTeamOrSoloModeForm: ComponentType<
   const gameService = useService(GameService);
   const { isLoading, doAction } = useLoading();
 
-  const doUpdate = async (is_solo: boolean) => {
+  const doUpdate = async (max_player_per_team: number) => {
     await toast.promise(
       doAction(
         gameService.update({
           ...game,
-          is_solo,
+          max_player_per_team,
         })
       ),
       {
@@ -50,24 +47,24 @@ const GameParticipantsTeamOrSoloModeForm: ComponentType<
       <div className="flex flex-wrap gap-4">
         <label className="label cursor-pointer gap-2">
           <input
-            onChange={() => doUpdate(false)}
+            onChange={() => doUpdate(9999)}
             disabled={isLoading}
             type="radio"
             name="is_solo"
             className="radio radio-primary"
-            defaultChecked={!game.is_solo}
+            defaultChecked={game.max_player_per_team > 1}
           />
           <span className="label-text">In teams</span>
         </label>
         <label className="label cursor-pointer gap-2">
           <input
-            onChange={() => doUpdate(true)}
+            onChange={() => doUpdate(1)}
             disabled={isLoading}
             type="radio"
             name="is_solo"
             value="true"
             className="radio radio-primary"
-            defaultChecked={game.is_solo}
+            defaultChecked={game.max_player_per_team === 1}
           />
           <span className="label-text">Solo</span>
         </label>

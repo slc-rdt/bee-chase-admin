@@ -7,6 +7,6 @@ export default interface Game extends BaseModel {
   password: string;
   start_time: Date | string | null; // ISO date string
   end_time: Date | string | null; // ISO date string
-  is_solo: boolean;
+  max_player_per_team: number;
   allow_user_create_team: boolean;
 }
