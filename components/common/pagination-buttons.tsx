@@ -4,19 +4,40 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/solid";
-import React, { ComponentProps, ComponentType } from "react";
+import { useRouter } from "next/router";
+import { ComponentProps, ComponentType, useCallback, useEffect } from "react";
 
 interface IPaginationButtons {
   currentPage: number;
   length: number;
-  onChangePage: (page: number) => void;
 }
 
 const PaginationButtons: ComponentType<
   ComponentProps<"section"> & IPaginationButtons
-> = ({ currentPage, length, onChangePage, ...rest }) => {
+> = ({ currentPage, length, ...rest }) => {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < length;
+
+  const router = useRouter();
+
+  const onChangePage = useCallback(
+    (page: number) => {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          page,
+        },
+      });
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    if (currentPage > length || currentPage < 1) {
+      onChangePage(1);
+    }
+  }, [currentPage, length, onChangePage]);
 
   return (
     <>

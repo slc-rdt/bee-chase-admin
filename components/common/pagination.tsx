@@ -15,27 +15,6 @@ const Pagination = <T extends unknown>({
   render,
   ...rest
 }: IPagination<T>) => {
-  const router = useRouter();
-
-  const onChangePage = useCallback(
-    (page: number) => {
-      router.push({
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page,
-        },
-      });
-    },
-    [router]
-  );
-
-  useEffect(() => {
-    if (currentPage > pagination.last_page || currentPage < 1) {
-      onChangePage(1);
-    }
-  }, [currentPage, onChangePage, pagination.last_page]);
-
   return (
     <>
       <section className="my-4 grid grid-cols-1 gap-4" {...rest}>
@@ -55,7 +34,6 @@ const Pagination = <T extends unknown>({
       <PaginationButtons
         length={pagination.last_page}
         currentPage={currentPage}
-        onChangePage={onChangePage}
       />
     </>
   );
