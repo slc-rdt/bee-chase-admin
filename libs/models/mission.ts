@@ -2,6 +2,7 @@ import BaseModel from "./base-model";
 import Submission from "./submission";
 
 export default interface Mission extends BaseModel {
+  game_id: string;
   name: string;
   point_value: number;
   description: string;

@@ -9,11 +9,13 @@ import Pagination from "../common/pagination";
 interface ISubmissionsViewTextType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
+  isLoading: boolean;
+  onDelete: (submission: Submission) => void;
 }
 
 const SubmissionsViewImageType: ComponentType<
   ComponentProps<"div"> & ISubmissionsViewTextType
-> = ({ currentPage, submissionsPaginated }) => {
+> = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
 
@@ -23,7 +25,12 @@ const SubmissionsViewImageType: ComponentType<
       currentPage={currentPage}
       pagination={submissionsPaginated}
       render={(submission) => (
-        <div key={submission.id} className="card bg-base-100 shadow-xl">
+        <div
+          key={submission.id}
+          className={`card bg-base-100 shadow-xl ${
+            isLoading && "animate-pulse"
+          }`}
+        >
           <figure>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -52,8 +59,12 @@ const SubmissionsViewImageType: ComponentType<
             </p>
 
             <div className="card-actions justify-end">
-              <button className="btn btn-error gap-2">
-                <TrashIcon className="h-5 w-5" />
+              <button
+                onClick={() => onDelete(submission)}
+                disabled={isLoading}
+                className={`btn btn-error gap-2 ${isLoading && "loading"}`}
+              >
+                {!isLoading && <TrashIcon className="h-5 w-5" />}
                 Delete
               </button>
             </div>

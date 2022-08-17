@@ -12,7 +12,6 @@ export default class SubmissionService extends AbstractService {
       `${this.apiUrl}/games/${gameId}/missions/${missionId}/submissions`,
       { params: { page } }
     );
-
     return data;
   }
 
@@ -25,7 +24,14 @@ export default class SubmissionService extends AbstractService {
       `${this.apiUrl}/games/${gameId}/game_teams/${teamId}/submissions`,
       { params: { page } }
     );
+    return data;
+  }
 
+  public async delete(submission: Submission) {
+    const gameId = (submission.mission ?? submission.game_team)?.game_id;
+    const { data } = await this.axios.delete<PaginateResponseDto<Submission>>(
+      `${this.apiUrl}/games/${gameId}/missions/${submission.mission_id}/submissions/${submission.id}`
+    );
     return data;
   }
 }

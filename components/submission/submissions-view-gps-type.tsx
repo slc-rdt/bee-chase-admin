@@ -9,11 +9,13 @@ import PaginationButtons from "../common/pagination-buttons";
 interface ISubmissionsViewGpsType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
+  isLoading: boolean;
+  onDelete: (submission: Submission) => void;
 }
 
 const SubmissionsViewGpsType: ComponentType<
   ComponentProps<"div"> & ISubmissionsViewGpsType
-> = ({ currentPage, submissionsPaginated }) => {
+> = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
 
@@ -39,7 +41,10 @@ const SubmissionsViewGpsType: ComponentType<
             )}
 
             {submissionsPaginated.data.map((submission) => (
-              <tr key={submission.id} className="hover">
+              <tr
+                key={submission.id}
+                className={`hover ${isLoading && "animate-pulse"}`}
+              >
                 <Link
                   href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
                 >
@@ -50,8 +55,12 @@ const SubmissionsViewGpsType: ComponentType<
                 <td>{submission.caption}</td>
                 <td>{submission.mission?.point_value}</td>
                 <td>
-                  <button className="btn btn-error gap-2">
-                    <TrashIcon className="h-5 w-5" />
+                  <button
+                    onClick={() => onDelete(submission)}
+                    disabled={isLoading}
+                    className={`btn btn-error gap-2 ${isLoading && "loading"}`}
+                  >
+                    {!isLoading && <TrashIcon className="h-5 w-5" />}
                     Delete
                   </button>
                 </td>
