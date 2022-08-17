@@ -2,19 +2,19 @@ import { TrashIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
-import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
-import Submission from "../../libs/models/submission";
-import PaginationButtons from "../common/pagination-buttons";
+import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import Submission from "../../../libs/models/submission";
+import PaginationButtons from "../../common/pagination-buttons";
 
-interface ISubmissionsViewByMissionGpsType {
+interface ISubmissionsViewByTeamGpsType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
   isLoading: boolean;
   onDelete: (submission: Submission) => void;
 }
 
-const SubmissionsViewByMissionGpsType: ComponentType<
-  ComponentProps<"div"> & ISubmissionsViewByMissionGpsType
+const SubmissionsViewByTeamGpsType: ComponentType<
+  ComponentProps<"div"> & ISubmissionsViewByTeamGpsType
 > = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
@@ -25,7 +25,7 @@ const SubmissionsViewByMissionGpsType: ComponentType<
         <table className="table w-full">
           <thead>
             <tr>
-              <th>Team</th>
+              <th>Mission</th>
               <th>Caption</th>
               <th>Points</th>
               <th></th>
@@ -46,10 +46,10 @@ const SubmissionsViewByMissionGpsType: ComponentType<
                 className={`hover ${isLoading && "animate-pulse"}`}
               >
                 <Link
-                  href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
+                  href={`/games/${gameId}/submissions/mission/${submission.mission_id}`}
                 >
                   <th className="link link-primary cursor-pointer">
-                    {submission.game_team?.name}
+                    {submission.mission?.name}
                   </th>
                 </Link>
                 <td>{submission.caption}</td>
@@ -80,4 +80,4 @@ const SubmissionsViewByMissionGpsType: ComponentType<
   );
 };
 
-export default SubmissionsViewByMissionGpsType;
+export default SubmissionsViewByTeamGpsType;

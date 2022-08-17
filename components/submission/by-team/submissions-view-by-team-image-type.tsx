@@ -2,26 +2,26 @@ import { TrashIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
-import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
-import Submission from "../../libs/models/submission";
-import Pagination from "../common/pagination";
+import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import Submission from "../../../libs/models/submission";
+import Pagination from "../../common/pagination";
 
-interface ISubmissionsViewByMissionTextType {
+interface ISubmissionsViewByTeamTextType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
   isLoading: boolean;
   onDelete: (submission: Submission) => void;
 }
 
-const SubmissionsViewByMissionImageType: ComponentType<
-  ComponentProps<"div"> & ISubmissionsViewByMissionTextType
+const SubmissionsViewByTeamImageType: ComponentType<
+  ComponentProps<"div"> & ISubmissionsViewByTeamTextType
 > = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
-  
+
   return (
     <Pagination
-      className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"
+      className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       currentPage={currentPage}
       pagination={submissionsPaginated}
       render={(submission) => (
@@ -45,10 +45,10 @@ const SubmissionsViewByMissionImageType: ComponentType<
 
           <div className="card-body">
             <Link
-              href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
+              href={`/games/${gameId}/submissions/mission/${submission.mission_id}`}
             >
               <h2 className="link card-title link-primary">
-                {submission.game_team?.name}
+                {submission.mission?.name}
               </h2>
             </Link>
 
@@ -75,4 +75,4 @@ const SubmissionsViewByMissionImageType: ComponentType<
   );
 };
 
-export default SubmissionsViewByMissionImageType;
+export default SubmissionsViewByTeamImageType;

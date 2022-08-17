@@ -93,7 +93,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
           </nav>
         )}
 
-        <main className="mx-auto w-full max-w-screen-lg p-8">{children}</main>
+        <main className="w-full p-8">{children}</main>
       </div>
 
       {sidebarMenus.length > 0 && (

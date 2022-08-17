@@ -2,19 +2,19 @@ import { TrashIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
-import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
-import Submission from "../../libs/models/submission";
-import PaginationButtons from "../common/pagination-buttons";
+import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import Submission from "../../../libs/models/submission";
+import PaginationButtons from "../../common/pagination-buttons";
 
-interface ISubmissionsViewByMissionTextType {
+interface ISubmissionsViewByTeamTextType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
   isLoading: boolean;
   onDelete: (submission: Submission) => void;
 }
 
-const SubmissionsViewByMissionTextType: ComponentType<
-  ComponentProps<"div"> & ISubmissionsViewByMissionTextType
+const SubmissionsViewByTeamTextType: ComponentType<
+  ComponentProps<"div"> & ISubmissionsViewByTeamTextType
 > = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
@@ -25,7 +25,7 @@ const SubmissionsViewByMissionTextType: ComponentType<
         <table className="table w-full">
           <thead>
             <tr>
-              <th>Team</th>
+              <th>Mission</th>
               <th>Answer</th>
               <th>Caption</th>
               <th>Points</th>
@@ -47,10 +47,10 @@ const SubmissionsViewByMissionTextType: ComponentType<
                 className={`hover ${isLoading && "animate-pulse"}`}
               >
                 <Link
-                  href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
+                  href={`/games/${gameId}/submissions/mission/${submission.mission_id}`}
                 >
                   <th className="link link-primary cursor-pointer">
-                    {submission.game_team?.name}
+                    {submission.mission?.name}
                   </th>
                 </Link>
 
@@ -88,4 +88,4 @@ const SubmissionsViewByMissionTextType: ComponentType<
   );
 };
 
-export default SubmissionsViewByMissionTextType;
+export default SubmissionsViewByTeamTextType;

@@ -3,7 +3,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import SubmissionsViewByMission from "../../../../../components/submission/submissions-view-by-mission";
+import SubmissionsViewByMission from "../../../../../components/submission/by-mission/submissions-view-by-mission";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../../libs/models/mission";
 import Submission from "../../../../../libs/models/submission";
