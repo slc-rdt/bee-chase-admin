@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<
     missionService.getOneById(gameId, missionId),
     submissionService.getAllPaginatedByMission(gameId, missionId, page),
   ]);
-  
+
   return {
     props: {
       gameId,

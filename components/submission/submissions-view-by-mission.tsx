@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ComponentType } from "react";
 import toast from "react-hot-toast";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
-import { MissionTypes } from "../../libs/enums";
+import { AnswerTypes } from "../../libs/enums";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Mission from "../../libs/models/mission";
@@ -13,7 +13,7 @@ import SubmissionsViewByMissionImageType from "./submissions-view-by-mission-ima
 import SubmissionsViewByMissionTextType from "./submissions-view-by-mission-text-type";
 
 interface ISubmissionsViewByMission {
-  answerType: MissionTypes;
+  answerType: AnswerTypes;
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
 }
@@ -39,19 +39,19 @@ const SubmissionsViewByMission: ComponentType<ISubmissionsViewByMission> = ({
 
   return (
     <>
-      {answerType === MissionTypes.IMAGE && (
+      {answerType === AnswerTypes.IMAGE && (
         <SubmissionsViewByMissionImageType
           {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
         />
       )}
 
-      {answerType === MissionTypes.TEXT && (
+      {answerType === AnswerTypes.TEXT && (
         <SubmissionsViewByMissionTextType
           {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
         />
       )}
 
-      {answerType === MissionTypes.GPS && (
+      {answerType === AnswerTypes.GPS && (
         <SubmissionsViewByMissionGpsType
           {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
         />

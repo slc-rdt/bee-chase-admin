@@ -4,7 +4,7 @@ export enum AvailabilityTypes {
   EXPIRED,
 }
 
-export enum MissionTypes {
+export enum AnswerTypes {
   IMAGE,
   TEXT,
   GPS,

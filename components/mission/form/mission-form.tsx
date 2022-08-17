@@ -2,7 +2,7 @@ import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
 import UpdateMissionDto from "../../../libs/dtos/update-mission-dto";
-import { MissionTypes } from "../../../libs/enums";
+import { AnswerTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
 import MissionData from "../../../libs/models/mission-data";
 import MissionFormChooseAnswerType from "./mission-form-choose-answer-type";
@@ -32,7 +32,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const { register, handleSubmit, watch } = useForm<MissionFormValues>({
     defaultValues: {
       ...(mission ?? {}),
-      answer_type: mission?.answer_type ?? MissionTypes.IMAGE,
+      answer_type: mission?.answer_type ?? AnswerTypes.IMAGE,
       mission_data: {
         ...missionData,
         accepted_answers: Array.isArray(missionData.accepted_answers)
@@ -133,15 +133,15 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
 
         <div className="divider" />
 
-        {answerType === MissionTypes.IMAGE && (
+        {answerType === AnswerTypes.IMAGE && (
           <MissionFormImageType {...{ register, isLoading }} />
         )}
 
-        {answerType === MissionTypes.TEXT && (
+        {answerType === AnswerTypes.TEXT && (
           <MissionFormTextType {...{ register, watch, isLoading }} />
         )}
 
-        {answerType === MissionTypes.GPS && (
+        {answerType === AnswerTypes.GPS && (
           <MissionFormGpsType {...{ register, isLoading }} />
         )}
 

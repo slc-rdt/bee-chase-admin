@@ -1,6 +1,6 @@
 import { ComponentProps, ComponentType } from "react";
 import { UseFormRegister } from "react-hook-form";
-import { MissionTypes } from "../../../libs/enums";
+import { AnswerTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
 import { MissionFormValues } from "./mission-form";
 
@@ -23,7 +23,7 @@ const MissionFormChooseAnswerType: ComponentType<
         className="select select-bordered w-full capitalize"
         disabled={isLoading}
       >
-        {Object.entries(MissionTypes)
+        {Object.entries(AnswerTypes)
           .filter(([_, value]) => typeof value === "number")
           .map(([type, value]) => (
             <option key={type} value={value}>
