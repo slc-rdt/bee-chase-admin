@@ -24,10 +24,9 @@ const SubmissionsViewByTeam: ComponentType<ISubmissionsViewByTeam> = ({
 }) => {
   const router = useRouter();
   const submissionService = useService(SubmissionService);
-  const { isLoading, doAction } = useLoading();
 
   const onDelete = async (submission: Submission) => {
-    await toast.promise(doAction(submissionService.delete(submission)), {
+    await toast.promise(submissionService.delete(submission), {
       loading: "Deleting submission...",
       success: "Submission deleted!",
       error: "Failed to delete submission",
@@ -40,19 +39,19 @@ const SubmissionsViewByTeam: ComponentType<ISubmissionsViewByTeam> = ({
     <>
       {answerType === AnswerTypes.IMAGE && (
         <SubmissionsViewByTeamImageType
-          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+          {...{ currentPage, submissionsPaginated, onDelete }}
         />
       )}
 
       {answerType === AnswerTypes.TEXT && (
         <SubmissionsViewByTeamTextType
-          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+          {...{ currentPage, submissionsPaginated, onDelete }}
         />
       )}
 
       {answerType === AnswerTypes.GPS && (
         <SubmissionsViewByTeamGpsType
-          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+          {...{ currentPage, submissionsPaginated, onDelete }}
         />
       )}
     </>

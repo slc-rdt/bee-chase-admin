@@ -16,15 +16,6 @@ interface ISubmissionsViewByMissionGpsType {
 const SubmissionsViewByMissionGpsType: ComponentType<
   ComponentProps<"div"> & ISubmissionsViewByMissionGpsType
 > = ({ currentPage, submissionsPaginated, onDelete }) => {
-  const router = useRouter();
-  const { isLoading, doAction } = useLoading();
-
-  const gameId = router.query.gameId ?? "";
-
-  const onDeleteClicked = (submission: Submission) => {
-    doAction(onDelete(submission));
-  };
-
   return (
     <>
       <div className="overflow-x-auto">
@@ -47,30 +38,11 @@ const SubmissionsViewByMissionGpsType: ComponentType<
             )}
 
             {submissionsPaginated.data.map((submission) => (
-              <tr
+              <GpsSubmissionItem
                 key={submission.id}
-                className={`hover ${isLoading && "animate-pulse"}`}
-              >
-                <Link
-                  href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
-                >
-                  <th className="link link-primary cursor-pointer">
-                    {submission.game_team?.name}
-                  </th>
-                </Link>
-                <td>{submission.caption}</td>
-                <td>{submission.mission?.point_value}</td>
-                <td>
-                  <button
-                    onClick={() => onDeleteClicked(submission)}
-                    disabled={isLoading}
-                    className={`btn btn-error gap-2 ${isLoading && "loading"}`}
-                  >
-                    {!isLoading && <TrashIcon className="h-5 w-5" />}
-                    Delete
-                  </button>
-                </td>
-              </tr>
+                submission={submission}
+                onDelete={onDelete}
+              />
             ))}
           </tbody>
         </table>
@@ -83,6 +55,48 @@ const SubmissionsViewByMissionGpsType: ComponentType<
         />
       </section>
     </>
+  );
+};
+
+interface IGpsSubmissionItem {
+  submission: Submission;
+  onDelete: (submission: Submission) => Promise<void>;
+}
+
+const GpsSubmissionItem: ComponentType<
+  ComponentProps<"tr"> & IGpsSubmissionItem
+> = ({ submission, onDelete, ...rest }) => {
+  const router = useRouter();
+  const { isLoading, doAction } = useLoading();
+
+  const gameId = router.query.gameId ?? "";
+
+  const onDeleteClicked = (submission: Submission) => {
+    doAction(onDelete(submission));
+  };
+
+  return (
+    <tr className={`hover ${isLoading && "animate-pulse"}`} {...rest}>
+      <Link
+        href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
+      >
+        <th className="link link-primary cursor-pointer">
+          {submission.game_team?.name}
+        </th>
+      </Link>
+      <td>{submission.caption}</td>
+      <td>{submission.mission?.point_value}</td>
+      <td>
+        <button
+          onClick={() => onDeleteClicked(submission)}
+          disabled={isLoading}
+          className={`btn btn-error gap-2 ${isLoading && "loading"}`}
+        >
+          {!isLoading && <TrashIcon className="h-5 w-5" />}
+          Delete
+        </button>
+      </td>
+    </tr>
   );
 };
 

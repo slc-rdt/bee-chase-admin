@@ -67,8 +67,19 @@ export const getServerSideProps: GetServerSideProps<
 const SubmissionsByGameTeamPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ page, gameTeam, submissionsPaginationsGroupedByAnswerTypes }) => {
+  const totalSubmissions = Object.values(
+    submissionsPaginationsGroupedByAnswerTypes
+  )
+    .map((x) => x.total)
+    .reduce((a, b) => a + b);
+
   return (
     <>
+      <header className="text-center">
+        <h2 className="mb-4 text-3xl font-bold">{gameTeam.name}</h2>
+        <p>{totalSubmissions} submissions</p>
+      </header>
+
       {Object.entries(submissionsPaginationsGroupedByAnswerTypes).map(
         ([type, pagination]) => {
           const key = `${type}|${pagination.current_page}`;
