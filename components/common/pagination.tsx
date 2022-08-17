@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import { ComponentProps, useCallback, useEffect } from "react";
+import { ComponentProps } from "react";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import PaginationButtons from "./pagination-buttons";
 
