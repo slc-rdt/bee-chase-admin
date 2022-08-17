@@ -2,6 +2,7 @@ import CreateGameDto from "../dtos/create-game-dto";
 import PaginateRequestDto from "../dtos/paginate-request-dto";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Game from "../models/game";
+import GameTeam from "../models/game-team";
 import User from "../models/user";
 import AbstractService from "./abstract-service";
 
@@ -16,6 +17,13 @@ export default class GameService extends AbstractService {
 
   public async getOneById(id: string) {
     const { data } = await this.axios.get<Game>(`${this.apiUrl}/games/${id}`);
+    return data;
+  }
+
+  public async leaderboard(gameId: string) {
+    const { data } = await this.axios.get<GameTeam[]>(
+      `${this.apiUrl}/games/${gameId}/leaderboard`
+    );
     return data;
   }
 

@@ -8,12 +8,13 @@ import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto"
 import { AnswerTypes } from "../../../../../libs/enums";
 import GameTeam from "../../../../../libs/models/game-team";
 import Submission from "../../../../../libs/models/submission";
+import GameService from "../../../../../libs/services/game-service";
 import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
   {
-    gameTeam: GameTeam;
+    gameTeam?: GameTeam;
     submissionsPaginationsGroupedByAnswerTypes: {
       [key: string]: PaginateResponseDto<Submission>;
     };
@@ -23,10 +24,10 @@ export const getServerSideProps: GetServerSideProps<
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";
 
-  const gameTeamService = await createServerSideService(
-    context.req,
-    GameTeamService
-  );
+  const [gameService, gameTeamService] = await Promise.all([
+    createServerSideService(context.req, GameService),
+    createServerSideService(context.req, GameTeamService),
+  ]);
 
   const missionTypeValues = Object.values(AnswerTypes)
     .map(Number)
@@ -44,10 +45,13 @@ export const getServerSideProps: GetServerSideProps<
     );
   });
 
-  const [gameTeam, ...submissionsPaginations] = await Promise.all([
-    gameTeamService.getOneById(gameId, gameTeamId),
+  const [leaderboard, ...submissionsPaginations] = await Promise.all([
+    gameService.leaderboard(gameId),
     ...submissionsPaginatedPromises,
   ]);
+
+  const gameTeam = leaderboard.find((gameTeam) => gameTeam.id === gameTeamId);
+  console.log(leaderboard);
 
   const submissionsPaginationsGroupedByAnswerTypes = Object.fromEntries(
     missionTypeValues.map((typeValue, idx) => [
@@ -67,17 +71,14 @@ export const getServerSideProps: GetServerSideProps<
 const SubmissionsByGameTeamPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ gameTeam, submissionsPaginationsGroupedByAnswerTypes }) => {
-  const totalSubmissions = Object.values(
-    submissionsPaginationsGroupedByAnswerTypes
-  )
-    .map((x) => x.total)
-    .reduce((a, b) => a + b);
-
   return (
     <>
       <header className="text-center">
-        <h2 className="mb-4 text-3xl font-bold">{gameTeam.name}</h2>
-        <p>{totalSubmissions} submissions</p>
+        <h2 className="mb-4 text-3xl font-bold">{gameTeam?.name}</h2>
+        <p>
+          {gameTeam?.submissions_count} submissions |{" "}
+          {gameTeam?.missions_sum_point_value} points
+        </p>
       </header>
 
       {Object.entries(submissionsPaginationsGroupedByAnswerTypes).map(

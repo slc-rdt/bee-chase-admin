@@ -7,4 +7,6 @@ export default interface GameTeam extends BaseModel {
   color?: string;
   access_code?: string;
   submissions?: Submission[];
+  submissions_count?: number;
+  missions_sum_point_value?: number;
 }
