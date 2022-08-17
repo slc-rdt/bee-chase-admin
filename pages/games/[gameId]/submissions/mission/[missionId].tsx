@@ -3,22 +3,16 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import Link from "next/link";
-import React from "react";
-import Pagination from "../../../../../components/common/pagination";
-import PaginationButtons from "../../../../../components/common/pagination-buttons";
+import SubmissionsView from "../../../../../components/submission/submissions-view";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
-import { MissionTypes } from "../../../../../libs/enums";
 import Mission from "../../../../../libs/models/mission";
 import Submission from "../../../../../libs/models/submission";
-import SubmissionAnswerData from "../../../../../libs/models/submission-answer-data";
 import MissionService from "../../../../../libs/services/mission-service";
 import SubmissionService from "../../../../../libs/services/submission-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
   {
-    gameId: string;
     page: number;
     mission: Mission;
     submissionsPaginated: PaginateResponseDto<Submission>;
@@ -36,7 +30,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const [mission, submissionsPaginated] = await Promise.all([
     missionService.getOneById(gameId, missionId),
-    submissionService.getAllPaginated(gameId, missionId, page),
+    submissionService.getAllPaginatedByMission(gameId, missionId, page),
   ]);
 
   return {
@@ -51,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<
 
 const SubmissionsByMissionPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ gameId, page, mission, submissionsPaginated }) => {
+> = ({ page, mission, submissionsPaginated }) => {
   return (
     <>
       <header className="mb-4 text-center">
@@ -62,59 +56,9 @@ const SubmissionsByMissionPage: NextPage<
         </p>
       </header>
 
-      <div className="overflow-x-auto">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Team</th>
-              {mission?.answer_type === MissionTypes.TEXT && <th>Answer</th>}
-              <th>Caption</th>
-              <th>Points</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {submissionsPaginated.total === 0 && (
-              <tr>
-                <td className="text-center" colSpan={99}>
-                  No submissions.
-                </td>
-              </tr>
-            )}
-
-            {submissionsPaginated.data.map((submission) => (
-              <tr key={submission.id} className="hover">
-                <Link
-                  href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
-                >
-                  <th className="link link-primary cursor-pointer">
-                    {submission.game_team?.name}
-                  </th>
-                </Link>
-
-                {submission.mission?.answer_type === MissionTypes.TEXT && (
-                  <td>
-                    {typeof submission.answer_data === "string"
-                      ? JSON.parse(submission.answer_data).answer
-                      : submission.answer_data.answer}
-                  </td>
-                )}
-
-                <td>{submission.caption}</td>
-                <td>{submission.mission?.point_value}</td>
-                <td></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <section className="mt-4">
-          <PaginationButtons
-            currentPage={page}
-            length={submissionsPaginated.last_page}
-          />
-        </section>
-      </div>
+      <SubmissionsView
+        {...{ mission, currentPage: page, submissionsPaginated }}
+      />
     </>
   );
 };
