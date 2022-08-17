@@ -44,7 +44,7 @@ const ParticipantsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ game, gameTeams }) => {
   return (
-    <>
+    <div className="mx-auto max-w-screen-lg">
       <h2 className="mb-2 text-3xl font-bold">Participants</h2>
 
       <section className="card my-4 bg-primary-content shadow-xl">
@@ -98,7 +98,7 @@ const ParticipantsPage: NextPage<
           <GameTeamCard key={gameTeam.id} gameTeam={gameTeam} />
         ))}
       </section>
-    </>
+    </div>
   );
 };
 

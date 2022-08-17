@@ -29,25 +29,23 @@ const GamesPage = ({
   paginatedGames,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <>
-      <main className="container mx-auto mt-8">
-        <section className="flex justify-between">
-          <h1 className="text-2xl font-bold">My Games</h1>
-          <Link href="/games/create">
-            <button className="btn btn-primary gap-2">
-              <PlusIcon className="h-5 w-5" />
-              New Game
-            </button>
-          </Link>
-        </section>
+    <div className="mx-auto mt-8 max-w-screen-lg">
+      <section className="flex justify-between">
+        <h1 className="text-2xl font-bold">My Games</h1>
+        <Link href="/games/create">
+          <button className="btn btn-primary gap-2">
+            <PlusIcon className="h-5 w-5" />
+            New Game
+          </button>
+        </Link>
+      </section>
 
-        <Pagination
-          pagination={paginatedGames}
-          currentPage={page}
-          render={(game) => <GameCard key={game.id} game={game} />}
-        />
-      </main>
-    </>
+      <Pagination
+        pagination={paginatedGames}
+        currentPage={page}
+        render={(game) => <GameCard key={game.id} game={game} />}
+      />
+    </div>
   );
 };
 

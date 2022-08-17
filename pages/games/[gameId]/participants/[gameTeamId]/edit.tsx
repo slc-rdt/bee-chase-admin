@@ -51,14 +51,14 @@ const ParticipantsTeamEditPage: NextPage<
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-md">
       <h2 className="mb-2 text-3xl font-bold">Edit Team</h2>
       <GameTeamForm
         gameTeam={gameTeam}
         isLoading={isLoading}
         onGameTeamFormSubmit={onSubmit}
       />
-    </>
+    </div>
   );
 };
 

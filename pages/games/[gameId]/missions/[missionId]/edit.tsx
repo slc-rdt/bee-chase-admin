@@ -51,7 +51,7 @@ const MissionEditPage = ({
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-lg">
       <MissionForm
         mission={mission}
         isLoading={isLoading}
@@ -59,7 +59,7 @@ const MissionEditPage = ({
           onSubmit(data as UpdateMissionDto);
         }}
       />
-    </>
+    </div>
   );
 };
 

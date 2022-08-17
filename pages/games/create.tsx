@@ -24,10 +24,10 @@ const GameCreatePage: NextPage = () => {
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-md">
       <h2 className="text-3xl font-bold">Details</h2>
       <GameForm isLoading={isLoading} onGameFormSubmit={onGameFormSubmit} />
-    </>
+    </div>
   );
 };
 

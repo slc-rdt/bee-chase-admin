@@ -50,14 +50,14 @@ const GameDetailEditPage = ({
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-md">
       <h2 className="mb-2 text-3xl font-bold">Details</h2>
       <GameForm
         game={game}
         isLoading={isLoading}
         onGameFormSubmit={onGameFormSubmit}
       />
-    </>
+    </div>
   );
 };
 

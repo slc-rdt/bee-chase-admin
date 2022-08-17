@@ -27,9 +27,9 @@ const MissionCreatePage = () => {
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-lg">
       <MissionForm isLoading={isLoading} onMissionFormSubmit={onSubmit} />
-    </>
+    </div>
   );
 };
 

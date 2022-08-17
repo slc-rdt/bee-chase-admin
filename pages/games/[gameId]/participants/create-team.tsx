@@ -25,10 +25,10 @@ const ParticipantsCreateTeamPage = () => {
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-md">
       <h2 className="mb-2 text-3xl font-bold">Create Team</h2>
       <GameTeamForm isLoading={isLoading} onGameTeamFormSubmit={onSubmit} />
-    </>
+    </div>
   );
 };
 

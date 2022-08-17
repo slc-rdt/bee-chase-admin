@@ -61,7 +61,7 @@ const AdminsPage: NextPage<
   });
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-lg">
       <h2 className="mb-2 text-3xl font-bold">Manage Admins</h2>
 
       <section className="form-control">
@@ -93,7 +93,7 @@ const AdminsPage: NextPage<
           )}
         />
       </section>
-    </>
+    </div>
   );
 };
 

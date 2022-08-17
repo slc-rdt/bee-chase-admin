@@ -27,10 +27,10 @@ const GameDetailStartStopPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ game }) => {
   return (
-    <>
+    <div className="mx-auto max-w-screen-md">
       <h2 className="mb-2 text-3xl font-bold">Start & End</h2>
       <StartEndForm game={game} />
-    </>
+    </div>
   );
 };
 
