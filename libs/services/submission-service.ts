@@ -15,18 +15,6 @@ export default class SubmissionService extends AbstractService {
     return data;
   }
 
-  public async getAllPaginatedByTeam(
-    gameId: string,
-    teamId: string,
-    page: number
-  ) {
-    const { data } = await this.axios.get<PaginateResponseDto<Submission>>(
-      `${this.apiUrl}/games/${gameId}/game_teams/${teamId}/submissions`,
-      { params: { page } }
-    );
-    return data;
-  }
-
   public async delete(submission: Submission) {
     const gameId = (submission.mission ?? submission.game_team)?.game_id;
     const { data } = await this.axios.delete<PaginateResponseDto<Submission>>(

@@ -57,7 +57,9 @@ const SubmissionsByMissionPage: NextPage<
       </header>
 
       <SubmissionsView
-        {...{ mission, currentPage: page, submissionsPaginated }}
+        answerType={mission.answer_type}
+        currentPage={page}
+        submissionsPaginated={submissionsPaginated}
       />
     </>
   );

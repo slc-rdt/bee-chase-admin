@@ -1,4 +1,7 @@
+import PaginateResponseDto from "../dtos/paginate-response-dto";
+import { MissionTypes } from "../enums";
 import GameTeam from "../models/game-team";
+import Submission from "../models/submission";
 import AbstractService from "./abstract-service";
 
 export default class GameTeamService extends AbstractService {
@@ -12,6 +15,18 @@ export default class GameTeamService extends AbstractService {
   public async getOneById(gameId: string, gameTeamId: string) {
     const { data } = await this.axios.get<GameTeam>(
       `${this.apiUrl}/games/${gameId}/game_teams/${gameTeamId}`
+    );
+    return data;
+  }
+
+  public async getSubmissionsPaginatedByMissionAnswerType(
+    gameId: string,
+    gameTeamId: string,
+    params: { page: number; answer_type: MissionTypes }
+  ) {
+    const { data } = await this.axios.get<PaginateResponseDto<Submission>>(
+      `${this.apiUrl}/games/${gameId}/game_teams/${gameTeamId}/submissions`,
+      { params }
     );
     return data;
   }

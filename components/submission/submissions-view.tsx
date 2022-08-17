@@ -13,13 +13,13 @@ import SubmissionsViewImageType from "./submissions-view-image-type";
 import SubmissionsViewTextType from "./submissions-view-text-type";
 
 interface ISubmissionsView {
-  mission: Mission;
+  answerType: MissionTypes;
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
 }
 
 const SubmissionsView: ComponentType<ISubmissionsView> = ({
-  mission,
+  answerType,
   currentPage,
   submissionsPaginated,
 }) => {
@@ -39,22 +39,31 @@ const SubmissionsView: ComponentType<ISubmissionsView> = ({
 
   return (
     <>
-      {mission.answer_type === MissionTypes.IMAGE && (
-        <SubmissionsViewImageType
-          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
-        />
+      {answerType === MissionTypes.IMAGE && (
+        <section>
+          <h3 className="mb-4 text-xl font-bold">Photo Submissions</h3>
+          <SubmissionsViewImageType
+            {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+          />
+        </section>
       )}
 
-      {mission.answer_type === MissionTypes.TEXT && (
-        <SubmissionsViewTextType
-          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
-        />
+      {answerType === MissionTypes.TEXT && (
+        <section>
+          <h3 className="mb-4 text-xl font-bold">Text Submissions</h3>
+          <SubmissionsViewTextType
+            {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+          />
+        </section>
       )}
 
-      {mission.answer_type === MissionTypes.GPS && (
-        <SubmissionsViewGpsType
-          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
-        />
+      {answerType === MissionTypes.GPS && (
+        <section>
+          <h3 className="mb-4 text-xl font-bold">GPS Submissions</h3>
+          <SubmissionsViewGpsType
+            {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+          />
+        </section>
       )}
     </>
   );
