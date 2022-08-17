@@ -3,6 +3,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import Link from "next/link";
 import React from "react";
 import Pagination from "../../../../components/common/pagination";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
@@ -13,11 +14,14 @@ import SubmissionService from "../../../../libs/services/submission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
 
 export const getServerSideProps: GetServerSideProps<
-  { missionsPaginated: PaginateResponseDto<Mission>; page: number },
-  { gameId: string; missionId: string }
+  {
+    gameId: string;
+    missionsPaginated: PaginateResponseDto<Mission>;
+    page: number;
+  },
+  { gameId: string }
 > = async (context) => {
   const gameId = context.params?.gameId ?? "";
-  const missionId = context.params?.missionId ?? "";
   const page = Number(context.query.page ?? 1);
 
   const missionService = await createServerSideService(
@@ -31,6 +35,7 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
+      gameId,
       missionsPaginated,
       page,
     },
@@ -39,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<
 
 const SubmissionsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ missionsPaginated, page }) => {
+> = ({ gameId, missionsPaginated, page }) => {
   return (
     <>
       <h2 className="mb-2 text-3xl font-bold">Submissions</h2>
@@ -49,18 +54,23 @@ const SubmissionsPage: NextPage<
         currentPage={page}
         pagination={missionsPaginated}
         render={(mission) => (
-          <div key={mission.id} className="card shadow-xl">
-            <div className="card-body">
-              <div className="card-title">{mission.name}</div>
+          <Link
+            key={mission.id}
+            href={`/games/${gameId}/submissions/mission/${mission.id}`}
+          >
+            <div className="card cursor-pointer shadow-xl">
+              <div className="card-body">
+                <div className="card-title">{mission.name}</div>
 
-              <p className="grid grid-cols-1 items-center gap-4 xl:grid-cols-2">
-                <span className="badge">{mission.point_value} PTS</span>
-                <span className="xl:text-right">
-                  {mission.submissions?.length} submissions
-                </span>
-              </p>
+                <p className="grid grid-cols-1 items-center gap-4 xl:grid-cols-2">
+                  <span className="badge">{mission.point_value} PTS</span>
+                  <span className="xl:text-right">
+                    {mission.submissions?.length} submissions
+                  </span>
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
         )}
       />
     </>
