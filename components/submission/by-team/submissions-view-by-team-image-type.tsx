@@ -21,6 +21,7 @@ const SubmissionsViewByTeamImageType: ComponentType<
       className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       currentPage={currentPage}
       pagination={submissionsPaginated}
+      paginationKey="pageForIMAGE"
       render={(submission) => (
         <ImageSubmissionItem
           key={submission.id}

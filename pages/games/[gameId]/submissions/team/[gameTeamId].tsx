@@ -3,7 +3,6 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import Pagination from "../../../../../components/common/pagination";
 import SubmissionsViewByTeam from "../../../../../components/submission/by-team/submissions-view-by-team";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
 import { AnswerTypes } from "../../../../../libs/enums";
@@ -14,7 +13,6 @@ import createServerSideService from "../../../../../libs/utils/create-server-sid
 
 export const getServerSideProps: GetServerSideProps<
   {
-    page: number;
     gameTeam: GameTeam;
     submissionsPaginationsGroupedByAnswerTypes: {
       [key: string]: PaginateResponseDto<Submission>;
@@ -24,7 +22,6 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";
-  const page = Number(context.query.page ?? 1);
 
   const gameTeamService = await createServerSideService(
     context.req,
@@ -35,13 +32,17 @@ export const getServerSideProps: GetServerSideProps<
     .map(Number)
     .filter((x) => !isNaN(x));
 
-  const submissionsPaginatedPromises = missionTypeValues.map((answerType) =>
-    gameTeamService.getSubmissionsPaginatedByMissionAnswerType(
+  const submissionsPaginatedPromises = missionTypeValues.map((typeValue) => {
+    const answerType = AnswerTypes[typeValue];
+    const queryKey = `pageFor${answerType}`;
+    const page = Number(context.query[queryKey] ?? 1);
+
+    return gameTeamService.getSubmissionsPaginatedByMissionAnswerType(
       gameId,
       gameTeamId,
-      { page, answer_type: answerType }
-    )
-  );
+      { page, answer_type: typeValue }
+    );
+  });
 
   const [gameTeam, ...submissionsPaginations] = await Promise.all([
     gameTeamService.getOneById(gameId, gameTeamId),
@@ -57,7 +58,6 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
-      page,
       gameTeam,
       submissionsPaginationsGroupedByAnswerTypes,
     },
@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<
 
 const SubmissionsByGameTeamPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ page, gameTeam, submissionsPaginationsGroupedByAnswerTypes }) => {
+> = ({ gameTeam, submissionsPaginationsGroupedByAnswerTypes }) => {
   const totalSubmissions = Object.values(
     submissionsPaginationsGroupedByAnswerTypes
   )

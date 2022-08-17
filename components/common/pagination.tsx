@@ -5,12 +5,14 @@ import PaginationButtons from "./pagination-buttons";
 interface IPagination<T> extends ComponentProps<"section"> {
   currentPage: number;
   pagination: PaginateResponseDto<T>;
+  paginationKey?: string;
   render: (data: T) => JSX.Element;
 }
 
 const Pagination = <T extends unknown>({
   currentPage,
   pagination,
+  paginationKey,
   render,
   ...rest
 }: IPagination<T>) => {
@@ -31,6 +33,7 @@ const Pagination = <T extends unknown>({
       <div className="my-4" />
 
       <PaginationButtons
+        paginationKey={paginationKey}
         length={pagination.last_page}
         currentPage={currentPage}
       />

@@ -8,13 +8,14 @@ import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useCallback, useEffect } from "react";
 
 interface IPaginationButtons {
+  paginationKey?: string;
   currentPage: number;
   length: number;
 }
 
 const PaginationButtons: ComponentType<
   ComponentProps<"section"> & IPaginationButtons
-> = ({ currentPage, length, ...rest }) => {
+> = ({ paginationKey, currentPage, length, ...rest }) => {
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < length;
 
@@ -22,15 +23,17 @@ const PaginationButtons: ComponentType<
 
   const onChangePage = useCallback(
     (page: number) => {
+      const paginationQueryStringKey = paginationKey ?? "page";
+
       router.push({
         pathname: router.pathname,
         query: {
           ...router.query,
-          page,
+          [paginationQueryStringKey]: page,
         },
       });
     },
-    [router]
+    [paginationKey, router]
   );
 
   useEffect(() => {

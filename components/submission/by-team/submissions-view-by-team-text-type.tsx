@@ -51,6 +51,7 @@ const SubmissionsViewByTeamTextType: ComponentType<
 
       <section className="mt-4">
         <PaginationButtons
+          paginationKey="pageForTEXT"
           currentPage={currentPage}
           length={submissionsPaginated.last_page}
         />

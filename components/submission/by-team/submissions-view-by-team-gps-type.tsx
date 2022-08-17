@@ -50,6 +50,7 @@ const SubmissionsViewByTeamGpsType: ComponentType<
 
       <section className="mt-4">
         <PaginationButtons
+          paginationKey="pageForGPS"
           currentPage={currentPage}
           length={submissionsPaginated.last_page}
         />
