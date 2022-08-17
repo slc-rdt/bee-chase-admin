@@ -6,15 +6,15 @@ import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Submission from "../../libs/models/submission";
 import PaginationButtons from "../common/pagination-buttons";
 
-interface ISubmissionsViewGpsType {
+interface ISubmissionsViewByMissionTextType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
   isLoading: boolean;
   onDelete: (submission: Submission) => void;
 }
 
-const SubmissionsViewGpsType: ComponentType<
-  ComponentProps<"div"> & ISubmissionsViewGpsType
+const SubmissionsViewByMissionTextType: ComponentType<
+  ComponentProps<"div"> & ISubmissionsViewByMissionTextType
 > = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
@@ -26,6 +26,7 @@ const SubmissionsViewGpsType: ComponentType<
           <thead>
             <tr>
               <th>Team</th>
+              <th>Answer</th>
               <th>Caption</th>
               <th>Points</th>
               <th></th>
@@ -52,6 +53,13 @@ const SubmissionsViewGpsType: ComponentType<
                     {submission.game_team?.name}
                   </th>
                 </Link>
+
+                <td>
+                  {typeof submission.answer_data === "string"
+                    ? JSON.parse(submission.answer_data).answer
+                    : submission.answer_data.answer}
+                </td>
+
                 <td>{submission.caption}</td>
                 <td>{submission.mission?.point_value}</td>
                 <td>
@@ -80,4 +88,4 @@ const SubmissionsViewGpsType: ComponentType<
   );
 };
 
-export default SubmissionsViewGpsType;
+export default SubmissionsViewByMissionTextType;

@@ -8,17 +8,17 @@ import useService from "../../libs/hooks/common/use-service";
 import Mission from "../../libs/models/mission";
 import Submission from "../../libs/models/submission";
 import SubmissionService from "../../libs/services/submission-service";
-import SubmissionsViewGpsType from "./submissions-view-gps-type";
-import SubmissionsViewImageType from "./submissions-view-image-type";
-import SubmissionsViewTextType from "./submissions-view-text-type";
+import SubmissionsViewByMissionGpsType from "./submissions-view-by-mission-gps-type";
+import SubmissionsViewByMissionImageType from "./submissions-view-by-mission-image-type";
+import SubmissionsViewByMissionTextType from "./submissions-view-by-mission-text-type";
 
-interface ISubmissionsView {
+interface ISubmissionsViewByMission {
   answerType: MissionTypes;
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
 }
 
-const SubmissionsView: ComponentType<ISubmissionsView> = ({
+const SubmissionsViewByMission: ComponentType<ISubmissionsViewByMission> = ({
   answerType,
   currentPage,
   submissionsPaginated,
@@ -40,33 +40,24 @@ const SubmissionsView: ComponentType<ISubmissionsView> = ({
   return (
     <>
       {answerType === MissionTypes.IMAGE && (
-        <section>
-          <h3 className="mb-4 text-xl font-bold">Photo Submissions</h3>
-          <SubmissionsViewImageType
-            {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
-          />
-        </section>
+        <SubmissionsViewByMissionImageType
+          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+        />
       )}
 
       {answerType === MissionTypes.TEXT && (
-        <section>
-          <h3 className="mb-4 text-xl font-bold">Text Submissions</h3>
-          <SubmissionsViewTextType
-            {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
-          />
-        </section>
+        <SubmissionsViewByMissionTextType
+          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+        />
       )}
 
       {answerType === MissionTypes.GPS && (
-        <section>
-          <h3 className="mb-4 text-xl font-bold">GPS Submissions</h3>
-          <SubmissionsViewGpsType
-            {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
-          />
-        </section>
+        <SubmissionsViewByMissionGpsType
+          {...{ currentPage, submissionsPaginated, isLoading, onDelete }}
+        />
       )}
     </>
   );
 };
 
-export default SubmissionsView;
+export default SubmissionsViewByMission;

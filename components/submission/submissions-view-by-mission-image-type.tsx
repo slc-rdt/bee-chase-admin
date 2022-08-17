@@ -6,19 +6,19 @@ import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Submission from "../../libs/models/submission";
 import Pagination from "../common/pagination";
 
-interface ISubmissionsViewTextType {
+interface ISubmissionsViewByMissionTextType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
   isLoading: boolean;
   onDelete: (submission: Submission) => void;
 }
 
-const SubmissionsViewImageType: ComponentType<
-  ComponentProps<"div"> & ISubmissionsViewTextType
+const SubmissionsViewByMissionImageType: ComponentType<
+  ComponentProps<"div"> & ISubmissionsViewByMissionTextType
 > = ({ currentPage, submissionsPaginated, isLoading, onDelete }) => {
   const router = useRouter();
   const gameId = router.query.gameId ?? "";
-
+  
   return (
     <Pagination
       className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3"
@@ -75,4 +75,4 @@ const SubmissionsViewImageType: ComponentType<
   );
 };
 
-export default SubmissionsViewImageType;
+export default SubmissionsViewByMissionImageType;

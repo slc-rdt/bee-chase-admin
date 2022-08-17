@@ -3,7 +3,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import SubmissionsView from "../../../../../components/submission/submissions-view";
+import SubmissionsViewByMission from "../../../../../components/submission/submissions-view-by-mission";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../../libs/models/mission";
 import Submission from "../../../../../libs/models/submission";
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<
     missionService.getOneById(gameId, missionId),
     submissionService.getAllPaginatedByMission(gameId, missionId, page),
   ]);
-
+  
   return {
     props: {
       gameId,
@@ -56,7 +56,7 @@ const SubmissionsByMissionPage: NextPage<
         </p>
       </header>
 
-      <SubmissionsView
+      <SubmissionsViewByMission
         answerType={mission.answer_type}
         currentPage={page}
         submissionsPaginated={submissionsPaginated}
