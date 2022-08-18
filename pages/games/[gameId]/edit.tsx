@@ -8,29 +8,26 @@ import useService from "../../../libs/hooks/common/use-service";
 import Game from "../../../libs/models/game";
 import GameService from "../../../libs/services/game-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game },
   { gameId: string }
 > = async (context) => {
-  const gameService = await createServerSideService(context.req, GameService);
-  const game = await gameService.getOneById(context.params?.gameId ?? "");
-
-  if (!game) {
-    return {
-      props: {},
-      redirect: {
-        destination: "/games",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      game,
+  return await getServerSidePropsWrapper(
+    async () => {
+      const gameService = await createServerSideService(
+        context.req,
+        GameService
+      );
+      const game = await gameService.getOneById(context.params?.gameId ?? "");
+      return { props: { game } };
     },
-  };
+    {
+      destination: `/games`,
+      permanent: false,
+    }
+  );
 };
 
 const GameDetailEditPage = ({

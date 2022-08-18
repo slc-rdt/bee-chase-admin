@@ -11,24 +11,31 @@ import useService from "../../../../../libs/hooks/common/use-service";
 import GameTeam from "../../../../../libs/models/game-team";
 import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   { gameTeam: GameTeam },
   { gameId: string; gameTeamId: string }
 > = async (context) => {
-  const gameTeamService = await createServerSideService(
-    context.req,
-    GameTeamService
-  );
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";
-  const gameTeam = await gameTeamService.getOneById(gameId, gameTeamId);
 
-  return {
-    props: {
-      gameTeam,
+  return await getServerSidePropsWrapper(
+    async () => {
+      const gameTeamService = await createServerSideService(
+        context.req,
+        GameTeamService
+      );
+
+      const gameTeam = await gameTeamService.getOneById(gameId, gameTeamId);
+
+      return { props: { gameTeam } };
     },
-  };
+    {
+      destination: `/games/${gameId}/participants`,
+      permanent: false,
+    }
+  );
 };
 
 const ParticipantsTeamEditPage: NextPage<

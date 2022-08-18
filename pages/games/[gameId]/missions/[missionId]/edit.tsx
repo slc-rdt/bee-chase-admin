@@ -8,24 +8,31 @@ import useService from "../../../../../libs/hooks/common/use-service";
 import Mission from "../../../../../libs/models/mission";
 import MissionService from "../../../../../libs/services/mission-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   { mission: Mission },
   { gameId: string; missionId: string }
 > = async (context) => {
-  const missionService = await createServerSideService(
-    context.req,
-    MissionService
-  );
   const gameId = context.params?.gameId ?? "";
   const missionId = context.params?.missionId ?? "";
-  const mission = await missionService.getOneById(gameId, missionId);
 
-  return {
-    props: {
-      mission,
+  return await getServerSidePropsWrapper(
+    async () => {
+      const missionService = await createServerSideService(
+        context.req,
+        MissionService
+      );
+
+      const mission = await missionService.getOneById(gameId, missionId);
+
+      return { props: { mission } };
     },
-  };
+    {
+      destination: `/games/${gameId}/missions`,
+      permanent: false,
+    }
+  );
 };
 
 const MissionEditPage = ({

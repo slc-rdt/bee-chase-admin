@@ -8,29 +8,38 @@ import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../libs/models/mission";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   { page: number; paginatedMissions: PaginateResponseDto<Mission> },
   { gameId: string }
 > = async (context) => {
-  const missionService = await createServerSideService(
-    context.req,
-    MissionService
-  );
+  return await getServerSidePropsWrapper(
+    async () => {
+      const missionService = await createServerSideService(
+        context.req,
+        MissionService
+      );
 
-  const gameId = context.params?.gameId ?? "";
-  const page = Number(context.query.page ?? 1);
+      const gameId = context.params?.gameId ?? "";
+      const page = Number(context.query.page ?? 1);
 
-  const paginatedMissions = await missionService.getAllPaginated(gameId, {
-    page,
-  });
+      const paginatedMissions = await missionService.getAllPaginated(gameId, {
+        page,
+      });
 
-  return {
-    props: {
-      page,
-      paginatedMissions,
+      return {
+        props: {
+          page,
+          paginatedMissions,
+        },
+      };
     },
-  };
+    {
+      destination: "/games",
+      permanent: false,
+    }
+  );
 };
 
 const MissionsPage = ({

@@ -3,7 +3,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType, useEffect } from "react";
 import toast from "react-hot-toast";
 import useCurrentGame from "../../libs/hooks/layout/use-current-game";
 import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
@@ -41,7 +41,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
   };
 
   return (
-    <div className="drawer drawer-mobile" {...rest}>
+    <div className="drawer-mobile drawer" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {status === "authenticated" && (
@@ -51,7 +51,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
                 <div className="flex-none lg:hidden">
                   <label
                     htmlFor="my-drawer-3"
-                    className="btn btn-ghost btn-square"
+                    className="btn btn-square btn-ghost"
                   >
                     <MenuIcon className="inline-block h-6 w-6 stroke-current" />
                   </label>
@@ -66,8 +66,8 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
             </div>
 
             <div className="flex-none gap-2">
-              <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
+              <div className="dropdown-end dropdown">
+                <label tabIndex={0} className="avatar btn btn-circle btn-ghost">
                   <div className="w-10 rounded-full">
                     <Image
                       src={

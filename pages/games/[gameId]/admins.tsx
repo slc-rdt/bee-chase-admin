@@ -15,6 +15,7 @@ import User from "../../../libs/models/user";
 import GameService from "../../../libs/services/game-service";
 import UserService from "../../../libs/services/user-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -24,27 +25,35 @@ export const getServerSideProps: GetServerSideProps<
   },
   { gameId: string }
 > = async (context) => {
-  const [userService, gameService] = await Promise.all([
-    createServerSideService(context.req, UserService),
-    createServerSideService(context.req, GameService),
-  ]);
-
   const gameId = context.params?.gameId ?? "";
   const keyword = context.query.search ?? "";
   const page = Number(context.query.page ?? 1);
 
-  const [users, game] = await Promise.all([
-    userService.search({ search: `${keyword}`, page }),
-    gameService.getOneById(gameId),
-  ]);
+  return await getServerSidePropsWrapper(
+    async () => {
+      const [userService, gameService] = await Promise.all([
+        createServerSideService(context.req, UserService),
+        createServerSideService(context.req, GameService),
+      ]);
 
-  return {
-    props: {
-      game,
-      pagintedUsers: users,
-      page,
+      const [users, game] = await Promise.all([
+        userService.search({ search: `${keyword}`, page }),
+        gameService.getOneById(gameId),
+      ]);
+
+      return {
+        props: {
+          game,
+          pagintedUsers: users,
+          page,
+        },
+      };
     },
-  };
+    {
+      destination: `/games`,
+      permanent: false,
+    }
+  );
 };
 
 const AdminsPage: NextPage<

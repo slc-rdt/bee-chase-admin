@@ -10,6 +10,7 @@ import Submission from "../../../../../libs/models/submission";
 import MissionService from "../../../../../libs/services/mission-service";
 import SubmissionService from "../../../../../libs/services/submission-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -23,24 +24,32 @@ export const getServerSideProps: GetServerSideProps<
   const missionId = context.params?.missionId ?? "";
   const page = Number(context.query.page ?? 1);
 
-  const [missionService, submissionService] = await Promise.all([
-    createServerSideService(context.req, MissionService),
-    createServerSideService(context.req, SubmissionService),
-  ]);
+  return await getServerSidePropsWrapper(
+    async () => {
+      const [missionService, submissionService] = await Promise.all([
+        createServerSideService(context.req, MissionService),
+        createServerSideService(context.req, SubmissionService),
+      ]);
 
-  const [mission, submissionsPaginated] = await Promise.all([
-    missionService.getOneById(gameId, missionId),
-    submissionService.getAllPaginatedByMission(gameId, missionId, page),
-  ]);
+      const [mission, submissionsPaginated] = await Promise.all([
+        missionService.getOneById(gameId, missionId),
+        submissionService.getAllPaginatedByMission(gameId, missionId, page),
+      ]);
 
-  return {
-    props: {
-      gameId,
-      page,
-      mission,
-      submissionsPaginated,
+      return {
+        props: {
+          gameId,
+          page,
+          mission,
+          submissionsPaginated,
+        },
+      };
     },
-  };
+    {
+      destination: `/games/${gameId}/submissions`,
+      permanent: false,
+    }
+  );
 };
 
 const SubmissionsByMissionPage: NextPage<

@@ -11,6 +11,7 @@ import Submission from "../../../../../libs/models/submission";
 import GameService from "../../../../../libs/services/game-service";
 import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
+import getServerSidePropsWrapper from "../../../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -24,47 +25,59 @@ export const getServerSideProps: GetServerSideProps<
   const gameId = context.params?.gameId ?? "";
   const gameTeamId = context.params?.gameTeamId ?? "";
 
-  const [gameService, gameTeamService] = await Promise.all([
-    createServerSideService(context.req, GameService),
-    createServerSideService(context.req, GameTeamService),
-  ]);
+  return await getServerSidePropsWrapper(
+    async () => {
+      const [gameService, gameTeamService] = await Promise.all([
+        createServerSideService(context.req, GameService),
+        createServerSideService(context.req, GameTeamService),
+      ]);
 
-  const missionTypeValues = Object.values(AnswerTypes)
-    .map(Number)
-    .filter((x) => !isNaN(x));
+      const missionTypeValues = Object.values(AnswerTypes)
+        .map(Number)
+        .filter((x) => !isNaN(x));
 
-  const submissionsPaginatedPromises = missionTypeValues.map((typeValue) => {
-    const answerType = AnswerTypes[typeValue];
-    const queryKey = `pageFor${answerType}`;
-    const page = Number(context.query[queryKey] ?? 1);
+      const submissionsPaginatedPromises = missionTypeValues.map(
+        (typeValue) => {
+          const answerType = AnswerTypes[typeValue];
+          const queryKey = `pageFor${answerType}`;
+          const page = Number(context.query[queryKey] ?? 1);
 
-    return gameTeamService.getSubmissionsPaginatedByMissionAnswerType(
-      gameId,
-      gameTeamId,
-      { page, answer_type: typeValue }
-    );
-  });
+          return gameTeamService.getSubmissionsPaginatedByMissionAnswerType(
+            gameId,
+            gameTeamId,
+            { page, answer_type: typeValue }
+          );
+        }
+      );
 
-  const [leaderboard, ...submissionsPaginations] = await Promise.all([
-    gameService.getLeaderboard(gameId),
-    ...submissionsPaginatedPromises,
-  ]);
+      const [leaderboard, ...submissionsPaginations] = await Promise.all([
+        gameService.getLeaderboard(gameId),
+        ...submissionsPaginatedPromises,
+      ]);
 
-  const gameTeam = leaderboard.find((gameTeam) => gameTeam.id === gameTeamId);
+      const gameTeam = leaderboard.find(
+        (gameTeam) => gameTeam.id === gameTeamId
+      );
 
-  const submissionsPaginationsGroupedByAnswerTypes = Object.fromEntries(
-    missionTypeValues.map((typeValue, idx) => [
-      AnswerTypes[typeValue],
-      submissionsPaginations[idx],
-    ])
-  );
+      const submissionsPaginationsGroupedByAnswerTypes = Object.fromEntries(
+        missionTypeValues.map((typeValue, idx) => [
+          AnswerTypes[typeValue],
+          submissionsPaginations[idx],
+        ])
+      );
 
-  return {
-    props: {
-      gameTeam,
-      submissionsPaginationsGroupedByAnswerTypes,
+      return {
+        props: {
+          gameTeam,
+          submissionsPaginationsGroupedByAnswerTypes,
+        },
+      };
     },
-  };
+    {
+      destination: `/games/${gameId}/submissions`,
+      permanent: false,
+    }
+  );
 };
 
 const SubmissionsByGameTeamPage: NextPage<
