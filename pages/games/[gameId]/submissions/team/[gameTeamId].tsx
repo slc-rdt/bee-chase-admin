@@ -51,7 +51,6 @@ export const getServerSideProps: GetServerSideProps<
   ]);
 
   const gameTeam = leaderboard.find((gameTeam) => gameTeam.id === gameTeamId);
-  console.log(leaderboard);
 
   const submissionsPaginationsGroupedByAnswerTypes = Object.fromEntries(
     missionTypeValues.map((typeValue, idx) => [
