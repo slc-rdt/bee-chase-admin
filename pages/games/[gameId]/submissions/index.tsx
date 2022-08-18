@@ -63,7 +63,9 @@ const SubmissionsPage: NextPage<
                 <div className="card-title">{mission.name}</div>
 
                 <p className="grid grid-cols-1 items-center gap-4 xl:grid-cols-2">
-                  <span className="badge">{mission.point_value} PTS</span>
+                  <span className="badge badge-primary">
+                    {mission.point_value} PTS
+                  </span>
                   <span className="xl:text-right">
                     {mission.submissions?.length} submissions
                   </span>
