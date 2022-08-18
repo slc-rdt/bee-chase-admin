@@ -5,7 +5,8 @@ import {
   ClockIcon,
   UsersIcon,
   PhotographIcon,
-} from "@heroicons/react/solid";
+  ChartBarIcon,
+} from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Game from "../../models/game";
@@ -74,7 +75,15 @@ export default function useSidebarMenus(game?: Game) {
         icon: <UsersIcon className="h-6 w-6" />,
         isActive: false,
       },
+
       null,
+
+      {
+        label: "Leaderboard",
+        path: `/games/${gameId}/leaderboard`,
+        icon: <ChartBarIcon className="h-6 w-6" />,
+        isActive: false,
+      },
       {
         label: "Submissions",
         path: `/games/${gameId}/submissions`,

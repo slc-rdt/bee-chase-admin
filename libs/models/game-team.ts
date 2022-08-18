@@ -9,4 +9,5 @@ export default interface GameTeam extends BaseModel {
   submissions?: Submission[];
   submissions_count?: number;
   missions_sum_point_value?: number;
+  rank?: number;
 }
