@@ -28,7 +28,18 @@ const Leaderboard: NextPage<
       <h2 className="text-3xl font-bold">Leaderboard</h2>
 
       <section className="grid grid-cols-1 gap-4">
-        {leaderboard.map((gameTeam, idx) => {
+        {leaderboard.map((gameTeam) => {
+          const rank = gameTeam.rank ?? 0;
+          const lastDigit = rank % 10;
+
+          const rankSuffixMapping = new Map([
+            [1, "st"],
+            [2, "nd"],
+            [3, "rd"],
+          ]);
+
+          const rankSuffix = rankSuffixMapping.get(lastDigit) ?? "th";
+
           return (
             <div key={gameTeam.id} className="card shadow-xl">
               <div className="card-body">
@@ -58,8 +69,9 @@ const Leaderboard: NextPage<
                     </p>
                   </section>
 
-                  <section className="text-lg font-bold italic">
-                    #{gameTeam.rank}
+                  <section className="text-lg font-bold">
+                    {gameTeam.rank}
+                    {rankSuffix}
                   </section>
                 </div>
               </div>
