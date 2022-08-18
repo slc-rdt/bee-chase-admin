@@ -20,7 +20,7 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async leaderboard(gameId: string) {
+  public async getLeaderboard(gameId: string) {
     const { data } = await this.axios.get<GameTeam[]>(
       `${this.apiUrl}/games/${gameId}/leaderboard`
     );

@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<
   });
 
   const [leaderboard, ...submissionsPaginations] = await Promise.all([
-    gameService.leaderboard(gameId),
+    gameService.getLeaderboard(gameId),
     ...submissionsPaginatedPromises,
   ]);
 
