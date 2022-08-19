@@ -28,8 +28,8 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const missionData: MissionData = mission?.mission_data
     ? JSON.parse(mission.mission_data)
     : {};
-
-  const { register, handleSubmit, watch } = useForm<MissionFormValues>({
+// navigator.geolocation.getCurrentPosition(successCallback)
+  const { register, handleSubmit, watch, setValue } = useForm<MissionFormValues>({
     defaultValues: {
       ...(mission ?? {}),
       answer_type: mission?.answer_type ?? AnswerTypes.IMAGE,
@@ -142,7 +142,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
         )}
 
         {answerType === AnswerTypes.GPS && (
-          <MissionFormGpsType {...{ register, isLoading }} />
+          <MissionFormGpsType {...{ register, watch, setValue, isLoading }} />
         )}
 
         <div className="divider" />
