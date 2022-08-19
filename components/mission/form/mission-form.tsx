@@ -28,23 +28,30 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const missionData: MissionData = mission?.mission_data
     ? JSON.parse(mission.mission_data)
     : {};
-// navigator.geolocation.getCurrentPosition(successCallback)
-  const { register, handleSubmit, watch, setValue } = useForm<MissionFormValues>({
-    defaultValues: {
-      ...(mission ?? {}),
-      answer_type: mission?.answer_type ?? AnswerTypes.IMAGE,
-      mission_data: {
-        ...missionData,
-        accepted_answers: Array.isArray(missionData.accepted_answers)
-          ? missionData.accepted_answers.join("\n")
-          : missionData.accepted_answers,
+  // navigator.geolocation.getCurrentPosition(successCallback)
+  const { register, handleSubmit, watch, setValue } =
+    useForm<MissionFormValues>({
+      defaultValues: {
+        ...(mission ?? {}),
+
+        answer_type: mission?.answer_type ?? AnswerTypes.IMAGE,
+
+        mission_data: {
+          ...missionData,
+
+          accepted_answers: Array.isArray(missionData.accepted_answers)
+            ? missionData.accepted_answers.join("\n")
+            : missionData.accepted_answers,
+
+          radius: missionData.radius ?? 100,
+        },
+
+        shown_in_feed:
+          typeof mission?.shown_in_feed === "undefined"
+            ? true
+            : mission.shown_in_feed,
       },
-      shown_in_feed:
-        typeof mission?.shown_in_feed === "undefined"
-          ? true
-          : mission.shown_in_feed,
-    },
-  });
+    });
 
   const answerType = Number(watch("answer_type"));
   const isShowInFeed = Boolean(watch("shown_in_feed"));

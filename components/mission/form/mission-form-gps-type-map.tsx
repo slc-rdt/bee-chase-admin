@@ -5,7 +5,13 @@ import "leaflet/dist/leaflet.css";
 import { ComponentType, useRef } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import toast from "react-hot-toast";
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMapEvents,
+} from "react-leaflet";
 import { MissionFormValues } from "./mission-form";
 
 interface IMissionFormGpsTypeMap {
@@ -24,6 +30,7 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
 
   const originalLatitude = watch("mission_data.latitude");
   const originalLongitude = watch("mission_data.longitude");
+  const radius = watch("mission_data.radius");
 
   const invalidCoordinate = !originalLatitude || !originalLongitude;
   const hasNavigator = typeof navigator !== "undefined";
@@ -67,7 +74,7 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
     <MapContainer
       ref={leafletMapRef}
       center={[latitude, longitude]}
-      zoom={13}
+      zoom={12}
       className="h-96"
       scrollWheelZoom
     >
@@ -78,11 +85,13 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
+      <Circle radius={radius} center={[latitude, longitude]} />
+
       <Marker
         position={[latitude, longitude]}
         eventHandlers={eventHandlers}
         draggable
-      ></Marker>
+      />
     </MapContainer>
   );
 };
