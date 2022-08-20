@@ -1,7 +1,10 @@
-import { PlusIcon } from "@heroicons/react/solid";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import React from "react";
 import Pagination from "../../../../components/common/pagination";
 import MissionCard from "../../../../components/mission/card/mission-card";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
@@ -14,7 +17,7 @@ export const getServerSideProps: GetServerSideProps<
   {
     page: number;
     gameId: string;
-    paginatedMissions: PaginateResponseDto<Mission>;
+    missionsPaginated: PaginateResponseDto<Mission>;
   },
   { gameId: string }
 > = async (context) => {
@@ -28,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<
       const gameId = context.params?.gameId ?? "";
       const page = Number(context.query.page ?? 1);
 
-      const paginatedMissions = await missionService.getAllPaginated(gameId, {
+      const missionsPaginated = await missionService.getAllPaginated(gameId, {
         page,
       });
 
@@ -36,7 +39,7 @@ export const getServerSideProps: GetServerSideProps<
         props: {
           page,
           gameId,
-          paginatedMissions,
+          missionsPaginated,
         },
       };
     },
@@ -47,51 +50,33 @@ export const getServerSideProps: GetServerSideProps<
   );
 };
 
-const MissionsPage = ({
-  page,
-  gameId,
-  paginatedMissions,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-
+const PreviousMissionsPage: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ page, gameId, missionsPaginated }) => {
   return (
     <div className="mx-auto max-w-screen-lg">
-      <section className="flex flex-wrap justify-between">
-        <h2 className="mb-3 text-3xl font-bold">Mission</h2>
-        <Link href={`/games/${router.query.gameId}/missions/create`}>
-          <button className="btn btn-primary gap-2">
-            <PlusIcon className="h-5 w-5" />
-            Add Mission
-          </button>
-        </Link>
-      </section>
+      <h2 className="mb-3 text-3xl font-bold">Mission</h2>
 
       <section className="flex">
         <div className="tabs tabs-boxed">
           <Link href={`/games/${gameId}/missions`}>
-            <a className="tab tab-active">Mission List</a>
+            <a className="tab">Mission List</a>
           </Link>
           <Link href={`/games/${gameId}/missions/previous`}>
-            <a className="tab">Previous Missions</a>
+            <a className="tab tab-active">Previous Missions</a>
           </Link>
         </div>
       </section>
 
       <Pagination
-        pagination={paginatedMissions}
         currentPage={page}
+        pagination={missionsPaginated}
         render={(mission) => (
-          <MissionCard
-            key={mission.id}
-            mission={mission}
-            editable
-            deletable
-            showAvailability
-          />
+          <MissionCard key={mission.id} mission={mission} clonable />
         )}
       />
     </div>
   );
 };
 
-export default MissionsPage;
+export default PreviousMissionsPage;
