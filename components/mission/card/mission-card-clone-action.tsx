@@ -23,7 +23,12 @@ const MissionCardCloneAction: ComponentType<
 
   const onClone = async (mission: Mission) => {
     await toast.promise(
-      doAction(missionService.create(gameId, mission as CreateMissionDto)),
+      doAction(
+        missionService.create(gameId, {
+          ...(mission as CreateMissionDto),
+          parent_mission_id: mission.id,
+        })
+      ),
       {
         loading: "Adding mission to game...",
         success: "Mission added to game!",

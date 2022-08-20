@@ -10,4 +10,5 @@ export default interface CreateMissionDto {
   answer_type: number;
   mission_data: MissionData;
   availability: number;
+  parent_mission_id?: string;
 }

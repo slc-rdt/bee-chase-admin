@@ -13,4 +13,5 @@ export default interface Mission extends BaseModel {
   availability: number;
   mission_data: string;
   submissions?: Submission[];
+  parent_mission_id?: string;
 }
