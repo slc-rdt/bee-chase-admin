@@ -7,6 +7,11 @@ import User from "../models/user";
 import AbstractService from "./abstract-service";
 
 export default class GameService extends AbstractService {
+  public async getAll() {
+    const { data } = await this.axios.get<Game[]>(`${this.apiUrl}/games`);
+    return data;
+  }
+
   public async getAllPaginated({ page }: PaginateRequestDto) {
     const { data } = await this.axios.get<PaginateResponseDto<Game>>(
       `${this.apiUrl}/games`,

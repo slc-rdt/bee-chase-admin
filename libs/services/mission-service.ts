@@ -6,6 +6,13 @@ import Mission from "../models/mission";
 import AbstractService from "./abstract-service";
 
 export default class MissionService extends AbstractService {
+  public async getAll(gameId: string) {
+    const { data } = await this.axios.get<Mission[]>(
+      `${this.apiUrl}/games/${gameId}/missions`
+    );
+    return data;
+  }
+
   public async getAllPaginated(gameId: string, payload: PaginateRequestDto) {
     const { data } = await this.axios.get<PaginateResponseDto<Mission>>(
       `${this.apiUrl}/games/${gameId}/missions`,

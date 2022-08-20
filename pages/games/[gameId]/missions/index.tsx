@@ -57,7 +57,7 @@ const MissionsPage = ({
   return (
     <div className="mx-auto max-w-screen-lg">
       <section className="flex flex-wrap justify-between">
-        <h2 className="mb-3 text-3xl font-bold">Mission</h2>
+        <h2 className="mb-4 text-3xl font-bold">Mission</h2>
         <Link href={`/games/${router.query.gameId}/missions/create`}>
           <button className="btn btn-primary gap-2">
             <PlusIcon className="h-5 w-5" />

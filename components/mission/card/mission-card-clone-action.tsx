@@ -1,8 +1,8 @@
-import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
-import { PencilIcon } from "@heroicons/react/solid";
+import { PlusIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import React, { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
+import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Mission from "../../../libs/models/mission";
@@ -46,7 +46,7 @@ const MissionCardCloneAction: ComponentType<
       className={`btn btn-primary gap-2 ${isLoading && "loading"}`}
       {...rest}
     >
-      <PencilIcon className="h-5 w-5" /> Add
+      <PlusIcon className="h-5 w-5" /> Add
     </button>
   );
 };

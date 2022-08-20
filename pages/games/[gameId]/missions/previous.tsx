@@ -4,42 +4,56 @@ import {
   NextPage,
 } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import Pagination from "../../../../components/common/pagination";
 import MissionCard from "../../../../components/mission/card/mission-card";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
+import Game from "../../../../libs/models/game";
 import Mission from "../../../../libs/models/mission";
+import GameService from "../../../../libs/services/game-service";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
 import getServerSidePropsWrapper from "../../../../libs/utils/get-server-side-props-wrapper";
 
 export const getServerSideProps: GetServerSideProps<
   {
-    page: number;
-    gameId: string;
-    missionsPaginated: PaginateResponseDto<Mission>;
+    originalGameId: string;
+    selectedGameId: string;
+    games: Game[];
+    missions: Mission[];
   },
   { gameId: string }
 > = async (context) => {
   return await getServerSidePropsWrapper(
     async () => {
-      const missionService = await createServerSideService(
-        context.req,
-        MissionService
+      const [gameService, missionService] = await Promise.all([
+        createServerSideService(context.req, GameService),
+        createServerSideService(context.req, MissionService),
+      ]);
+
+      const allGames = await gameService.getAll();
+      const originalGameId = context.params?.gameId ?? "";
+      const games = allGames.filter((game) => game.id !== originalGameId);
+      const selectedGameId = context.query.selectedGameId ?? games[0]?.id ?? "";
+
+      const [originalGameMissions, selectedGameMissions] = await Promise.all([
+        missionService.getAll(originalGameId.toString()),
+        missionService.getAll(selectedGameId.toString()),
+      ]);
+
+      const missions = selectedGameMissions.filter((parentMission) =>
+        originalGameMissions.every(
+          (mission) => parentMission.id !== mission.parent_mission_id
+        )
       );
-
-      const gameId = context.params?.gameId ?? "";
-      const page = Number(context.query.page ?? 1);
-
-      const missionsPaginated = await missionService.getAllPaginated(gameId, {
-        page,
-      });
 
       return {
         props: {
-          page,
-          gameId,
-          missionsPaginated,
+          originalGameId,
+          selectedGameId,
+          games,
+          missions,
         },
       };
     },
@@ -52,29 +66,53 @@ export const getServerSideProps: GetServerSideProps<
 
 const PreviousMissionsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ page, gameId, missionsPaginated }) => {
+> = ({ originalGameId, selectedGameId, games, missions }) => {
+  const router = useRouter();
+
+  const onChangeGame = (gameId: string) => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        selectedGameId: gameId,
+      },
+    });
+  };
+
   return (
-    <div className="mx-auto max-w-screen-lg">
-      <h2 className="mb-3 text-3xl font-bold">Mission</h2>
+    <div className="mx-auto grid max-w-screen-lg grid-cols-1 gap-4">
+      <h2 className="text-3xl font-bold">Mission</h2>
 
       <section className="flex">
         <div className="tabs tabs-boxed">
-          <Link href={`/games/${gameId}/missions`}>
+          <Link href={`/games/${originalGameId}/missions`}>
             <a className="tab">Mission List</a>
           </Link>
-          <Link href={`/games/${gameId}/missions/previous`}>
+          <Link href={`/games/${originalGameId}/missions/previous`}>
             <a className="tab tab-active">Previous Missions</a>
           </Link>
         </div>
       </section>
 
-      <Pagination
-        currentPage={page}
-        pagination={missionsPaginated}
-        render={(mission) => (
+      <section>
+        <select
+          onChange={(e) => onChangeGame(e.target.value)}
+          className="select select-bordered select-primary"
+          defaultValue={selectedGameId}
+        >
+          {games.map((game) => (
+            <option key={game.id} value={game.id}>
+              {game.name}
+            </option>
+          ))}
+        </select>
+      </section>
+
+      <section className="grid grid-cols-1 gap-4">
+        {missions.map((mission) => (
           <MissionCard key={mission.id} mission={mission} clonable />
-        )}
-      />
+        ))}
+      </section>
     </div>
   );
 };
