@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "next-auth";
+import User from "../models/user";
 import AbstractService from "./abstract-service";
 
 export default class AuthService extends AbstractService {
@@ -7,6 +7,18 @@ export default class AuthService extends AbstractService {
     const { data } = await axios.post<User>(
       `${this.apiUrl}/auth/login`,
       payload
+    );
+    return data;
+  }
+
+  public async me(accessToken: string) {
+    const { data } = await axios.get<User>(
+      `${this.apiUrl}/users/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
     return data;
   }
