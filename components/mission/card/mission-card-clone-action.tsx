@@ -36,7 +36,7 @@ const MissionCardCloneAction: ComponentType<
       }
     );
 
-    router.push(`/games/${gameId}/missions`);
+    router.push(router.asPath);
   };
 
   return (
