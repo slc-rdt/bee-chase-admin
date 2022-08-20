@@ -12,6 +12,7 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet";
+import LeafletMap from "../../common/laeflet-map";
 import { MissionFormValues } from "./mission-form";
 
 interface IMissionFormGpsTypeMap {
@@ -35,7 +36,7 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
   const invalidCoordinate = !originalLatitude || !originalLongitude;
   const hasNavigator = typeof navigator !== "undefined";
 
-  const setFormLatLang = (lat: number, long: number) => {
+  const onLatLngChange = (lat: number, long: number) => {
     const reRenderOptions = {
       shouldValidate: true,
       shouldDirty: true,
@@ -50,7 +51,7 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
       (position) => {
         const { latitude, longitude } = position.coords;
         leafletMapRef.current?.panTo({ lat: latitude, lng: longitude });
-        setFormLatLang(latitude, longitude);
+        onLatLngChange(latitude, longitude);
       },
       (err) => {
         toast.error(`${err.code}: ${err.message}`);
@@ -59,58 +60,17 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
     );
   }
 
-  const eventHandlers: LeafletEventHandlerFnMap = {
-    drag: (e) => {
-      const target = e.target as L.Marker;
-      const { lat, lng } = target.getLatLng();
-      setFormLatLang(lat, lng);
-    },
-  };
-
   const latitude = originalLatitude ?? DEFAULT_LATITUDE;
   const longitude = originalLongitude ?? DEFAULT_LONGITUDE;
 
   return (
-    <MapContainer
-      ref={leafletMapRef}
-      center={[latitude, longitude]}
-      zoom={12}
-      className="h-96"
-      scrollWheelZoom
-    >
-      <MapContainerEventListeners setFormLatLang={setFormLatLang} />
-
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-
-      <Circle radius={radius} center={[latitude, longitude]} />
-
-      <Marker
-        position={[latitude, longitude]}
-        eventHandlers={eventHandlers}
-        draggable
-      />
-    </MapContainer>
+    <LeafletMap
+      latitude={latitude}
+      longitude={longitude}
+      circleRadius={radius}
+      onLatLngChange={onLatLngChange}
+    />
   );
-};
-
-interface IMapContainerEventListeners {
-  setFormLatLang: (lat: number, long: number) => void;
-}
-
-const MapContainerEventListeners: ComponentType<
-  IMapContainerEventListeners
-> = ({ setFormLatLang }) => {
-  useMapEvents({
-    click: (e) => {
-      const { lat, lng } = e.latlng;
-      setFormLatLang(lat, lng);
-    },
-  });
-
-  return null;
 };
 
 export default MissionFormGpsTypeMap;
