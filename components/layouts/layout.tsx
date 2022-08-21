@@ -19,6 +19,9 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
 
   const user = data?.user;
 
+  const shouldShowNavbar =
+    status === "authenticated" && !router.pathname.startsWith("/auth/login");
+
   const onLogout = async () => {
     const data = await signOut({
       callbackUrl: "/auth/login",
@@ -44,7 +47,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
     <div className="drawer-mobile drawer" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        {status === "authenticated" && (
+        {shouldShowNavbar && (
           <nav className="navbar bg-base-100 shadow-xl">
             <div className="flex-1">
               {sidebarMenus.length > 0 && (
