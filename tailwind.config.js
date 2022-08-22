@@ -8,4 +8,17 @@ module.exports = {
     extend: {},
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    darkTheme: "binus",
+    themes: [
+      {
+        binus: {
+          ...require("daisyui/src/colors/themes")["[data-theme=winter]"],
+          // primary: "#00a9e2",
+          secondary: "#fb923c",
+          // "secondary-content": "#FFFFFF",
+        },
+      },
+    ],
+  },
 };
