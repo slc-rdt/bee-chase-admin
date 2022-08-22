@@ -3,7 +3,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ComponentProps, ComponentType, useEffect } from "react";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
 import useCurrentGame from "../../libs/hooks/layout/use-current-game";
 import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
