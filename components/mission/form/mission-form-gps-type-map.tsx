@@ -65,6 +65,7 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
 
   return (
     <LeafletMap
+      ref={leafletMapRef}
       latitude={latitude}
       longitude={longitude}
       circleRadius={radius}

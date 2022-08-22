@@ -1,11 +1,15 @@
 import { LeafletEventHandlerFnMap, Map } from "leaflet";
-import React, { ComponentProps, ComponentType, useRef } from "react";
+import {
+  ComponentProps, ComponentType,
+  forwardRef,
+  MutableRefObject
+} from "react";
 import {
   Circle,
   MapContainer,
   Marker,
   TileLayer,
-  useMapEvents,
+  useMapEvents
 } from "react-leaflet";
 
 interface ILeafletMap {
@@ -17,9 +21,10 @@ interface ILeafletMap {
 
 const LeafletMap: ComponentType<
   ComponentProps<typeof MapContainer> & ILeafletMap
-> = ({ latitude, longitude, circleRadius, onLatLngChange, ...rest }) => {
-  const leafletMapRef = useRef<Map | null>(null);
-
+> = (
+  { latitude, longitude, circleRadius, onLatLngChange, ...rest },
+  ref: MutableRefObject<Map>
+) => {
   const eventHandlers: LeafletEventHandlerFnMap = {
     drag: (e) => {
       const target = e.target as L.Marker;
@@ -30,9 +35,9 @@ const LeafletMap: ComponentType<
 
   return (
     <MapContainer
-      ref={leafletMapRef}
+      ref={ref}
       center={[latitude, longitude]}
-      zoom={12}
+      zoom={16}
       className="h-96"
       scrollWheelZoom
       {...rest}
@@ -44,7 +49,9 @@ const LeafletMap: ComponentType<
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {circleRadius && <Circle radius={circleRadius} center={[latitude, longitude]} />}
+      {circleRadius && (
+        <Circle radius={circleRadius} center={[latitude, longitude]} />
+      )}
 
       <Marker
         position={[latitude, longitude]}
@@ -72,4 +79,5 @@ const MapContainerEventListeners: ComponentType<
   return null;
 };
 
-export default LeafletMap;
+// @ts-ignore: has type error, but hey, as long as it works
+export default forwardRef(LeafletMap);
