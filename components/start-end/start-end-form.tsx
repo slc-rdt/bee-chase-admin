@@ -1,8 +1,10 @@
 import { DateTime, Duration } from "luxon";
 import { useRouter } from "next/router";
-import React, { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useSWRConfig } from "swr";
+import { LuxonFormatForInputDateTimeLocal } from "../../libs/enums";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
@@ -27,17 +29,25 @@ const StartEndForm: ComponentType<
 > = ({ game, ...rest }) => {
   const router = useRouter();
   const gameService = useService(GameService);
+  const { mutate } = useSWRConfig();
   const { isLoading, doAction } = useLoading();
 
   const isGameStarted = game.start_time || game.end_time;
 
-  const { register, handleSubmit, watch } = useForm<StartEndFormValues>({
-    defaultValues: {
-      scheduleType: isGameStarted ? "schedule" : "manual",
-      start_time: game.start_time,
-      end_time: game.end_time,
-    },
-  });
+  const { register, handleSubmit, watch, setValue } =
+    useForm<StartEndFormValues>({
+      defaultValues: {
+        scheduleType: isGameStarted ? "schedule" : "manual",
+        start_time: DateTime.fromISO(game.start_time?.toString() ?? "")
+          .toUTC()
+          .toLocal()
+          .toFormat(LuxonFormatForInputDateTimeLocal),
+        end_time: DateTime.fromISO(game.end_time?.toString() ?? "")
+          .toUTC()
+          .toLocal()
+          .toFormat(LuxonFormatForInputDateTimeLocal),
+      },
+    });
 
   const onSubmit = handleSubmit(async ({ scheduleType, ...data }) => {
     let payload = { ...game };
@@ -45,7 +55,7 @@ const StartEndForm: ComponentType<
     if (scheduleType === "manual") {
       const { duration_type, duration_value } = data;
 
-      const startTime = DateTime.now();
+      const startTime = DateTime.utc();
       const duration = Duration.fromObject({
         [duration_type]: duration_value,
       });
@@ -55,8 +65,8 @@ const StartEndForm: ComponentType<
       payload = {
         ...payload,
         // MySQL DateTime only accepts 'YYYY-MM-DDTHH:MM' format, excluding the seconds and 'Z'
-        start_time: startTime.toISO().substring(0, "YYYY-MM-DDTHH:MM".length),
-        end_time: endTime.toISO().substring(0, "YYYY-MM-DDTHH:MM".length),
+        start_time: startTime.toUTC().toSQL(),
+        end_time: endTime.toUTC().toSQL(),
       };
     }
 
@@ -64,8 +74,12 @@ const StartEndForm: ComponentType<
       const { start_time, end_time } = data;
       payload = {
         ...payload,
-        start_time,
-        end_time,
+        start_time: DateTime.fromISO(start_time?.toString() ?? "")
+          .toUTC()
+          .toSQL(),
+        end_time: DateTime.fromISO(end_time?.toString() ?? "")
+          .toUTC()
+          .toSQL(),
       };
     }
 
@@ -75,6 +89,23 @@ const StartEndForm: ComponentType<
       error: "Failed to update game start and end time.",
     });
 
+    setValue(
+      "start_time",
+      DateTime.fromSQL(payload.start_time?.toString() ?? "").toFormat(
+        LuxonFormatForInputDateTimeLocal
+      )
+    );
+
+    setValue(
+      "end_time",
+      DateTime.fromSQL(payload.end_time?.toString() ?? "").toFormat(
+        LuxonFormatForInputDateTimeLocal
+      )
+    );
+
+    setValue("scheduleType", "schedule");
+
+    mutate(`/games/${game.id}`);
     router.push(router.asPath);
   });
 
@@ -113,6 +144,7 @@ const StartEndForm: ComponentType<
                   type="radio"
                   className="radio radio-primary"
                   value="manual"
+                  disabled={!!isGameStarted}
                 />
                 <span className="label-text">Manual</span>
               </label>
