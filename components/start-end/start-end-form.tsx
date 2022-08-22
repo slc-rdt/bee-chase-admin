@@ -122,6 +122,7 @@ const StartEndForm: ComponentType<
       error: "Failed to stop game.",
     });
 
+    mutate(`/games/${game.id}`);
     router.push(router.asPath);
   };
 
