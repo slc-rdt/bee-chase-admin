@@ -55,7 +55,7 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
       <div className="flex-none gap-2">
         {game && (
           <>
-            <GameStatusBadge {...{ game, isLoading }} />
+            <GameStatusBadge game={game} />
             <div className="divider divider-horizontal" />
           </>
         )}

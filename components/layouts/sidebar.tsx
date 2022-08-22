@@ -5,7 +5,7 @@ import useCurrentGame from "../../libs/hooks/layout/use-current-game";
 import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
 
 const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
-  const { game, isLoading } = useCurrentGame();
+  const { game } = useCurrentGame();
   const sidebarMenus = useSidebarMenus(game);
 
   const onGameCodeClick = async () => {
@@ -61,8 +61,7 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
 
           <button
             onClick={onGameCodeClick}
-            disabled={isLoading}
-            className={`btn btn-secondary btn-block ${isLoading && "loading"}`}
+            className="btn btn-secondary btn-block"
           >
             {game?.access_code}
           </button>
