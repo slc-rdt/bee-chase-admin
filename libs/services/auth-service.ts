@@ -13,7 +13,7 @@ export default class AuthService extends AbstractService {
 
   public async me(accessToken: string) {
     const { data } = await axios.get<User>(
-      `${this.apiUrl}/users/me`,
+      `${this.apiUrl}/auth/me`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
