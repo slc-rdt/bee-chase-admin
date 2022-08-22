@@ -44,7 +44,7 @@ const StartEndManualType: ComponentType<
 
         <label className="label">
           <span className="label-text-alt">
-            Clicking <span className="font-bold">Start Experience</span>
+            Clicking <span className="font-bold">Start Experience</span>{" "}
             releases the Missions for all participants to see and complete.
           </span>
         </label>
