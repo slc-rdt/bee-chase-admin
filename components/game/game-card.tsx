@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
@@ -49,8 +50,9 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
                 e.stopPropagation();
                 onDelete(game);
               }}
-              className={`btn btn-error ${isLoading && "loading"}`}
+              className={`btn btn-error gap-2 ${isLoading && "loading"}`}
             >
+              <TrashIcon className="h-5 w-5" />
               Delete
             </button>
           </section>
