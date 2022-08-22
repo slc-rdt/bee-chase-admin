@@ -11,13 +11,13 @@ export default function useCurrentGame() {
 
   const gameId = router.query.gameId;
 
-  const { data, error } = useSWR(
+  const { data, error, isValidating } = useSWR(
     status === "authenticated" && gameId ? `/games/${gameId}` : null,
     async () => await gameService.getOneById(`${router.query.gameId}`)
   );
 
   return {
     game: data,
-    isLoading: !data && !error,
+    isLoading: (!data && !error) || isValidating,
   };
 }

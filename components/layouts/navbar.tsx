@@ -6,12 +6,15 @@ import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import useCurrentGame from "../../libs/hooks/layout/use-current-game";
 import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
+import getGameStatus from "../../libs/utils/get-game-status";
+import GameStatusBadge from "../game/game-status-badge";
 
 const Navbar: ComponentType<ComponentProps<"nav">> = () => {
   const router = useRouter();
   const { data, status } = useSession();
-  const { game } = useCurrentGame();
+  const { game, isLoading } = useCurrentGame();
   const sidebarMenus = useSidebarMenus(game);
+  const gameStatus = getGameStatus(game);
 
   const user = data?.user;
 
@@ -50,8 +53,15 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
       </div>
 
       <div className="flex-none gap-2">
+        {game && (
+          <>
+            <GameStatusBadge {...{ game, isLoading }} />
+            <div className="divider divider-horizontal" />
+          </>
+        )}
+
         <div className="dropdown-end dropdown">
-          <label tabIndex={0} className="avatar btn btn-circle btn-ghost">
+          <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
             <div className="w-10 rounded-full">
               <Image
                 src={

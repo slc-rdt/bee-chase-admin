@@ -1,4 +1,5 @@
 import { TrashIcon } from "@heroicons/react/solid";
+import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
@@ -7,6 +8,7 @@ import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
+import GameStatusBadge from "./game-status-badge";
 
 interface IGameCard {
   game: Game;
@@ -37,8 +39,36 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
       >
         <div className="card-body">
           <section>
-            <h2 className="card-title">{game.name}</h2>
-            <p className="truncate">{game.description}</p>
+            <header className="flex flex-wrap items-center gap-4">
+              <h2 className="card-title">{game.name}</h2>
+              <div>
+                <GameStatusBadge game={game} />
+              </div>
+            </header>
+
+            <p className="my-4 truncate">{game.description}</p>
+
+            <section className="font-medium">
+              {game.start_time && (
+                <p>
+                  Start:{" "}
+                  {DateTime.fromISO(game.start_time.toString())
+                    .toUTC()
+                    .toLocal()
+                    .toFormat("yyyy LLL dd 'at' HH:mm")}
+                </p>
+              )}
+
+              {game.end_time && (
+                <p>
+                  End:{" "}
+                  {DateTime.fromISO(game.end_time.toString())
+                    .toUTC()
+                    .toLocal()
+                    .toFormat("yyyy LLL dd 'at' HH:mm")}
+                </p>
+              )}
+            </section>
           </section>
 
           <section className="flex flex-grow justify-end">

@@ -1,3 +1,5 @@
+export const LuxonFormatForInputDateTimeLocal = "yyyy-LL-dd'T'HH:mm";
+
 export enum AvailabilityTypes {
   AVAILABLE,
   HIDDEN,
@@ -25,4 +27,12 @@ export enum MediaType {
 export enum SubmissionSource {
   LIVE_CAPTURE_AND_LIBRARY,
   LIVE_CAPTURE_ONLY,
+}
+
+export enum GameStatus {
+  DRAFT,
+  SCHEDULED,
+  LIVE,
+  ENDED,
+  UNKNOWN,
 }
