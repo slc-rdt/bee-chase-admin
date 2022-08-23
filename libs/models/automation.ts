@@ -1,5 +1,7 @@
 import { AutomationTimeType, AutomationType } from "../enums";
+import AutomationData from "./automation-data";
 import BaseModel from "./base-model";
+import Mission from "./mission";
 
 export default interface Automation extends BaseModel {
   game_id: string;
@@ -10,9 +12,5 @@ export default interface Automation extends BaseModel {
   when_happened?: Date | string;
   relative_time?: number;
   has_executed: boolean;
-}
-
-interface AutomationData {
-  message?: string; // AutomationType is NOTIFY_ALL_USERS
-  mission_ids?: string[]; // AutomationType is not NOTIFY_ALL_USERS
+  missions?: Mission[]; // from automation_data.mission_ids
 }

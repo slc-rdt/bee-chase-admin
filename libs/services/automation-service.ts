@@ -22,4 +22,11 @@ export default class AutomationService extends AbstractService {
     );
     return data;
   }
+
+  public async delete(automation: Automation) {
+    const { data } = await this.axios.delete<Automation>(
+      `${this.apiUrl}/games/${automation.game_id}/automations/${automation.id}`
+    );
+    return data;
+  }
 }

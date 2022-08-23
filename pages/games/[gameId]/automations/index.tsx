@@ -6,6 +6,7 @@ import {
 } from "next";
 import Link from "next/link";
 import React from "react";
+import AutomationCard from "../../../../components/automation/automation-card";
 import Pagination from "../../../../components/common/pagination";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Automation from "../../../../libs/models/automation";
@@ -66,7 +67,9 @@ const AutomationsPage: NextPage<
         <Pagination
           currentPage={page}
           pagination={automationsPaginated}
-          render={(automation) => <div>{automation.name}</div>}
+          render={(automation) => (
+            <AutomationCard key={automation.id} automation={automation} />
+          )}
         />
       </section>
     </>
