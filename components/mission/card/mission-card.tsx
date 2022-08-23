@@ -1,5 +1,10 @@
+import {
+  CameraIcon,
+  DocumentTextIcon,
+  LocationMarkerIcon,
+} from "@heroicons/react/outline";
 import { ComponentProps, ComponentType } from "react";
-import { AvailabilityTypes } from "../../../libs/enums";
+import { AnswerTypes, AvailabilityTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
 import MissionCardCloneAction from "./mission-card-clone-action";
 import MissionCardDeleteAction from "./mission-card-delete-action";
@@ -11,6 +16,9 @@ interface IMissionCard {
   deletable?: boolean;
   clonable?: boolean;
   showAvailability?: boolean;
+  checked?: boolean;
+  onCheck?: (isChecked: boolean) => void;
+  isLoading?: boolean;
 }
 
 const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
@@ -19,15 +27,44 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
   deletable,
   clonable,
   showAvailability,
+  checked,
+  onCheck,
+  isLoading,
   ...rest
 }) => {
   return (
-    <div className="card w-full bg-base-100 shadow-xl" {...rest}>
+    <div className="card card-side w-full bg-base-100 shadow-xl" {...rest}>
+      {(checked || onCheck) && (
+        <section className="ml-8 grid place-items-center">
+          <input
+            onChange={(e) => onCheck && onCheck(e.target.checked)}
+            disabled={isLoading}
+            type="checkbox"
+            className="checkbox checkbox-primary"
+            defaultChecked={checked}
+          />
+        </section>
+      )}
+
       <div className="card-body">
-        <h2 className="card-title flex flex-wrap items-center justify-between capitalize">
-          <span>{mission.name}</span>
+        <header className="card-title flex flex-wrap items-center justify-between capitalize">
+          <h2 className="flex items-center gap-2">
+            <span>
+              {mission.answer_type === AnswerTypes.IMAGE && (
+                <CameraIcon className="h-6 w-6" />
+              )}
+              {mission.answer_type === AnswerTypes.TEXT && (
+                <DocumentTextIcon className="h-6 w-6" />
+              )}
+              {mission.answer_type === AnswerTypes.GPS && (
+                <LocationMarkerIcon className="h-6 w-6" />
+              )}
+            </span>
+            <span>{mission.name}</span>
+          </h2>
+
           <small>({mission.point_value}) Points</small>
-        </h2>
+        </header>
 
         <p>{mission.description}</p>
 

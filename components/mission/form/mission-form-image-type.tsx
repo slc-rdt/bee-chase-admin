@@ -1,6 +1,7 @@
-import React, { ComponentProps, ComponentType } from "react";
+import { ComponentType } from "react";
 import { UseFormRegister } from "react-hook-form";
 import { MediaType, SubmissionSource } from "../../../libs/enums";
+import normalizeConstantCase from "../../../libs/utils/normalize-constant-case";
 import { MissionFormValues } from "./mission-form";
 
 interface IMissionFormImageType {
@@ -12,9 +13,6 @@ const MissionFormImageType: ComponentType<IMissionFormImageType> = ({
   register,
   isLoading,
 }) => {
-  const transformLabel = (label: string) =>
-    label.toLowerCase().replaceAll("_", " ");
-
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <section className="form-control w-full">
@@ -30,7 +28,7 @@ const MissionFormImageType: ComponentType<IMissionFormImageType> = ({
             .filter(([_, value]) => typeof value === "number")
             .map(([type, value]) => (
               <option key={type} value={value}>
-                {transformLabel(type)}
+                {normalizeConstantCase(type)}
               </option>
             ))}
         </select>
@@ -49,7 +47,7 @@ const MissionFormImageType: ComponentType<IMissionFormImageType> = ({
             .filter(([_, value]) => typeof value === "number")
             .map(([type, value]) => (
               <option key={type} value={value}>
-                {transformLabel(type)}
+                {normalizeConstantCase(type)}
               </option>
             ))}
         </select>

@@ -1,5 +1,3 @@
-export const LuxonFormatForInputDateTimeLocal = "yyyy-LL-dd'T'HH:mm";
-
 export enum AvailabilityTypes {
   AVAILABLE,
   HIDDEN,
@@ -14,8 +12,15 @@ export enum AnswerTypes {
 
 export enum AutomationType {
   SET_MISSION_AVAILABLE,
+  SET_MISSION_HIDDEN,
   SET_MISSION_EXPIRED,
   NOTIFY_ALL_USERS,
+}
+
+export enum AutomationTimeType {
+  EXACT,
+  AFTER_GAME_STARTS,
+  BEFORE_GAME_ENDS,
 }
 
 export enum MediaType {

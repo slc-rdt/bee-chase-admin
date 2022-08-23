@@ -7,6 +7,7 @@ import {
   PhotographIcon,
   ChartBarIcon,
 } from "@heroicons/react/outline";
+import { FilmIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Game from "../../models/game";
@@ -45,12 +46,12 @@ export default function useSidebarMenus(game?: Game) {
         icon: <FlagIcon className="h-6 w-6" />,
         isActive: false,
       },
-      // {
-      //   label: "Script",
-      //   path: `/games/${gameId}/script`,
-      //   icon: <FilmIcon className="h-6 w-6" />,
-      //   isActive: false,
-      // },
+      {
+        label: "Automations",
+        path: `/games/${gameId}/automations`,
+        icon: <FilmIcon className="h-6 w-6" />,
+        isActive: false,
+      },
       // {
       //   label: "Branding",
       //   path: `/games/${gameId}/branding`,
