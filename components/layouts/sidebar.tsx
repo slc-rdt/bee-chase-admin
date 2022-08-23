@@ -44,10 +44,10 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
                 } rounded-box`}
               >
                 <Link href={menu.path}>
-                  <button>
+                  <a>
                     {menu.icon}
                     {menu.label}
-                  </button>
+                  </a>
                 </Link>
               </li>
             ) : (
