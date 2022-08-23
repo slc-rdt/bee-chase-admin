@@ -105,7 +105,7 @@ const AutomationCard: ComponentType<
         )}
 
         <section className="card-actions justify-end">
-          <Link href={`/games/${gameId}/automations/${automation.id}`}>
+          <Link href={`/games/${gameId}/automations/${automation.id}/edit`}>
             <a className="btn btn-secondary gap-2">
               <PencilIcon className="h-5 w-5" /> Edit
             </a>

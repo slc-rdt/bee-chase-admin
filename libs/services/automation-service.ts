@@ -12,12 +12,30 @@ export default class AutomationService extends AbstractService {
     return data;
   }
 
+  public async getOneById(gameId: string, automationId: string) {
+    const { data } = await this.axios.get<Automation>(
+      `${this.apiUrl}/games/${gameId}/automations/${automationId}`
+    );
+    return data;
+  }
+
   public async create(gameId: string, payload: Automation) {
     const { data } = await this.axios.post<Automation>(
       `${this.apiUrl}/games/${gameId}/automations`,
       {
         ...payload,
         automation_data: JSON.stringify(payload.automation_data),
+      }
+    );
+    return data;
+  }
+
+  public async update(automation: Automation) {
+    const { data } = await this.axios.put<Automation>(
+      `${this.apiUrl}/games/${automation.game_id}/automations/${automation.id}`,
+      {
+        ...automation,
+        automation_data: JSON.stringify(automation.automation_data),
       }
     );
     return data;

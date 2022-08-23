@@ -1,3 +1,4 @@
+import { PaperAirplaneIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
@@ -6,6 +7,7 @@ import { AutomationTimeType, AutomationType } from "../../libs/enums";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Automation from "../../libs/models/automation";
+import AutomationData from "../../libs/models/automation-data";
 import Mission from "../../libs/models/mission";
 import AutomationService from "../../libs/services/automation-service";
 import convertTimeLocalToServer from "../../libs/utils/convert-time-local-to-server";
@@ -27,12 +29,26 @@ interface IAutomationForm {
 const AutomationForm: ComponentType<
   ComponentProps<"div"> & IAutomationForm
 > = ({ automation, missions, onAutomationFormSubmit, ...rest }) => {
+  const automationData =
+    typeof automation?.automation_data === "string"
+      ? (JSON.parse(automation.automation_data) as AutomationData)
+      : automation?.automation_data;
+
   const { register, handleSubmit, watch, setValue } =
     useForm<AutomationFormValues>({
       defaultValues: {
         ...(automation ?? {}),
-        radio_when_type: "relative",
-        when_type: AutomationTimeType.AFTER_GAME_STARTS,
+
+        automation_data: automationData,
+
+        radio_when_type:
+          automation?.when_type === AutomationTimeType.EXACT
+            ? "exact"
+            : "relative",
+
+        when_type:
+          automation?.when_type ?? AutomationTimeType.AFTER_GAME_STARTS,
+
         when_happened: convertTimeServerToLocal(
           automation?.when_happened ?? ""
         ),
@@ -69,7 +85,9 @@ const AutomationForm: ComponentType<
   return (
     <div className="card shadow-xl" {...rest}>
       <form onSubmit={onSubmit} className="card-body">
-        <h2 className="card-title">Create Automation</h2>
+        <h2 className="card-title">
+          {automation ? "Update" : "Create"} Automation
+        </h2>
 
         <section className="form-control">
           <label className="label">
@@ -203,8 +221,12 @@ const AutomationForm: ComponentType<
         )}
 
         <section className="card-actions mt-4 justify-end">
-          <button type="submit" className="btn btn-primary">
-            Save
+          <button
+            type="submit"
+            className={`btn btn-primary gap-2 ${isLoading && "loading"}`}
+          >
+            {!isLoading && <PaperAirplaneIcon className="h-5 w-5" />}
+            {automation ? "Update" : "Save"}
           </button>
         </section>
       </form>
