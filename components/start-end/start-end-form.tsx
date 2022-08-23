@@ -4,11 +4,13 @@ import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useSWRConfig } from "swr";
-import { LuxonFormatForInputDateTimeLocal } from "../../libs/enums";
+import { LuxonFormatForInputDateTimeLocal } from "../../libs/constants";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
+import convertTimeLocalToServer from "../../libs/utils/convert-time-local-to-server";
+import convertTimeServerToLocal from "../../libs/utils/convert-time-server-to-local";
 import StartEndManualType from "./start-end-manual-type";
 import StartEndScheduleType from "./start-end-schedule-type";
 
@@ -38,14 +40,8 @@ const StartEndForm: ComponentType<
     useForm<StartEndFormValues>({
       defaultValues: {
         scheduleType: isGameStarted ? "schedule" : "manual",
-        start_time: DateTime.fromISO(game.start_time?.toString() ?? "")
-          .toUTC()
-          .toLocal()
-          .toFormat(LuxonFormatForInputDateTimeLocal),
-        end_time: DateTime.fromISO(game.end_time?.toString() ?? "")
-          .toUTC()
-          .toLocal()
-          .toFormat(LuxonFormatForInputDateTimeLocal),
+        start_time: convertTimeServerToLocal(game.start_time ?? ""),
+        end_time: convertTimeServerToLocal(game.end_time ?? ""),
       },
     });
 
@@ -74,12 +70,8 @@ const StartEndForm: ComponentType<
       const { start_time, end_time } = data;
       payload = {
         ...payload,
-        start_time: DateTime.fromISO(start_time?.toString() ?? "")
-          .toUTC()
-          .toSQL(),
-        end_time: DateTime.fromISO(end_time?.toString() ?? "")
-          .toUTC()
-          .toSQL(),
+        start_time: convertTimeLocalToServer(start_time ?? ""),
+        end_time: convertTimeLocalToServer(end_time ?? ""),
       };
     }
 
