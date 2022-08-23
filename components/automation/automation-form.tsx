@@ -45,17 +45,18 @@ const AutomationForm: ComponentType<
     let payload = { ...data };
 
     if (payload.radio_when_type === "exact" && payload.when_happened) {
+      const { relative_time, ...rest } = payload;
       payload = {
-        ...payload,
+        ...rest,
         when_type: AutomationTimeType.EXACT,
         when_happened: convertTimeLocalToServer(payload.when_happened),
       };
     }
 
     if (payload.radio_when_type === "relative") {
+      const { when_happened, ...rest } = payload;
       payload = {
-        ...payload,
-        when_happened: undefined,
+        ...rest,
       };
     }
 
