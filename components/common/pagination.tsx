@@ -16,6 +16,7 @@ const Pagination = <T extends unknown>({
   render,
   ...rest
 }: IPagination<T>) => {
+  console.log(pagination);
   return (
     <>
       <section className="my-4 grid grid-cols-1 gap-4" {...rest}>
@@ -34,7 +35,7 @@ const Pagination = <T extends unknown>({
 
       <PaginationButtons
         paginationKey={paginationKey}
-        length={pagination.last_page}
+        length={pagination.last_page ?? pagination.meta?.last_page ?? 0}
         currentPage={currentPage}
       />
     </>
