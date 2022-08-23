@@ -65,10 +65,10 @@ const EditAutomationPage: NextPage<
   };
 
   return (
-    <>
+    <div className="max-w-screen-md mx-auto">
       <h2 className="mb-4 text-3xl font-bold"></h2>
       <AutomationForm {...{ automation, missions, onAutomationFormSubmit }} />
-    </>
+    </div>
   );
 };
 

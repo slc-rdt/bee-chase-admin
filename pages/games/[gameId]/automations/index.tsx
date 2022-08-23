@@ -51,7 +51,7 @@ const AutomationsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ gameId, page, automationsPaginated }) => {
   return (
-    <>
+    <div className="mx-auto max-w-screen-lg">
       <header className="flex flex-wrap items-center justify-between">
         <h2 className="mb-4 text-3xl font-bold">Automations</h2>
 
@@ -72,7 +72,7 @@ const AutomationsPage: NextPage<
           )}
         />
       </section>
-    </>
+    </div>
   );
 };
 
