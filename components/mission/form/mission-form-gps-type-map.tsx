@@ -1,17 +1,10 @@
-import { LeafletEventHandlerFnMap, Map } from "leaflet";
+import { Map } from "leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet/dist/leaflet.css";
 import { ComponentType, useRef } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import toast from "react-hot-toast";
-import {
-  Circle,
-  MapContainer,
-  Marker,
-  TileLayer,
-  useMapEvents,
-} from "react-leaflet";
 import LeafletMap from "../../common/laeflet-map";
 import { MissionFormValues } from "./mission-form";
 
