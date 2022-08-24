@@ -39,6 +39,14 @@ const Leaderboard: NextPage<
       <h2 className="text-3xl font-bold">Leaderboard</h2>
 
       <section className="grid grid-cols-1 gap-4">
+        {leaderboard.length === 0 && (
+          <div className="card shadow-xl">
+            <div className="card-body">
+              <h2 className="card-title justify-center">No data.</h2>
+            </div>
+          </div>
+        )}
+
         {leaderboard.map((gameTeam) => {
           const rank = gameTeam.rank ?? 0;
           const lastDigit = rank % 10;
