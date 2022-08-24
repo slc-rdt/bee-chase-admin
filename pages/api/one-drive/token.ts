@@ -14,6 +14,7 @@ export default async function handler(
     const { data } = await axios.get<{ token: string }>(
       `${process.env.BLUEJACK_API_URL}/Account/GetOneDriveToken`
     );
+
     res.status(200).json(data);
   } catch (error) {
     const err = error as Error;

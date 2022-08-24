@@ -4,7 +4,9 @@ import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
+import useOneDriveImage from "../../../libs/hooks/common/use-one-drive-image";
 import Submission from "../../../libs/models/submission";
+import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
 import Pagination from "../../common/pagination";
 
 interface ISubmissionsViewByTeamTextType {
@@ -46,6 +48,13 @@ const ImageSubmissionItem: ComponentType<
 
   const gameId = router.query.gameId ?? "";
 
+  const answerData =
+    typeof submission.answer_data === "string"
+      ? (JSON.parse(submission.answer_data) as SubmissionAnswerData)
+      : submission.answer_data;
+
+  const { data } = useOneDriveImage(answerData.download_url);
+
   const onDeleteClicked = (submission: Submission) => {
     doAction(onDelete(submission));
   };
@@ -58,14 +67,7 @@ const ImageSubmissionItem: ComponentType<
     >
       <figure>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={
-            typeof submission.answer_data === "string"
-              ? JSON.parse(submission.answer_data).urls?.at(0)
-              : submission.answer_data.urls?.at(0)
-          }
-          alt="submission image"
-        />
+        <img src={data} alt="submission image" />
       </figure>
 
       <div className="card-body">
