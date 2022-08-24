@@ -1,35 +1,49 @@
+import "leaflet-defaulticon-compatibility";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import "leaflet/dist/leaflet.css";
 import { LeafletEventHandlerFnMap, Map } from "leaflet";
 import {
-  ComponentProps, ComponentType,
+  ComponentProps,
+  ComponentType,
   forwardRef,
-  MutableRefObject
+  MutableRefObject,
 } from "react";
 import {
   Circle,
   MapContainer,
   Marker,
   TileLayer,
-  useMapEvents
+  useMapEvents,
 } from "react-leaflet";
 
 interface ILeafletMap {
   latitude: number;
   longitude: number;
   circleRadius?: number;
-  onLatLngChange: (lat: number, lng: number) => void;
+  onLatLngChange?: (lat: number, lng: number) => void;
+  scrollWheelZoom?: boolean;
+  draggable?: boolean;
 }
 
 const LeafletMap: ComponentType<
   ComponentProps<typeof MapContainer> & ILeafletMap
 > = (
-  { latitude, longitude, circleRadius, onLatLngChange, ...rest },
+  {
+    latitude,
+    longitude,
+    circleRadius,
+    onLatLngChange,
+    scrollWheelZoom,
+    draggable,
+    ...rest
+  },
   ref: MutableRefObject<Map>
 ) => {
   const eventHandlers: LeafletEventHandlerFnMap = {
     drag: (e) => {
       const target = e.target as L.Marker;
       const { lat, lng } = target.getLatLng();
-      onLatLngChange(lat, lng);
+      onLatLngChange && onLatLngChange(lat, lng);
     },
   };
 
@@ -39,7 +53,7 @@ const LeafletMap: ComponentType<
       center={[latitude, longitude]}
       zoom={16}
       className="h-96"
-      scrollWheelZoom
+      scrollWheelZoom={scrollWheelZoom}
       {...rest}
     >
       <MapContainerEventListeners onLatLngChange={onLatLngChange} />
@@ -56,14 +70,14 @@ const LeafletMap: ComponentType<
       <Marker
         position={[latitude, longitude]}
         eventHandlers={eventHandlers}
-        draggable
+        draggable={draggable}
       />
     </MapContainer>
   );
 };
 
 interface IMapContainerEventListeners {
-  onLatLngChange: (lat: number, long: number) => void;
+  onLatLngChange?: (lat: number, long: number) => void;
 }
 
 const MapContainerEventListeners: ComponentType<
@@ -72,7 +86,7 @@ const MapContainerEventListeners: ComponentType<
   useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
-      onLatLngChange(lat, lng);
+      onLatLngChange && onLatLngChange(lat, lng);
     },
   });
 

@@ -93,8 +93,8 @@ const TextSubmissionItem: ComponentType<
 
       <td>
         {typeof submission.answer_data === "string"
-          ? JSON.parse(submission.answer_data).answer
-          : submission.answer_data.answer}
+          ? JSON.parse(submission.answer_data).text
+          : submission.answer_data.text}
       </td>
 
       <td>{submission.caption}</td>

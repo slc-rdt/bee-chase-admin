@@ -1,12 +1,13 @@
 import { Map } from "leaflet";
-import "leaflet-defaulticon-compatibility";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-import "leaflet/dist/leaflet.css";
+import dynamic from "next/dynamic";
 import { ComponentType, useRef } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
 import toast from "react-hot-toast";
-import LeafletMap from "../../common/laeflet-map";
 import { MissionFormValues } from "./mission-form";
+
+const LeafletMap = dynamic(() => import("../../common/laeflet-map"), {
+  ssr: false,
+});
 
 interface IMissionFormGpsTypeMap {
   watch: UseFormWatch<MissionFormValues>;
@@ -63,6 +64,8 @@ const MissionFormGpsTypeMap: ComponentType<IMissionFormGpsTypeMap> = ({
       longitude={longitude}
       circleRadius={radius}
       onLatLngChange={onLatLngChange}
+      scrollWheelZoom
+      draggable
     />
   );
 };

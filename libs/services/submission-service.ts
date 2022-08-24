@@ -1,8 +1,20 @@
+import PaginateRequestDto from "../dtos/paginate-request-dto";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Submission from "../models/submission";
 import AbstractService from "./abstract-service";
 
 export default class SubmissionService extends AbstractService {
+  public async getAllPaginatedByGame(
+    gameId: string,
+    params: PaginateRequestDto
+  ) {
+    const { data } = await this.axios.get<PaginateResponseDto<Submission>>(
+      `${this.apiUrl}/games/${gameId}/submissions`,
+      { params: params }
+    );
+    return data;
+  }
+
   public async getAllPaginatedByMission(
     gameId: string,
     missionId: string,

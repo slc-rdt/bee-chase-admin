@@ -16,7 +16,6 @@ const Pagination = <T extends unknown>({
   render,
   ...rest
 }: IPagination<T>) => {
-  console.log(pagination);
   return (
     <>
       <section className="my-4 grid grid-cols-1 gap-4" {...rest}>

@@ -6,6 +6,7 @@ import {
   UsersIcon,
   PhotographIcon,
   ChartBarIcon,
+  CollectionIcon,
 } from "@heroicons/react/outline";
 import { FilmIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
@@ -52,12 +53,6 @@ export default function useSidebarMenus(game?: Game) {
         icon: <FilmIcon className="h-6 w-6" />,
         isActive: false,
       },
-      // {
-      //   label: "Branding",
-      //   path: `/games/${gameId}/branding`,
-      //   icon: <ColorSwatchIcon className="h-6 w-6" />,
-      //   isActive: false,
-      // },
       {
         label: "Participants",
         path: `/games/${gameId}/participants`,
@@ -79,6 +74,12 @@ export default function useSidebarMenus(game?: Game) {
 
       null,
 
+      {
+        label: "Activity Feed",
+        path: `/games/${gameId}/feed`,
+        icon: <CollectionIcon className="h-6 w-6" />,
+        isActive: false,
+      },
       {
         label: "Leaderboard",
         path: `/games/${gameId}/leaderboard`,

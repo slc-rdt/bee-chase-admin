@@ -6,6 +6,7 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import { MissionFormValues } from "./mission-form";
+import MissionFormGpsTypeMap from "./mission-form-gps-type-map";
 
 interface IMissionFormGpsType {
   register: UseFormRegister<MissionFormValues>;
@@ -13,11 +14,6 @@ interface IMissionFormGpsType {
   setValue: UseFormSetValue<MissionFormValues>;
   isLoading: boolean;
 }
-
-const MissionFormGpsTypeMap = dynamic(
-  () => import("./mission-form-gps-type-map"),
-  { ssr: false }
-);
 
 const MissionFormGpsType: ComponentType<
   ComponentProps<"div"> & IMissionFormGpsType

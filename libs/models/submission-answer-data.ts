@@ -1,9 +1,15 @@
 export default interface SubmissionAnswerData {
   // image
-  urls?: string[];
+  // urls?: string[];
+  download_url?: string;
+  last_modified_date_time?: string;
+  hash?: string;
+  file_name?: string;
+  mime_type?: string;
+  size?: number;
 
   // text
-  answer?: string;
+  text?: string;
 
   // gps
   latitude?: number;
