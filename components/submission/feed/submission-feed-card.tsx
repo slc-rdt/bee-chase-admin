@@ -1,9 +1,14 @@
+import { TrashIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { ComponentProps, ComponentType } from "react";
+import toast from "react-hot-toast";
 import { AnswerTypes } from "../../../libs/enums";
+import useLoading from "../../../libs/hooks/common/use-loading";
+import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
 import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
+import SubmissionService from "../../../libs/services/submission-service";
 import SubmissionFeedCardGpsContent from "./submission-feed-card-gps-content";
 import SubmissionFeedCardImageContent from "./submission-feed-card-image-content";
 import SubmissionFeedCardTextContent from "./submission-feed-card-text-content";
@@ -16,12 +21,25 @@ const SubmissionFeedCard: ComponentType<
   ComponentProps<"div"> & ISubmissionFeedCard
 > = ({ submission, ...rest }) => {
   const router = useRouter();
+  const submissionService = useService(SubmissionService);
+  const { isLoading, doAction } = useLoading();
+
   const gameId = router.query.gameId;
 
   const answerData =
     typeof submission.answer_data === "string"
       ? (JSON.parse(submission.answer_data) as SubmissionAnswerData)
       : submission.answer_data;
+
+  const onDelete = async () => {
+    await toast.promise(doAction(submissionService.delete(submission)), {
+      loading: "Deleting submission...",
+      success: "Submission deleted!",
+      error: "Failed to delete submission.",
+    });
+
+    router.push(router.asPath);
+  };
 
   return (
     <div className="card card-side shadow-xl" {...rest}>
@@ -59,6 +77,17 @@ const SubmissionFeedCard: ComponentType<
         {Number(submission.mission?.answer_type) === AnswerTypes.TEXT && (
           <SubmissionFeedCardTextContent {...{ submission, answerData }} />
         )}
+
+        <section className="card-actions justify-end">
+          <button
+            onClick={onDelete}
+            className={`btn btn-error gap-2 ${isLoading && "loading"}`}
+            disabled={isLoading}
+          >
+            {!isLoading && <TrashIcon className="h-5 w-5" />}
+            Delete
+          </button>
+        </section>
       </section>
     </div>
   );
