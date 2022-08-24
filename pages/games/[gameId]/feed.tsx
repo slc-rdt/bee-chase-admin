@@ -58,6 +58,8 @@ const GameActivityFeed: NextPage<
 > = ({ page, submissionsPaginated }) => {
   return (
     <div className="mx-auto max-w-screen-md">
+      <h2 className="mb-4 text-3xl font-bold">Activity Feed</h2>
+
       <Pagination
         currentPage={page}
         pagination={submissionsPaginated}
