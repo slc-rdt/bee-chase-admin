@@ -1,7 +1,13 @@
 import { TrashIcon } from "@heroicons/react/solid";
+import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { ComponentProps, ComponentType } from "react";
+import React, {
+  ComponentProps,
+  ComponentType,
+  useEffect,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { AnswerTypes } from "../../../libs/enums";
 import useLoading from "../../../libs/hooks/common/use-loading";
@@ -9,6 +15,7 @@ import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
 import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
 import SubmissionService from "../../../libs/services/submission-service";
+import convertTimeServerToLocal from "../../../libs/utils/convert-time-server-to-local";
 import SubmissionFeedCardGpsContent from "./submission-feed-card-gps-content";
 import SubmissionFeedCardImageContent from "./submission-feed-card-image-content";
 import SubmissionFeedCardTextContent from "./submission-feed-card-text-content";
@@ -23,6 +30,7 @@ const SubmissionFeedCard: ComponentType<
   const router = useRouter();
   const submissionService = useService(SubmissionService);
   const { isLoading, doAction } = useLoading();
+  const [when, setWhen] = useState("");
 
   const gameId = router.query.gameId;
 
@@ -40,6 +48,15 @@ const SubmissionFeedCard: ComponentType<
 
     router.push(router.asPath);
   };
+
+  useEffect(() => {
+    const originalDateTime = submission.created_at.toString();
+    const humanFriendlyDateTime = DateTime.fromISO(originalDateTime)
+      .toUTC()
+      .toLocal()
+      .toRelative();
+    setWhen(humanFriendlyDateTime ?? originalDateTime);
+  }, [submission.created_at]);
 
   return (
     <div className="card card-side shadow-xl" {...rest}>
@@ -64,7 +81,7 @@ const SubmissionFeedCard: ComponentType<
           {submission.mission?.point_value} points
         </h2>
 
-        <small>{submission.created_at.toString()}</small>
+        <small>{when}</small>
 
         <p>{submission.caption}</p>
 
