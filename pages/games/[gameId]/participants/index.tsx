@@ -57,8 +57,7 @@ const ParticipantsPage: NextPage<
       <section className="card my-4 bg-primary-content shadow-xl">
         <div className="card-body">
           <p>
-            Participants can join this Game by visiting asdfsadfasdf and
-            searching by join code:{" "}
+            Participants can join this Game by searching by join code:{" "}
             <span className="font-bold">{game.access_code}</span>.
           </p>
         </div>
