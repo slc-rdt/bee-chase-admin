@@ -47,9 +47,9 @@ export const getServerSideProps: GetServerSideProps<
     return {
       props: {
         originalGameId,
-        selectedGameId: "",
-        games: [],
-        missions: [],
+        selectedGameId,
+        games,
+        missions,
       },
     };
   } catch (error) {
