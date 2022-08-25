@@ -64,7 +64,7 @@ const SubmissionsPage: NextPage<
             key={mission.id}
             href={`/games/${gameId}/submissions/mission/${mission.id}`}
           >
-            <div className="card cursor-pointer shadow-xl">
+            <a className="card shadow-xl">
               <div className="card-body">
                 <div className="card-title">{mission.name}</div>
 
@@ -77,7 +77,7 @@ const SubmissionsPage: NextPage<
                   </span>
                 </p>
               </div>
-            </div>
+            </a>
           </Link>
         )}
       />

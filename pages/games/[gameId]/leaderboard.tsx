@@ -76,9 +76,9 @@ const Leaderboard: NextPage<
                     <Link
                       href={`/games/${gameId}/submissions/team/${gameTeam.id}`}
                     >
-                      <h3 className="link card-title link-primary">
+                      <a className="link card-title link-primary">
                         {gameTeam.name}
-                      </h3>
+                      </a>
                     </Link>
                     <p>
                       {Number(

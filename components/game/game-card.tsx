@@ -14,7 +14,7 @@ interface IGameCard {
   game: Game;
 }
 
-const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
+const GameCard: ComponentType<ComponentProps<"a"> & IGameCard> = ({
   game,
   ...rest
 }) => {
@@ -33,10 +33,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 
   return (
     <Link href={`/games/${game.id}/missions`}>
-      <div
-        className="card w-full cursor-pointer bg-base-100 shadow-xl"
-        {...rest}
-      >
+      <a className="card w-full cursor-pointer bg-base-100 shadow-xl" {...rest}>
         <div className="card-body">
           <section>
             <header className="flex flex-wrap items-center gap-4">
@@ -87,7 +84,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
             </button>
           </section>
         </div>
-      </div>
+      </a>
     </Link>
   );
 };

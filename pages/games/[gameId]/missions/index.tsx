@@ -59,10 +59,10 @@ const MissionsPage = ({
       <section className="flex flex-wrap justify-between">
         <h2 className="mb-4 text-3xl font-bold">Mission</h2>
         <Link href={`/games/${router.query.gameId}/missions/create`}>
-          <button className="btn btn-primary gap-2">
+          <a className="btn btn-primary gap-2">
             <PlusIcon className="h-5 w-5" />
             Add Mission
-          </button>
+          </a>
         </Link>
       </section>
 

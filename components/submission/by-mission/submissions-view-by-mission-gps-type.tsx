@@ -81,13 +81,13 @@ const GpsSubmissionItem: ComponentType<
 
   return (
     <tr className={`hover ${isLoading && "animate-pulse"}`} {...rest}>
-      <Link
-        href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
-      >
-        <th className="link link-primary cursor-pointer">
-          {submission.game_team?.name}
-        </th>
-      </Link>
+      <th className="link link-primary cursor-pointer">
+        <Link
+          href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
+        >
+          <a>{submission.game_team?.name}</a>
+        </Link>
+      </th>
       <td>{submission.caption}</td>
       <td>{submission.mission?.point_value}</td>
       <td>

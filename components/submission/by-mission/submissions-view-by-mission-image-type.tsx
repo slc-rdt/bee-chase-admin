@@ -73,9 +73,9 @@ const ImageSubmissionItem: ComponentType<
         <Link
           href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
         >
-          <h2 className="link card-title link-primary">
+          <a className="link card-title link-primary">
             {submission.game_team?.name}
-          </h2>
+          </a>
         </Link>
 
         <p>

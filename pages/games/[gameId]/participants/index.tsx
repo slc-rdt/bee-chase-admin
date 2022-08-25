@@ -85,10 +85,10 @@ const ParticipantsPage: NextPage<
         </h3>
 
         <Link href={`/games/${game.id}/participants/create-team`}>
-          <button className="btn btn-primary gap-2">
+          <a className="btn btn-primary gap-2">
             <PlusIcon className="h-5 w-5" />
             Create Team
-          </button>
+          </a>
         </Link>
       </section>
 

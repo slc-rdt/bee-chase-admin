@@ -53,10 +53,10 @@ const GameTeamCard: ComponentType<ComponentProps<"div"> & ITeamCard> = ({
           <Link
             href={`/games/${gameTeam.game_id}/participants/${gameTeam.id}/edit`}
           >
-            <button disabled={isLoading} className="btn btn-secondary gap-2">
+            <a className="btn btn-secondary gap-2">
               <PencilIcon className="h-5 w-5" />
               Edit
-            </button>
+            </a>
           </Link>
 
           <button
