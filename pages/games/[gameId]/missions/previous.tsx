@@ -15,6 +15,7 @@ import GameService from "../../../../libs/services/game-service";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
 import getServerSidePropsWrapper from "../../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -25,43 +26,42 @@ export const getServerSideProps: GetServerSideProps<
   },
   { gameId: string }
 > = async (context) => {
-  return await getServerSidePropsWrapper(
-    async () => {
-      const [gameService, missionService] = await Promise.all([
-        createServerSideService(context.req, GameService),
-        createServerSideService(context.req, MissionService),
-      ]);
+  try {
+    const [gameService, missionService] = await Promise.all([
+      createServerSideService(context.req, GameService),
+      createServerSideService(context.req, MissionService),
+    ]);
 
-      const allGames = await gameService.getAll();
-      const originalGameId = context.params?.gameId ?? "";
-      const games = allGames.filter((game) => game.id !== originalGameId);
-      const selectedGameId = context.query.selectedGameId ?? games[0]?.id ?? "";
+    const allGames = await gameService.getAll();
+    const originalGameId = context.params?.gameId ?? "";
+    const games = allGames.filter((game) => game.id !== originalGameId);
+    const selectedGameId = context.query.selectedGameId ?? games[0]?.id ?? "";
 
-      const [originalGameMissions, selectedGameMissions] = await Promise.all([
-        missionService.getAll(originalGameId.toString()),
-        missionService.getAll(selectedGameId.toString()),
-      ]);
+    const [originalGameMissions, selectedGameMissions] = await Promise.all([
+      missionService.getAll(originalGameId.toString()),
+      missionService.getAll(selectedGameId.toString()),
+    ]);
 
-      const missions = selectedGameMissions.filter((parentMission) =>
-        originalGameMissions.every(
-          (mission) => parentMission.id !== mission.parent_mission_id
-        )
-      );
+    const missions = selectedGameMissions.filter((parentMission) =>
+      originalGameMissions.every(
+        (mission) => parentMission.id !== mission.parent_mission_id
+      )
+    );
 
-      return {
-        props: {
-          originalGameId,
-          selectedGameId,
-          games,
-          missions,
-        },
-      };
-    },
-    {
+    return {
+      props: {
+        originalGameId,
+        selectedGameId: "",
+        games: [],
+        missions: [],
+      },
+    };
+  } catch (error) {
+    return handleServerSideError(error, {
       destination: "/games",
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const PreviousMissionsPage: NextPage<
@@ -99,7 +99,10 @@ const PreviousMissionsPage: NextPage<
           onChange={(e) => onChangeGame(e.target.value)}
           className="select select-bordered select-primary"
           defaultValue={selectedGameId}
+          disabled={!selectedGameId}
         >
+          {games.length === 0 && <option>No games.</option>}
+
           {games.map((game) => (
             <option key={game.id} value={game.id}>
               {game.name}
@@ -109,6 +112,14 @@ const PreviousMissionsPage: NextPage<
       </section>
 
       <section className="grid grid-cols-1 gap-4">
+        {missions.length === 0 && (
+          <div className="card shadow-xl">
+            <div className="card-body">
+              <h3 className="card-title justify-center">No missions.</h3>
+            </div>
+          </div>
+        )}
+
         {missions.map((mission) => (
           <MissionCard key={mission.id} mission={mission} clonable />
         ))}
