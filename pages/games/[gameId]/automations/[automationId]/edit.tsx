@@ -4,9 +4,10 @@ import {
   NextPage,
 } from "next";
 import { useRouter } from "next/router";
-import React from "react";
 import toast from "react-hot-toast";
-import AutomationForm from "../../../../../components/automation/automation-form";
+import AutomationForm, {
+  AutomationFormValues,
+} from "../../../../../components/automation/automation-form";
 import useService from "../../../../../libs/hooks/common/use-service";
 import Automation from "../../../../../libs/models/automation";
 import Mission from "../../../../../libs/models/mission";
@@ -53,8 +54,8 @@ const EditAutomationPage: NextPage<
   const router = useRouter();
   const automationService = useService(AutomationService);
 
-  const onAutomationFormSubmit = async (data: Automation) => {
-    await toast.promise(automationService.update(data), {
+  const onAutomationFormSubmit = async (data: AutomationFormValues) => {
+    await toast.promise(automationService.update({ ...automation, ...data }), {
       loading: "Updating automation...",
       success: "Automation updated!",
       error: "Failed to update automation",
@@ -65,7 +66,7 @@ const EditAutomationPage: NextPage<
   };
 
   return (
-    <div className="max-w-screen-md mx-auto">
+    <div className="mx-auto max-w-screen-md">
       <h2 className="mb-4 text-3xl font-bold"></h2>
       <AutomationForm {...{ automation, missions, onAutomationFormSubmit }} />
     </div>

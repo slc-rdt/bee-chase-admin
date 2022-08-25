@@ -5,7 +5,9 @@ import {
 } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import AutomationForm from "../../../../components/automation/automation-form";
+import AutomationForm, {
+  AutomationFormValues,
+} from "../../../../components/automation/automation-form";
 import useService from "../../../../libs/hooks/common/use-service";
 import Automation from "../../../../libs/models/automation";
 import Mission from "../../../../libs/models/mission";
@@ -44,7 +46,7 @@ const CreateAutomationPage: NextPage<
   const router = useRouter();
   const automationService = useService(AutomationService);
 
-  const onAutomationFormSubmit = async (data: Automation) => {
+  const onAutomationFormSubmit = async (data: AutomationFormValues) => {
     const gameId = `${router.query.gameId ?? ""}`;
 
     await toast.promise(automationService.create(gameId, data), {

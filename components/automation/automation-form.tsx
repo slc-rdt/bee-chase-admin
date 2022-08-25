@@ -1,29 +1,33 @@
 import { PaperAirplaneIcon } from "@heroicons/react/solid";
-import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { AutomationTimeType, AutomationType } from "../../libs/enums";
 import useLoading from "../../libs/hooks/common/use-loading";
-import useService from "../../libs/hooks/common/use-service";
 import Automation from "../../libs/models/automation";
 import AutomationData from "../../libs/models/automation-data";
 import Mission from "../../libs/models/mission";
-import AutomationService from "../../libs/services/automation-service";
 import convertTimeLocalToServer from "../../libs/utils/convert-time-local-to-server";
 import convertTimeServerToLocal from "../../libs/utils/convert-time-server-to-local";
 import normalizeConstantCase from "../../libs/utils/normalize-constant-case";
 import AutomationFormTypeNotifyUsers from "./automation-form-type-notify-users";
 import AutomationFormTypeWithMissions from "./automation-form-type-with-missions";
 
-export interface AutomationFormValues extends Automation {
+export interface AutomationFormValues {
+  game_id: string;
+  name: string;
+  type: AutomationType;
+  when_type: AutomationTimeType;
+  automation_data: AutomationData | string;
+  when_happened?: Date | string;
+  relative_time?: number;
+  has_executed: boolean;
   radio_when_type: "relative" | "exact";
 }
 
 interface IAutomationForm {
   automation?: Automation;
   missions: Mission[];
-  onAutomationFormSubmit: (data: Automation) => Promise<void>;
+  onAutomationFormSubmit: (data: AutomationFormValues) => Promise<void>;
 }
 
 const AutomationForm: ComponentType<

@@ -1,12 +1,10 @@
-import React, { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType } from "react";
 import {
   UseFormRegister,
   UseFormSetValue,
-  UseFormWatch,
+  UseFormWatch
 } from "react-hook-form";
-import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Mission from "../../libs/models/mission";
-import Pagination from "../common/pagination";
 import MissionCard from "../mission/card/mission-card";
 import { AutomationFormValues } from "./automation-form";
 

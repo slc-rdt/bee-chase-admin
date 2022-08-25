@@ -1,3 +1,4 @@
+import { AutomationFormValues } from "../../components/automation/automation-form";
 import PaginateRequestDto from "../dtos/paginate-request-dto";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Automation from "../models/automation";
@@ -19,7 +20,7 @@ export default class AutomationService extends AbstractService {
     return data;
   }
 
-  public async create(gameId: string, payload: Automation) {
+  public async create(gameId: string, payload: AutomationFormValues) {
     const { data } = await this.axios.post<Automation>(
       `${this.apiUrl}/games/${gameId}/automations`,
       {

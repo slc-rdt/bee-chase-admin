@@ -95,7 +95,9 @@ const SubmissionsByGameTeamPage: NextPage<
 
       {Object.entries(submissionsPaginationsGroupedByAnswerTypes).map(
         ([type, pagination]) => {
-          const key = `${type}|${pagination.current_page}`;
+          const key = `${type}|${
+            pagination.current_page ?? pagination.meta?.current_page ?? 0
+          }`;
 
           const answerType = Object.entries(AnswerTypes)
             .filter(([k, _]) => k === type)
@@ -111,7 +113,9 @@ const SubmissionsByGameTeamPage: NextPage<
 
               <SubmissionsViewByTeam
                 answerType={answerType}
-                currentPage={pagination.current_page}
+                currentPage={
+                  pagination.current_page ?? pagination.meta?.current_page ?? 0
+                }
                 submissionsPaginated={pagination}
               />
 

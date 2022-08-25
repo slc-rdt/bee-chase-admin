@@ -52,7 +52,11 @@ const SubmissionsViewByTeamGpsType: ComponentType<
         <PaginationButtons
           paginationKey="pageForGPS"
           currentPage={currentPage}
-          length={submissionsPaginated.last_page}
+          length={
+            submissionsPaginated.last_page ??
+            submissionsPaginated.meta?.last_page ??
+            0
+          }
         />
       </section>
     </>

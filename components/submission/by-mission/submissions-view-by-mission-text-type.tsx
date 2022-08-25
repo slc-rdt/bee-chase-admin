@@ -52,7 +52,11 @@ const SubmissionsViewByMissionTextType: ComponentType<
       <section className="mt-4">
         <PaginationButtons
           currentPage={currentPage}
-          length={submissionsPaginated.last_page}
+          length={
+            submissionsPaginated.last_page ??
+            submissionsPaginated.meta?.last_page ??
+            0
+          }
         />
       </section>
     </>

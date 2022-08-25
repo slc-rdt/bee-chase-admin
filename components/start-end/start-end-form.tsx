@@ -60,9 +60,8 @@ const StartEndForm: ComponentType<
 
       payload = {
         ...payload,
-        // MySQL DateTime only accepts 'YYYY-MM-DDTHH:MM' format, excluding the seconds and 'Z'
-        start_time: startTime.toUTC().toSQL(),
-        end_time: endTime.toUTC().toSQL(),
+        start_time: startTime.toUTC().toISO(),
+        end_time: endTime.toUTC().toISO(),
       };
     }
 
@@ -83,14 +82,14 @@ const StartEndForm: ComponentType<
 
     setValue(
       "start_time",
-      DateTime.fromSQL(payload.start_time?.toString() ?? "").toFormat(
+      DateTime.fromISO(payload.start_time?.toString() ?? "").toFormat(
         LuxonFormatForInputDateTimeLocal
       )
     );
 
     setValue(
       "end_time",
-      DateTime.fromSQL(payload.end_time?.toString() ?? "").toFormat(
+      DateTime.fromISO(payload.end_time?.toString() ?? "").toFormat(
         LuxonFormatForInputDateTimeLocal
       )
     );

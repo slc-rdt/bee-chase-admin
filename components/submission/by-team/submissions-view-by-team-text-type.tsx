@@ -53,7 +53,11 @@ const SubmissionsViewByTeamTextType: ComponentType<
         <PaginationButtons
           paginationKey="pageForTEXT"
           currentPage={currentPage}
-          length={submissionsPaginated.last_page}
+          length={
+            submissionsPaginated.last_page ??
+            submissionsPaginated.meta?.last_page ??
+            0
+          }
         />
       </section>
     </>
