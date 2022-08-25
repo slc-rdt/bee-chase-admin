@@ -7,13 +7,13 @@ import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
 import createServerSideService from "../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<{
   page: number;
   paginatedGames: PaginateResponseDto<Game>;
 }> = async (context) => {
-  return await getServerSidePropsWrapper(async () => {
+  try {
     const gameService = await createServerSideService(context.req, GameService);
     const page = Number(context.query.page ?? 1);
     const paginatedGames = await gameService.getAllPaginated({ page });
@@ -24,7 +24,9 @@ export const getServerSideProps: GetServerSideProps<{
         paginatedGames,
       },
     };
-  });
+  } catch (error) {
+    return handleServerSideError(error);
+  }
 };
 
 const GamesPage = ({

@@ -1,20 +1,16 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
-import Pagination from "../../../../components/common/pagination";
 import MissionCard from "../../../../components/mission/card/mission-card";
-import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Game from "../../../../libs/models/game";
 import Mission from "../../../../libs/models/mission";
 import GameService from "../../../../libs/services/game-service";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../../libs/utils/get-server-side-props-wrapper";
 import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<

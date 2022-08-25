@@ -1,7 +1,7 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import SubmissionsViewByMission from "../../../../../components/submission/by-mission/submissions-view-by-mission";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
@@ -10,7 +10,7 @@ import Submission from "../../../../../libs/models/submission";
 import MissionService from "../../../../../libs/services/mission-service";
 import SubmissionService from "../../../../../libs/services/submission-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -20,36 +20,35 @@ export const getServerSideProps: GetServerSideProps<
   },
   { gameId: string; missionId: string }
 > = async (context) => {
-  const gameId = context.params?.gameId ?? "";
-  const missionId = context.params?.missionId ?? "";
-  const page = Number(context.query.page ?? 1);
+  try {
+    const gameId = context.params?.gameId ?? "";
+    const missionId = context.params?.missionId ?? "";
+    const page = Number(context.query.page ?? 1);
 
-  return await getServerSidePropsWrapper(
-    async () => {
-      const [missionService, submissionService] = await Promise.all([
-        createServerSideService(context.req, MissionService),
-        createServerSideService(context.req, SubmissionService),
-      ]);
+    const [missionService, submissionService] = await Promise.all([
+      createServerSideService(context.req, MissionService),
+      createServerSideService(context.req, SubmissionService),
+    ]);
 
-      const [mission, submissionsPaginated] = await Promise.all([
-        missionService.getOneById(gameId, missionId),
-        submissionService.getAllPaginatedByMission(gameId, missionId, page),
-      ]);
+    const [mission, submissionsPaginated] = await Promise.all([
+      missionService.getOneById(gameId, missionId),
+      submissionService.getAllPaginatedByMission(gameId, missionId, page),
+    ]);
 
-      return {
-        props: {
-          gameId,
-          page,
-          mission,
-          submissionsPaginated,
-        },
-      };
-    },
-    {
-      destination: `/games/${gameId}/submissions`,
+    return {
+      props: {
+        gameId,
+        page,
+        mission,
+        submissionsPaginated,
+      },
+    };
+  } catch (error) {
+    return handleServerSideError(error, {
+      destination: `/games`,
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const SubmissionsByMissionPage: NextPage<

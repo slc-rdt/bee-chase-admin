@@ -15,7 +15,7 @@ import User from "../../../libs/models/user";
 import GameService from "../../../libs/services/game-service";
 import UserService from "../../../libs/services/user-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -25,35 +25,34 @@ export const getServerSideProps: GetServerSideProps<
   },
   { gameId: string }
 > = async (context) => {
-  const gameId = context.params?.gameId ?? "";
-  const keyword = context.query.search ?? "";
-  const page = Number(context.query.page ?? 1);
+  try {
+    const gameId = context.params?.gameId ?? "";
+    const keyword = context.query.search ?? "";
+    const page = Number(context.query.page ?? 1);
 
-  return await getServerSidePropsWrapper(
-    async () => {
-      const [userService, gameService] = await Promise.all([
-        createServerSideService(context.req, UserService),
-        createServerSideService(context.req, GameService),
-      ]);
+    const [userService, gameService] = await Promise.all([
+      createServerSideService(context.req, UserService),
+      createServerSideService(context.req, GameService),
+    ]);
 
-      const [users, game] = await Promise.all([
-        userService.search({ search: `${keyword}`, page }),
-        gameService.getOneById(gameId),
-      ]);
+    const [users, game] = await Promise.all([
+      userService.search({ search: `${keyword}`, page }),
+      gameService.getOneById(gameId),
+    ]);
 
-      return {
-        props: {
-          game,
-          pagintedUsers: users,
-          page,
-        },
-      };
-    },
-    {
+    return {
+      props: {
+        game,
+        pagintedUsers: users,
+        page,
+      },
+    };
+  } catch (error) {
+    return handleServerSideError(error, {
       destination: `/games`,
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const AdminsPage: NextPage<
@@ -84,7 +83,7 @@ const AdminsPage: NextPage<
           <button
             type="submit"
             disabled={isLoading}
-            className={`btn btn-square btn-primary ${
+            className={`btn btn-primary btn-square ${
               isLoading && "btn-square loading"
             }`}
           >

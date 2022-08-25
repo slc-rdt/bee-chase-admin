@@ -8,31 +8,30 @@ import useService from "../../../../../libs/hooks/common/use-service";
 import Mission from "../../../../../libs/models/mission";
 import MissionService from "../../../../../libs/services/mission-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   { mission: Mission },
   { gameId: string; missionId: string }
 > = async (context) => {
-  const gameId = context.params?.gameId ?? "";
-  const missionId = context.params?.missionId ?? "";
+  try {
+    const gameId = context.params?.gameId ?? "";
+    const missionId = context.params?.missionId ?? "";
 
-  return await getServerSidePropsWrapper(
-    async () => {
-      const missionService = await createServerSideService(
-        context.req,
-        MissionService
-      );
+    const missionService = await createServerSideService(
+      context.req,
+      MissionService
+    );
 
-      const mission = await missionService.getOneById(gameId, missionId);
+    const mission = await missionService.getOneById(gameId, missionId);
 
-      return { props: { mission } };
-    },
-    {
-      destination: `/games/${gameId}/missions`,
+    return { props: { mission } };
+  } catch (error) {
+    return handleServerSideError(error, {
+      destination: `/games`,
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const MissionEditPage = ({

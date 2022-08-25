@@ -8,7 +8,7 @@ import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../libs/models/mission";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -18,33 +18,32 @@ export const getServerSideProps: GetServerSideProps<
   },
   { gameId: string }
 > = async (context) => {
-  return await getServerSidePropsWrapper(
-    async () => {
-      const missionService = await createServerSideService(
-        context.req,
-        MissionService
-      );
+  try {
+    const missionService = await createServerSideService(
+      context.req,
+      MissionService
+    );
 
-      const gameId = context.params?.gameId ?? "";
-      const page = Number(context.query.page ?? 1);
+    const gameId = context.params?.gameId ?? "";
+    const page = Number(context.query.page ?? 1);
 
-      const paginatedMissions = await missionService.getAllPaginated(gameId, {
+    const paginatedMissions = await missionService.getAllPaginated(gameId, {
+      page,
+    });
+
+    return {
+      props: {
         page,
-      });
-
-      return {
-        props: {
-          page,
-          gameId,
-          paginatedMissions,
-        },
-      };
-    },
-    {
+        gameId,
+        paginatedMissions,
+      },
+    };
+  } catch (error) {
+    return handleServerSideError(error, {
       destination: "/games",
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const MissionsPage = ({

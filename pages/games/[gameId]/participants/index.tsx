@@ -6,7 +6,6 @@ import {
   NextPage,
 } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import GameParticipantsAllowUserCreateTeamForm from "../../../../components/participants/game-participants-allow-user-create-team-form";
 import GameParticipantsTeamOrSoloModeForm from "../../../../components/participants/game-participants-team-or-solo-mode-form";
 import GameTeamCard from "../../../../components/participants/game-team-card";
@@ -15,38 +14,37 @@ import GameTeam from "../../../../libs/models/game-team";
 import GameService from "../../../../libs/services/game-service";
 import GameTeamService from "../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game; gameTeams: GameTeam[] },
   { gameId: string }
 > = async (context) => {
-  return await getServerSidePropsWrapper(
-    async () => {
-      const [gameService, gameTeamService] = await Promise.all([
-        createServerSideService(context.req, GameService),
-        createServerSideService(context.req, GameTeamService),
-      ]);
+  try {
+    const [gameService, gameTeamService] = await Promise.all([
+      createServerSideService(context.req, GameService),
+      createServerSideService(context.req, GameTeamService),
+    ]);
 
-      const gameId = context.params?.gameId ?? "";
+    const gameId = context.params?.gameId ?? "";
 
-      const [game, gameTeams] = await Promise.all([
-        gameService.getOneById(gameId),
-        gameTeamService.getAll(gameId),
-      ]);
+    const [game, gameTeams] = await Promise.all([
+      gameService.getOneById(gameId),
+      gameTeamService.getAll(gameId),
+    ]);
 
-      return {
-        props: {
-          game,
-          gameTeams,
-        },
-      };
-    },
-    {
+    return {
+      props: {
+        game,
+        gameTeams,
+      },
+    };
+  } catch (error) {
+    return handleServerSideError(error, {
       destination: "/games",
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const ParticipantsPage: NextPage<

@@ -1,34 +1,29 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import Link from "next/link";
-import React from "react";
 import GameTeam from "../../../libs/models/game-team";
 import GameService from "../../../libs/services/game-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
-import getServerSidePropsWrapper from "../../../libs/utils/get-server-side-props-wrapper";
+import handleServerSideError from "../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   { gameId: string; leaderboard: GameTeam[] },
   { gameId: string }
 > = async (context) => {
-  return await getServerSidePropsWrapper(
-    async () => {
-      const gameId = context.params?.gameId ?? "";
-      const gameService = await createServerSideService(
-        context.req,
-        GameService
-      );
-      const leaderboard = await gameService.getLeaderboard(gameId);
-      return { props: { gameId, leaderboard } };
-    },
-    {
+  try {
+    const gameId = context.params?.gameId ?? "";
+    const gameService = await createServerSideService(context.req, GameService);
+    const leaderboard = await gameService.getLeaderboard(gameId);
+    return { props: { gameId, leaderboard } };
+  } catch (error) {
+    return handleServerSideError(error, {
       destination: `/games`,
       permanent: false,
-    }
-  );
+    });
+  }
 };
 
 const Leaderboard: NextPage<
