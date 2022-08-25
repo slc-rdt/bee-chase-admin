@@ -62,6 +62,16 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
       data.mission_data.accepted_answers = acceptedAnswers.split("\n");
     }
 
+    if (typeof data.mission_data.media_type === "string") {
+      data.mission_data.media_type = Number(data.mission_data.media_type);
+    }
+
+    if (typeof data.mission_data.submission_source === "string") {
+      data.mission_data.submission_source = Number(
+        data.mission_data.submission_source
+      );
+    }
+
     onMissionFormSubmit(data);
   });
 
