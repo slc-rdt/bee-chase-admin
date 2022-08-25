@@ -39,7 +39,7 @@ const MissionFormImageType: ComponentType<IMissionFormImageType> = ({
           <span className="label-text">Submission Source</span>
         </label>
         <select
-          {...register("mission_data.media_type")}
+          {...register("mission_data.submission_source")}
           className="select select-bordered w-full capitalize"
           disabled={isLoading}
         >
