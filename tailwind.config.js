@@ -14,11 +14,11 @@ module.exports = {
       {
         binus: {
           ...require("daisyui/src/colors/themes")["[data-theme=winter]"],
-          // primary: "#00a9e2",
           secondary: "#fb923c",
-          // "secondary-content": "#FFFFFF",
+          success: "#22c55e",
         },
       },
     ],
   },
 };
+``;
