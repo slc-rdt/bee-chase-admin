@@ -2,6 +2,7 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import NextNProgress from "nextjs-progressbar";
 import { ComponentType } from "react";
 import { Toaster } from "react-hot-toast";
 import Layout from "../components/layouts/layout";
@@ -22,6 +23,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <RedirectIfUnauthenticated />
 
       <Toaster />
+      <NextNProgress color="#057AFF" />
+
       <Layout>
         <Component {...pageProps} />
       </Layout>
