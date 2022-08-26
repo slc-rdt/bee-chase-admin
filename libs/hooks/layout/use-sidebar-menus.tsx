@@ -1,7 +1,25 @@
 import {
-  ChartBarIcon, ClipboardIcon, ClockIcon, CollectionIcon, FlagIcon, PhotographIcon, UserGroupIcon, UsersIcon
-} from "@heroicons/react/outline";
-import { FilmIcon } from "@heroicons/react/solid";
+  CameraIcon as OutlineCameraIcon,
+  ChartBarIcon as OutlineChartBarIcon,
+  ClipboardIcon as OutlineClipboardIcon,
+  ClockIcon as OutlineClockIcon,
+  FilmIcon as OutlineFilmIcon,
+  FlagIcon as OutlineFlagIcon,
+  RectangleStackIcon as OutlineRectangleStackIcon,
+  UserGroupIcon as OutlineUserGroupIcon,
+  UsersIcon as OutlineUsersIcon,
+} from "@heroicons/react/24/outline";
+import {
+  CameraIcon as SolidCameraIcon,
+  ChartBarIcon as SolidChartBarIcon,
+  ClipboardIcon as SolidClipboardIcon,
+  ClockIcon as SolidClockIcon,
+  FilmIcon as SolidFilmIcon,
+  FlagIcon as SolidFlagIcon,
+  RectangleStackIcon as SolidRectangleStackIcon,
+  UserGroupIcon as SolidUserGroupIcon,
+  UsersIcon as SolidUsersIcon,
+} from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import Game from "../../models/game";
 
@@ -9,6 +27,7 @@ interface IMenu {
   label: string;
   path: string;
   icon: JSX.Element;
+  activeIcon: JSX.Element;
   isActive: boolean;
 }
 
@@ -25,37 +44,43 @@ export default function useSidebarMenus(game?: Game): MenuItem[] {
     {
       label: "Details",
       path: `/games/${gameId}/edit`,
-      icon: <ClipboardIcon className="h-6 w-6" />,
+      icon: <OutlineClipboardIcon className="h-6 w-6" />,
+      activeIcon: <SolidClipboardIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Missions",
       path: `/games/${gameId}/missions`,
-      icon: <FlagIcon className="h-6 w-6" />,
+      icon: <OutlineFlagIcon className="h-6 w-6" />,
+      activeIcon: <SolidFlagIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Automations",
       path: `/games/${gameId}/automations`,
-      icon: <FilmIcon className="h-6 w-6" />,
+      icon: <OutlineFilmIcon className="h-6 w-6" />,
+      activeIcon: <SolidFilmIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Participants",
       path: `/games/${gameId}/participants`,
-      icon: <UserGroupIcon className="h-6 w-6" />,
+      icon: <OutlineUserGroupIcon className="h-6 w-6" />,
+      activeIcon: <SolidUserGroupIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Start & End",
       path: `/games/${gameId}/start-end`,
-      icon: <ClockIcon className="h-6 w-6" />,
+      icon: <OutlineClockIcon className="h-6 w-6" />,
+      activeIcon: <SolidClockIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Admins",
       path: `/games/${gameId}/admins`,
-      icon: <UsersIcon className="h-6 w-6" />,
+      icon: <OutlineUsersIcon className="h-6 w-6" />,
+      activeIcon: <SolidUsersIcon className="h-6 w-6" />,
       isActive: false,
     },
 
@@ -64,19 +89,22 @@ export default function useSidebarMenus(game?: Game): MenuItem[] {
     {
       label: "Activity Feed",
       path: `/games/${gameId}/feed`,
-      icon: <CollectionIcon className="h-6 w-6" />,
+      icon: <OutlineRectangleStackIcon className="h-6 w-6" />,
+      activeIcon: <SolidRectangleStackIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Leaderboard",
       path: `/games/${gameId}/leaderboard`,
-      icon: <ChartBarIcon className="h-6 w-6" />,
+      icon: <OutlineChartBarIcon className="h-6 w-6" />,
+      activeIcon: <SolidChartBarIcon className="h-6 w-6" />,
       isActive: false,
     },
     {
       label: "Submissions",
       path: `/games/${gameId}/submissions`,
-      icon: <PhotographIcon className="h-6 w-6" />,
+      icon: <OutlineCameraIcon className="h-6 w-6" />,
+      activeIcon: <SolidCameraIcon className="h-6 w-6" />,
       isActive: false,
     },
   ].map((menu) => {

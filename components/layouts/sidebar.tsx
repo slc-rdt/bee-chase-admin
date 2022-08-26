@@ -45,7 +45,7 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
               >
                 <Link href={menu.path}>
                   <a>
-                    {menu.icon}
+                    {menu.isActive ? menu.activeIcon : menu.icon}
                     {menu.label}
                   </a>
                 </Link>

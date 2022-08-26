@@ -1,4 +1,4 @@
-import { MenuIcon } from "@heroicons/react/solid";
+import { Bars3Icon } from "@heroicons/react/20/solid";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,15 +6,13 @@ import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import useCurrentGame from "../../libs/hooks/layout/use-current-game";
 import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
-import getGameStatus from "../../libs/utils/get-game-status";
 import GameStatusBadge from "../game/game-status-badge";
 
 const Navbar: ComponentType<ComponentProps<"nav">> = () => {
   const router = useRouter();
   const { data, status } = useSession();
-  const { game, isLoading } = useCurrentGame();
+  const { game } = useCurrentGame();
   const sidebarMenus = useSidebarMenus(game);
-  const gameStatus = getGameStatus(game);
 
   const user = data?.user;
 
@@ -39,16 +37,14 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
       <div className="flex-1">
         {sidebarMenus.length > 0 && (
           <div className="flex-none lg:hidden">
-            <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
-              <MenuIcon className="inline-block h-6 w-6 stroke-current" />
+            <label htmlFor="my-drawer-3" className="btn btn-ghost btn-square">
+              <Bars3Icon className="inline-block h-6 w-6 stroke-current" />
             </label>
           </div>
         )}
 
         <Link href="/games">
-          <a className="btn btn-ghost text-xl normal-case">
-            BeeChase
-          </a>
+          <a className="btn btn-ghost text-xl normal-case">BeeChase</a>
         </Link>
       </div>
 
@@ -60,7 +56,7 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
           </>
         )}
 
-        <div className="dropdown-end dropdown">
+        <div className="dropdown dropdown-end">
           <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
             <div className="w-10 rounded-full">
               <Image

@@ -1,8 +1,8 @@
 import {
   CameraIcon,
   DocumentTextIcon,
-  LocationMarkerIcon,
-} from "@heroicons/react/outline";
+  MapPinIcon,
+} from "@heroicons/react/24/outline";
 import { ComponentProps, ComponentType } from "react";
 import { AnswerTypes, AvailabilityTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
@@ -57,7 +57,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
                 <DocumentTextIcon className="h-6 w-6" />
               )}
               {mission.answer_type === AnswerTypes.GPS && (
-                <LocationMarkerIcon className="h-6 w-6" />
+                <MapPinIcon className="h-6 w-6" />
               )}
             </span>
             <span>{mission.name}</span>

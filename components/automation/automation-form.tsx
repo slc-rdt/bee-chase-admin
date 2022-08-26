@@ -1,4 +1,4 @@
-import { PaperAirplaneIcon } from "@heroicons/react/solid";
+import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
 import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import { AutomationTimeType, AutomationType } from "../../libs/enums";

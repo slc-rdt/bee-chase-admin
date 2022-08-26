@@ -3,7 +3,7 @@ import {
   ChevronDoubleRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-} from "@heroicons/react/solid";
+} from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useCallback, useEffect } from "react";
 

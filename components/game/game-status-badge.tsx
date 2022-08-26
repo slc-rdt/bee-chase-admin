@@ -11,7 +11,7 @@ interface IGameStatusBadge {
 const GameStatusBadge: ComponentType<
   ComponentProps<"button"> & IGameStatusBadge
 > = ({ game, isLoading, ...rest }) => {
-  const gameStatus = getGameStatus(game);
+  const gameStatus = getGameStatus(game); 
 
   return (
     <button

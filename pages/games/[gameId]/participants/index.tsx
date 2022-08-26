@@ -1,5 +1,5 @@
-import { QuestionMarkCircleIcon } from "@heroicons/react/outline";
-import { PlusIcon } from "@heroicons/react/solid";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,

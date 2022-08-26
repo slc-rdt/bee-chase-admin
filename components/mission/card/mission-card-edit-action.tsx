@@ -1,4 +1,4 @@
-import { PencilIcon } from "@heroicons/react/solid";
+import { PencilIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import React, { ComponentProps, ComponentType } from "react";
 import Mission from "../../../libs/models/mission";

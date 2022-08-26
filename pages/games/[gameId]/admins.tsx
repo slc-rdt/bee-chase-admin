@@ -1,4 +1,4 @@
-import { SearchIcon } from "@heroicons/react/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -83,11 +83,11 @@ const AdminsPage: NextPage<
           <button
             type="submit"
             disabled={isLoading}
-            className={`btn btn-primary btn-square ${
+            className={`btn btn-square btn-primary ${
               isLoading && "btn-square loading"
             }`}
           >
-            {!isLoading && <SearchIcon className="h-6 w-6" />}
+            {!isLoading && <MagnifyingGlassIcon className="h-6 w-6" />}
           </button>
         </form>
       </section>
