@@ -1,3 +1,3 @@
 export default function normalizeConstantCase(string: string) {
-  return string.toLowerCase().replaceAll("_", " ");
+  return string.toLowerCase().replace(/\_/gi, " ");
 }
