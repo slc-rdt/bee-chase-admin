@@ -27,6 +27,10 @@ const MissionCardCloneAction: ComponentType<
         missionService.create(gameId, {
           ...(mission as CreateMissionDto),
           parent_mission_id: mission.id,
+          mission_data:
+            typeof mission.mission_data === "string"
+              ? JSON.parse(mission.mission_data)
+              : mission.mission_data,
         })
       ),
       {
@@ -46,7 +50,7 @@ const MissionCardCloneAction: ComponentType<
       className={`btn btn-primary gap-2 ${isLoading && "loading"}`}
       {...rest}
     >
-      <PlusIcon className="h-5 w-5" /> Add
+      {!isLoading && <PlusIcon className="h-5 w-5" />} Add
     </button>
   );
 };
