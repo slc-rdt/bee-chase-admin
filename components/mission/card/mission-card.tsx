@@ -76,8 +76,8 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
               <div
                 className={`h-4 w-4 rounded-full ${
                   {
-                    0: "bg-green-500",
-                    1: "bg-yellow-500",
+                    0: "bg-success",
+                    1: "bg-warning",
                     2: "bg-base-300",
                   }[mission.availability]
                 }`}
