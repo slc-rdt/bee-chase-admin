@@ -29,7 +29,7 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
   };
 
   if (!shouldShowNavbar) {
-    return <></>;
+    return null;
   }
 
   return (
