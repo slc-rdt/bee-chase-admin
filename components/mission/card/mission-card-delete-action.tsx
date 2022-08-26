@@ -1,6 +1,6 @@
-import { PencilIcon } from "@heroicons/react/20/solid";
+import { TrashIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
-import React, { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
@@ -37,7 +37,7 @@ const MissionCardDeleteAction: ComponentType<
       className={`btn btn-error gap-2 ${isLoading && "loading"}`}
       {...rest}
     >
-      <PencilIcon className="h-5 w-5" /> Delete
+      <TrashIcon className="h-5 w-5" /> Delete
     </button>
   );
 };
