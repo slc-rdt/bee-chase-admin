@@ -36,6 +36,8 @@ const RedirectIfUnauthenticated: ComponentType = () => {
   const router = useRouter();
   const { status } = useSession();
 
+  if (status === "loading" || !router.isReady) return null;
+
   const isLogin = router.pathname.startsWith("/auth/login");
   if (status === "unauthenticated" && !isLogin) {
     router.push("/auth/login");
