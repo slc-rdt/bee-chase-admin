@@ -1,11 +1,13 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import GameTeamForm from "../../../../../components/participants/game-team-form";
+import GameTeamForm, {
+  GameTeamFormValues
+} from "../../../../../components/participants/game-team-form";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
 import useService from "../../../../../libs/hooks/common/use-service";
 import GameTeam from "../../../../../libs/models/game-team";
@@ -44,14 +46,17 @@ const ParticipantsTeamEditPage: NextPage<
   const teamService = useService(GameTeamService);
   const { isLoading, doAction } = useLoading();
 
-  const onSubmit = async (data: GameTeam) => {
+  const onSubmit = async (data: GameTeamFormValues) => {
     const game_id = router.query.gameId?.toString() ?? "";
 
-    await toast.promise(doAction(teamService.update(data)), {
-      loading: "Updating team...",
-      success: "Team updated!",
-      error: "Failed to update team.",
-    });
+    await toast.promise(
+      doAction(teamService.update({ ...gameTeam, ...data })),
+      {
+        loading: "Updating team...",
+        success: "Team updated!",
+        error: "Failed to update team.",
+      }
+    );
 
     router.push(`/games/${game_id}/participants`);
   };

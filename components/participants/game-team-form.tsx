@@ -2,7 +2,12 @@ import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import GameTeam from "../../libs/models/game-team";
 
-type GameTeamFormValues = GameTeam;
+export interface GameTeamFormValues {
+  game_id: string;
+  name: string;
+  color?: string;
+  access_code?: string;
+}
 
 interface IGameTeamForm {
   gameTeam?: GameTeam;
@@ -16,7 +21,7 @@ const GameTeamForm: ComponentType<ComponentProps<"div"> & IGameTeamForm> = ({
   isLoading,
   ...rest
 }) => {
-  const { register, handleSubmit } = useForm<GameTeam>({
+  const { register, handleSubmit } = useForm<GameTeamFormValues>({
     defaultValues: gameTeam,
   });
 

@@ -1,3 +1,4 @@
+import { GameTeamFormValues } from "../../components/participants/game-team-form";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import { AnswerTypes } from "../enums";
 import GameTeam from "../models/game-team";
@@ -31,7 +32,7 @@ export default class GameTeamService extends AbstractService {
     return data;
   }
 
-  public async create(payload: GameTeam) {
+  public async create(payload: GameTeamFormValues) {
     const { data } = await this.axios.post<GameTeam>(
       `${this.apiUrl}/games/${payload.game_id}/game_teams`,
       payload
