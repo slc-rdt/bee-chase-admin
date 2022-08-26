@@ -7,6 +7,7 @@ import useLoading from "../../../libs/hooks/common/use-loading";
 import useOneDriveImage from "../../../libs/hooks/common/use-one-drive-image";
 import Submission from "../../../libs/models/submission";
 import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
+import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
 import Pagination from "../../common/pagination";
 
 interface ISubmissionsViewByMissionTextType {
@@ -47,10 +48,9 @@ const ImageSubmissionItem: ComponentType<
 
   const gameId = router.query.gameId ?? "";
 
-  const answerData =
-    typeof submission.answer_data === "string"
-      ? (JSON.parse(submission.answer_data) as SubmissionAnswerData)
-      : submission.answer_data;
+  const answerData = parseJsonIfString<SubmissionAnswerData>(
+    submission.answer_data
+  );
 
   const { data } = useOneDriveImage(answerData.download_url);
 

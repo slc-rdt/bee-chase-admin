@@ -9,6 +9,7 @@ import Mission from "../../libs/models/mission";
 import convertTimeLocalToServer from "../../libs/utils/convert-time-local-to-server";
 import convertTimeServerToLocal from "../../libs/utils/convert-time-server-to-local";
 import normalizeConstantCase from "../../libs/utils/normalize-constant-case";
+import parseJsonIfString from "../../libs/utils/parse-json-if-string";
 import AutomationFormTypeNotifyUsers from "./automation-form-type-notify-users";
 import AutomationFormTypeWithMissions from "./automation-form-type-with-missions";
 
@@ -33,17 +34,16 @@ interface IAutomationForm {
 const AutomationForm: ComponentType<
   ComponentProps<"div"> & IAutomationForm
 > = ({ automation, missions, onAutomationFormSubmit, ...rest }) => {
-  const automationData =
-    typeof automation?.automation_data === "string"
-      ? (JSON.parse(automation.automation_data) as AutomationData)
-      : automation?.automation_data;
+  const automationData = automation?.automation_data
+    ? parseJsonIfString<AutomationData>(automation.automation_data)
+    : null;
 
   const { register, handleSubmit, watch, setValue } =
     useForm<AutomationFormValues>({
       defaultValues: {
         ...(automation ?? {}),
 
-        automation_data: automationData,
+        automation_data: automationData ?? {},
 
         radio_when_type:
           automation?.when_type === AutomationTimeType.EXACT

@@ -5,6 +5,7 @@ import { ComponentProps, ComponentType } from "react";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import Submission from "../../../libs/models/submission";
+import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
 import PaginationButtons from "../../common/pagination-buttons";
 
 interface ISubmissionsViewByMissionTextType {
@@ -94,11 +95,7 @@ const TextSubmissionItem: ComponentType<
         </Link>
       </th>
 
-      <td>
-        {typeof submission.answer_data === "string"
-          ? JSON.parse(submission.answer_data).text
-          : submission.answer_data.text}
-      </td>
+      <td>{parseJsonIfString(submission.answer_data).text}</td>
 
       <td>{submission.caption}</td>
       <td>{submission.mission?.point_value}</td>

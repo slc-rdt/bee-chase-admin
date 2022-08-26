@@ -6,7 +6,9 @@ import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Mission from "../../../libs/models/mission";
+import MissionData from "../../../libs/models/mission-data";
 import MissionService from "../../../libs/services/mission-service";
+import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
 
 interface IMissionCardCloneAction {
   mission: Mission;
@@ -27,10 +29,7 @@ const MissionCardCloneAction: ComponentType<
         missionService.create(gameId, {
           ...(mission as CreateMissionDto),
           parent_mission_id: mission.id,
-          mission_data:
-            typeof mission.mission_data === "string"
-              ? JSON.parse(mission.mission_data)
-              : mission.mission_data,
+          mission_data: parseJsonIfString<MissionData>(mission.mission_data),
         })
       ),
       {

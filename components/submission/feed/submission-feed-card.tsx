@@ -16,6 +16,7 @@ import Submission from "../../../libs/models/submission";
 import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
 import SubmissionService from "../../../libs/services/submission-service";
 import convertTimeServerToLocal from "../../../libs/utils/convert-time-server-to-local";
+import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
 import SubmissionFeedCardGpsContent from "./submission-feed-card-gps-content";
 import SubmissionFeedCardImageContent from "./submission-feed-card-image-content";
 import SubmissionFeedCardTextContent from "./submission-feed-card-text-content";
@@ -34,10 +35,7 @@ const SubmissionFeedCard: ComponentType<
 
   const gameId = router.query.gameId;
 
-  const answerData =
-    typeof submission.answer_data === "string"
-      ? (JSON.parse(submission.answer_data) as SubmissionAnswerData)
-      : submission.answer_data;
+  const answerData = parseJsonIfString(submission.answer_data);
 
   const onDelete = async () => {
     await toast.promise(doAction(submissionService.delete(submission)), {

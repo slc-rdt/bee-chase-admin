@@ -11,6 +11,7 @@ import Automation from "../../libs/models/automation";
 import AutomationData from "../../libs/models/automation-data";
 import AutomationService from "../../libs/services/automation-service";
 import normalizeConstantCase from "../../libs/utils/normalize-constant-case";
+import parseJsonIfString from "../../libs/utils/parse-json-if-string";
 import MissionCard from "../mission/card/mission-card";
 
 interface IAutomationCard {
@@ -26,10 +27,7 @@ const AutomationCard: ComponentType<
   const [when, setWhen] = useState("");
 
   const gameId = router.query.gameId;
-  const automationData =
-    typeof automation.automation_data === "string"
-      ? (JSON.parse(automation.automation_data) as AutomationData)
-      : automation.automation_data;
+  const automationData = parseJsonIfString<AutomationData>(automation.automation_data);
 
   const onDelete = async () => {
     await toast.promise(doAction(automationService.delete(automation)), {
