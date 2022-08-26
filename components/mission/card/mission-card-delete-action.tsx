@@ -37,7 +37,7 @@ const MissionCardDeleteAction: ComponentType<
       className={`btn btn-error gap-2 ${isLoading && "loading"}`}
       {...rest}
     >
-      <TrashIcon className="h-5 w-5" /> Delete
+      {!isLoading && <TrashIcon className="h-5 w-5" />} Delete
     </button>
   );
 };
