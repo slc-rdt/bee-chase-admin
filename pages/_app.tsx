@@ -9,7 +9,7 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session} basePath="/beechase-admin/api/auth">
       <Head>
         <title>BeeChase | Admin</title>
         <meta
