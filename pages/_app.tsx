@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           name="description"
           content="Complete your missions in BINUS University!"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/beechase-admin/favicon.ico" />
       </Head>
 
       <RedirectIfUnauthenticated />
