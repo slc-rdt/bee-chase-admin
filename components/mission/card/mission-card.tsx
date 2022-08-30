@@ -1,6 +1,7 @@
 import {
   CameraIcon,
   DocumentTextIcon,
+  ListBulletIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { ComponentProps, ComponentType } from "react";
@@ -50,15 +51,16 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
         <header className="card-title flex flex-wrap items-center justify-between capitalize">
           <h2 className="flex items-center gap-2">
             <span>
-              {mission.answer_type === AnswerTypes.IMAGE && (
-                <CameraIcon className="h-6 w-6" />
-              )}
-              {mission.answer_type === AnswerTypes.TEXT && (
-                <DocumentTextIcon className="h-6 w-6" />
-              )}
-              {mission.answer_type === AnswerTypes.GPS && (
-                <MapPinIcon className="h-6 w-6" />
-              )}
+              {
+                {
+                  [AnswerTypes.IMAGE]: <CameraIcon className="h-6 w-6" />,
+                  [AnswerTypes.TEXT]: <DocumentTextIcon className="h-6 w-6" />,
+                  [AnswerTypes.GPS]: <MapPinIcon className="h-6 w-6" />,
+                  [AnswerTypes.MULTIPLE_CHOICE]: (
+                    <ListBulletIcon className="h-6 w-6" />
+                  ),
+                }[mission.answer_type]
+              }
             </span>
             <span>{mission.name}</span>
           </h2>
