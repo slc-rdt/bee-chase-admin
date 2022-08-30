@@ -47,13 +47,18 @@ const LoginPage: NextPage = () => {
             onSubmit={onSubmit}
             className="card-body items-center text-center"
           >
-            <input
-              type="text"
-              {...register("username")}
-              placeholder="NIM"
-              className="input input-bordered w-full max-w-xs"
-              required
-            />
+            <label className="input-group">
+              <input
+                type="text"
+                {...register("username")}
+                placeholder="Username"
+                className="input input-bordered w-full max-w-xs"
+                required
+              />
+              <span className="bg-primary text-primary-content">
+                @binus.edu
+              </span>
+            </label>
 
             <input
               type="password"
