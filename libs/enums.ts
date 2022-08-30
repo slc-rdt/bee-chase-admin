@@ -8,6 +8,7 @@ export enum AnswerTypes {
   IMAGE,
   TEXT,
   GPS,
+  MULTIPLE_CHOICE,
 }
 
 export enum AutomationType {

@@ -1,5 +1,5 @@
 import { ComponentProps, ComponentType } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
 import UpdateMissionDto from "../../../libs/dtos/update-mission-dto";
 import { AnswerTypes } from "../../../libs/enums";
@@ -9,6 +9,7 @@ import MissionFormChooseAnswerType from "./mission-form-choose-answer-type";
 import MissionFormChooseAvailability from "./mission-form-choose-availability";
 import MissionFormGpsType from "./mission-form-gps-type";
 import MissionFormImageType from "./mission-form-image-type";
+import MissionFormMultipleChoiceType from "./mission-form-multiple-choice-type";
 import MissionFormTextType from "./mission-form-text-type";
 
 export type MissionFormValues = CreateMissionDto | UpdateMissionDto;
@@ -28,8 +29,8 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const missionData: MissionData = mission?.mission_data
     ? JSON.parse(mission.mission_data)
     : {};
-  // navigator.geolocation.getCurrentPosition(successCallback)
-  const { register, handleSubmit, watch, setValue } =
+
+  const { control, register, handleSubmit, watch, setValue } =
     useForm<MissionFormValues>({
       defaultValues: {
         ...(mission ?? {}),
@@ -70,6 +71,16 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
       data.mission_data.submission_source = Number(
         data.mission_data.submission_source
       );
+    }
+
+    if (data.mission_data.choicesProxy?.length) {
+      const proxies = data.mission_data.choicesProxy;
+
+      const answers = proxies.filter((x) => x.isCorrect).map((x) => x.value);
+      const choices = proxies.map((x) => x.value);
+
+      data.mission_data.choices = choices;
+      data.mission_data.answers = answers;
     }
 
     onMissionFormSubmit(data);
@@ -160,6 +171,12 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
 
         {answerType === AnswerTypes.GPS && (
           <MissionFormGpsType {...{ register, watch, setValue, isLoading }} />
+        )}
+
+        {answerType === AnswerTypes.MULTIPLE_CHOICE && (
+          <MissionFormMultipleChoiceType
+            {...{ control, register, watch, setValue, isLoading }}
+          />
         )}
 
         <div className="divider" />

@@ -2,6 +2,7 @@ import { ComponentProps, ComponentType } from "react";
 import { UseFormRegister } from "react-hook-form";
 import { AnswerTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
+import normalizeConstantCase from "../../../libs/utils/normalize-constant-case";
 import { MissionFormValues } from "./mission-form";
 
 interface IMissionFormChooseAnswerType {
@@ -27,7 +28,7 @@ const MissionFormChooseAnswerType: ComponentType<
           .filter(([_, value]) => typeof value === "number")
           .map(([type, value]) => (
             <option key={type} value={value}>
-              {type.toLowerCase()}
+              {normalizeConstantCase(type)}
             </option>
           ))}
       </select>

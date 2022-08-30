@@ -12,4 +12,13 @@ export default interface MissionData {
   // MissionDataMedia
   media_type?: MediaType;
   submission_source?: SubmissionSource;
+
+  // MissionDataMultipleChoice
+  choices?: string[];
+  choicesProxy?: {
+    value: string;
+    isCorrect: boolean;
+  }[];
+  can_choose_multiple?: boolean;
+  answers?: string[];
 }
