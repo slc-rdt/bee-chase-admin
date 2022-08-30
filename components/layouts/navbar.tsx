@@ -37,7 +37,7 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
       <div className="flex-1">
         {sidebarMenus.length > 0 && (
           <div className="flex-none lg:hidden">
-            <label htmlFor="my-drawer-3" className="btn btn-ghost btn-square">
+            <label htmlFor="my-drawer-3" className="btn btn-square btn-ghost">
               <Bars3Icon className="inline-block h-6 w-6 stroke-current" />
             </label>
           </div>
@@ -56,19 +56,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
           </>
         )}
 
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
-            <div className="w-10 rounded-full">
-              <Image
-                src={
-                  user?.picture_url ??
-                  `https://ui-avatars.com/api?name=${user?.name}`
-                }
-                alt="avatar"
-                width={40}
-                height={40}
-              />
-            </div>
+        <div className="dropdown-end dropdown">
+          <label tabIndex={0} className="btn btn-ghost">
+            {user.name}
           </label>
           <ul
             tabIndex={0}
