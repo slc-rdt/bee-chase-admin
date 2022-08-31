@@ -10,7 +10,10 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider session={session} basePath="/beechase-admin/api/auth">
+    <SessionProvider
+      session={session}
+      basePath={`${process.env.NEXT_PUBLIC_BASE_PATH}/api/auth`}
+    >
       <Head>
         <title>BeeChase | Admin</title>
         <meta
