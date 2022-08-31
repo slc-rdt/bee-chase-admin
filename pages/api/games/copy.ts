@@ -32,7 +32,5 @@ export default async function handler(
     )
   );
 
-  console.log(clonedGame);
-
   res.status(200).json(clonedGame);
 }
