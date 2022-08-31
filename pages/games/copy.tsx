@@ -2,8 +2,9 @@ import { DocumentDuplicateIcon } from "@heroicons/react/20/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Pagination from "../../components/common/pagination";
 import MissionCard from "../../components/mission/card/mission-card";
@@ -48,6 +49,7 @@ export const getServerSideProps: GetServerSideProps<{
 const GameCopyPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ page, game, missionsPaginated }) => {
+  const router = useRouter();
   const gameService = useService(GameService);
   const { isLoading, doAction } = useLoading();
 
@@ -57,6 +59,7 @@ const GameCopyPage: NextPage<
       success: "Game copied!",
       error: "Failed to copy game",
     });
+    router.push("/games");
   };
 
   return (
