@@ -1,4 +1,4 @@
-import { Bars3Icon } from "@heroicons/react/20/solid";
+import { Bars3Icon, HomeIcon } from "@heroicons/react/20/solid";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,7 +44,10 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
         )}
 
         <Link href="/games">
-          <a className="btn btn-ghost text-xl normal-case">BeeChase</a>
+          <a className="btn btn-ghost gap-2 text-xl normal-case">
+            <HomeIcon className="h-5 w-5" />
+            BeeChase
+          </a>
         </Link>
       </div>
 
