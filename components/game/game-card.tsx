@@ -1,4 +1,4 @@
-import { TrashIcon } from "@heroicons/react/20/solid";
+import { ShareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,6 +21,17 @@ const GameCard: ComponentType<ComponentProps<"a"> & IGameCard> = ({
   const gameService = useService(GameService);
   const router = useRouter();
   const { isLoading, doAction } = useLoading();
+
+  const onShare = async (game: Game) => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_APP_URL}/games/copy?gameId=${game.id}`;
+      await navigator.clipboard.writeText(url);
+      toast.success("Share game link copied to clipboard!");
+    } catch (error) {
+      toast.success("Failed to share game link to clipboard.");
+      console.error(error);
+    }
+  };
 
   const onDelete = async (game: Game) => {
     await toast.promise(doAction(gameService.delete(game)), {
@@ -68,7 +79,20 @@ const GameCard: ComponentType<ComponentProps<"a"> & IGameCard> = ({
             </section>
           </section>
 
-          <section className="flex flex-grow justify-end">
+          <section className="flex flex-grow justify-end gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onShare(game);
+              }}
+              className="btn btn-primary gap-2"
+            >
+              <ShareIcon className="h-5 w-5" />
+              Share
+            </button>
+
             <button
               type="button"
               disabled={isLoading}

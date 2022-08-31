@@ -68,4 +68,12 @@ export default class GameService extends AbstractService {
     );
     return data;
   }
+
+  public async copy(gameId: string) {
+    const { data } = await this.axios.post<Game>(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/games/copy`,
+      { gameId }
+    );
+    return data;
+  }
 }

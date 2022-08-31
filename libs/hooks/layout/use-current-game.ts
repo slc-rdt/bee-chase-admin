@@ -9,10 +9,13 @@ export default function useCurrentGame() {
   const { status } = useSession();
   const gameService = useService(GameService);
 
+  const isGameDetail = router.pathname.startsWith("/games/[gameId]");
   const gameId = router.query.gameId;
 
   const { data, error, isValidating } = useSWR(
-    status === "authenticated" && gameId ? `/games/${gameId}` : null,
+    status === "authenticated" && isGameDetail && gameId
+      ? `/games/${gameId}`
+      : null,
     async () => await gameService.getOneById(`${router.query.gameId}`)
   );
 
