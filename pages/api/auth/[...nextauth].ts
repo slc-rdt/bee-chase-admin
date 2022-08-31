@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import User from "../../../libs/models/user";
@@ -18,10 +19,21 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, _req) {
-        return await authService.login({
-          username: credentials?.username ?? "",
-          password: credentials?.password ?? "",
-        });
+        try {
+          return await authService.login({
+            username: credentials?.username ?? "",
+            password: credentials?.password ?? "",
+          });
+        } catch (e) {
+          const error = e as AxiosError;
+
+          const message = {
+            401: "Invalid credentials",
+            404: "User has no admin access.",
+          }[error.response?.status ?? 0];
+
+          throw new Error(message ?? "Unknown error.");
+        }
       },
     }),
   ],

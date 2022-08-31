@@ -30,7 +30,7 @@ const LoginPage: NextPage = () => {
       toast.success("Login success.");
       router.push("/games");
     } else {
-      toast.error("Invalid credentials.");
+      toast.error(response?.error ?? "Unknown error.");
     }
   });
 
