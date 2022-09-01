@@ -2,23 +2,19 @@ import {
   CameraIcon as OutlineCameraIcon,
   ChartBarIcon as OutlineChartBarIcon,
   ClipboardIcon as OutlineClipboardIcon,
-  ClockIcon as OutlineClockIcon,
-  FilmIcon as OutlineFilmIcon,
-  FlagIcon as OutlineFlagIcon,
+  ClockIcon as OutlineClockIcon, FlagIcon as OutlineFlagIcon,
   RectangleStackIcon as OutlineRectangleStackIcon,
   UserGroupIcon as OutlineUserGroupIcon,
-  UsersIcon as OutlineUsersIcon,
+  UsersIcon as OutlineUsersIcon
 } from "@heroicons/react/24/outline";
 import {
   CameraIcon as SolidCameraIcon,
   ChartBarIcon as SolidChartBarIcon,
   ClipboardIcon as SolidClipboardIcon,
-  ClockIcon as SolidClockIcon,
-  FilmIcon as SolidFilmIcon,
-  FlagIcon as SolidFlagIcon,
+  ClockIcon as SolidClockIcon, FlagIcon as SolidFlagIcon,
   RectangleStackIcon as SolidRectangleStackIcon,
   UserGroupIcon as SolidUserGroupIcon,
-  UsersIcon as SolidUsersIcon,
+  UsersIcon as SolidUsersIcon
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import Game from "../../models/game";
@@ -55,13 +51,13 @@ export default function useSidebarMenus(game?: Game): MenuItem[] {
       activeIcon: <SolidFlagIcon className="h-6 w-6" />,
       isActive: false,
     },
-    {
-      label: "Automations",
-      path: `/games/${gameId}/automations`,
-      icon: <OutlineFilmIcon className="h-6 w-6" />,
-      activeIcon: <SolidFilmIcon className="h-6 w-6" />,
-      isActive: false,
-    },
+    // {
+    //   label: "Automations",
+    //   path: `/games/${gameId}/automations`,
+    //   icon: <OutlineFilmIcon className="h-6 w-6" />,
+    //   activeIcon: <SolidFilmIcon className="h-6 w-6" />,
+    //   isActive: false,
+    // },
     {
       label: "Participants",
       path: `/games/${gameId}/participants`,

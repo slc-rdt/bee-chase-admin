@@ -1,12 +1,11 @@
 import { ComponentProps, ComponentType } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import CreateMissionDto from "../../../libs/dtos/create-mission-dto";
 import UpdateMissionDto from "../../../libs/dtos/update-mission-dto";
-import { AnswerTypes } from "../../../libs/enums";
+import { AnswerTypes, AvailabilityTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
 import MissionData from "../../../libs/models/mission-data";
 import MissionFormChooseAnswerType from "./mission-form-choose-answer-type";
-import MissionFormChooseAvailability from "./mission-form-choose-availability";
 import MissionFormGpsType from "./mission-form-gps-type";
 import MissionFormImageType from "./mission-form-image-type";
 import MissionFormMultipleChoiceType from "./mission-form-multiple-choice-type";
@@ -47,6 +46,8 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           radius: missionData.radius ?? 100,
         },
 
+        availability: AvailabilityTypes.AVAILABLE,
+
         shown_in_feed:
           typeof mission?.shown_in_feed === "undefined"
             ? true
@@ -55,7 +56,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
     });
 
   const answerType = Number(watch("answer_type"));
-  const isShowInFeed = Boolean(watch("shown_in_feed"));
+  // const isShowInFeed = Boolean(watch("shown_in_feed"));
 
   const onSubmit = handleSubmit((data) => {
     const acceptedAnswers = data.mission_data.accepted_answers;
@@ -135,7 +136,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           ></textarea>
         </section>
 
-        <section className="form-control w-full">
+        {/* <section className="form-control w-full">
           <label className="label">
             <span className="label-text">Attached Photo Link (Optional)</span>
           </label>
@@ -157,7 +158,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
             disabled={isLoading}
             className="input input-bordered w-full"
           />
-        </section>
+        </section> */}
 
         <div className="divider" />
 
@@ -179,15 +180,15 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           />
         )}
 
-        <div className="divider" />
+        {/* <div className="divider" /> */}
 
-        <MissionFormChooseAvailability
+        {/* <MissionFormChooseAvailability
           {...{ register, watch, isLoading, mission }}
-        />
+        /> */}
 
-        <div className="divider" />
+        {/* <div className="divider" /> */}
 
-        <section className="form-control">
+        {/* <section className="form-control">
           <label className="label cursor-pointer justify-start gap-2">
             <input
               {...register("shown_in_feed")}
@@ -204,7 +205,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
               other&apos;s submissions.
             </span>
           </label>
-        </section>
+        </section> */}
 
         <section className="card-actions justify-end">
           <button
