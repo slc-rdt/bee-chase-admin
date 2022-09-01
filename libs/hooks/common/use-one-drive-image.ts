@@ -12,7 +12,9 @@ export default function useOneDriveImage(downloadUrl?: string) {
     downloadUrl ?? null,
     async (url) => {
       const { data } = await axios
-        .get<OneDriveTokenApiDto>(`/beechase-admin/api/one-drive/token`)
+        .get<OneDriveTokenApiDto>(
+          `${process.env.NEXT_PUBLIC_BASE_PATH}/api/one-drive/token`
+        )
         .then((resp) =>
           axios.get(url, {
             headers: {

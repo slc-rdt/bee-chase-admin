@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "/beechase-admin",
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   reactStrictMode: true,
   swcMinify: true,
   images: {
