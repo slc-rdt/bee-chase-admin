@@ -66,18 +66,20 @@ const SubmissionFeedCard: ComponentType<
       </section>
 
       <section className="card-body">
-        <h2 className="card-title">
-          <Link
-            href={`/games/${gameId}/submission/teams/${submission.game_team_id}`}
-          >
-            <a className="link link-primary font-bold">
-              {submission.game_team?.name}
-            </a>
-          </Link>
-          completed{" "}
-          <span className="font-bold">{submission.mission?.name}</span> for{" "}
-          {submission.mission?.point_value} points
-        </h2>
+        <header className="card-title">
+          <h2>
+            <Link
+              href={`/games/${gameId}/submission/teams/${submission.game_team_id}`}
+            >
+              <a className="link link-primary font-bold">
+                {submission.game_team?.name}
+              </a>
+            </Link>{" "}
+            completed{" "}
+            <span className="font-bold">{submission.mission?.name}</span> for{" "}
+            {submission.mission?.point_value} points
+          </h2>
+        </header>
 
         <small>{when}</small>
 
