@@ -1,7 +1,7 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
 import SubmissionsViewByTeam from "../../../../../components/submission/by-team/submissions-view-by-team";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
@@ -12,6 +12,7 @@ import GameService from "../../../../../libs/services/game-service";
 import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../../../libs/utils/handle-server-side-error";
+import normalizeConstantCase from "../../../../../libs/utils/normalize-constant-case";
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -102,7 +103,9 @@ const SubmissionsByGameTeamPage: NextPage<
           return (
             <section key={key} className="my-4">
               <h3 className="mb-4 text-2xl font-bold">
-                <span className="capitalize">{type.toLowerCase()}</span>{" "}
+                <span className="capitalize">
+                  {normalizeConstantCase(type)}
+                </span>{" "}
                 <span>Submissions</span>
               </h3>
 
