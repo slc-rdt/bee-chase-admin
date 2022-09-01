@@ -29,8 +29,6 @@ const MissionFormMultipleChoiceType: ComponentType<
     append({ value: '', isCorrect: false });
   };
 
-  console.log(watch("mission_data.choicesProxy"));
-
   return (
     <section {...rest}>
       <div className="form-control gap-2">
