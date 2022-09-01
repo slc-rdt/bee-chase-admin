@@ -17,6 +17,7 @@ pipeline {
       steps {
         echo 'Building..'
         sh 'node --version'
+        sh 'pnpm i'
         sh 'pnpm build'
       }
     }
