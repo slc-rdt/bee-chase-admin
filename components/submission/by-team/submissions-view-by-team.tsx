@@ -7,6 +7,7 @@ import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
 import SubmissionService from "../../../libs/services/submission-service";
+import SubmissionsViewByMissionMultipleChoiceType from "./submissions-view-by-mission-multiple-choice-type";
 import SubmissionsViewByTeamGpsType from "./submissions-view-by-team-gps-type";
 import SubmissionsViewByTeamImageType from "./submissions-view-by-team-image-type";
 import SubmissionsViewByTeamTextType from "./submissions-view-by-team-text-type";
@@ -51,6 +52,12 @@ const SubmissionsViewByTeam: ComponentType<ISubmissionsViewByTeam> = ({
 
       {answerType === AnswerTypes.GPS && (
         <SubmissionsViewByTeamGpsType
+          {...{ currentPage, submissionsPaginated, onDelete }}
+        />
+      )}
+
+      {answerType === AnswerTypes.MULTIPLE_CHOICE && (
+        <SubmissionsViewByMissionMultipleChoiceType
           {...{ currentPage, submissionsPaginated, onDelete }}
         />
       )}

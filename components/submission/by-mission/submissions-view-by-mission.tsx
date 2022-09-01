@@ -9,6 +9,7 @@ import Submission from "../../../libs/models/submission";
 import SubmissionService from "../../../libs/services/submission-service";
 import SubmissionsViewByMissionGpsType from "./submissions-view-by-mission-gps-type";
 import SubmissionsViewByMissionImageType from "./submissions-view-by-mission-image-type";
+import SubmissionsViewByMissionMultipleChoiceType from "./submissions-view-by-mission-multiple-choice-type";
 import SubmissionsViewByMissionTextType from "./submissions-view-by-mission-text-type";
 
 interface ISubmissionsViewByMission {
@@ -51,6 +52,12 @@ const SubmissionsViewByMission: ComponentType<ISubmissionsViewByMission> = ({
 
       {answerType === AnswerTypes.GPS && (
         <SubmissionsViewByMissionGpsType
+          {...{ currentPage, submissionsPaginated, onDelete }}
+        />
+      )}
+
+      {answerType === AnswerTypes.MULTIPLE_CHOICE && (
+        <SubmissionsViewByMissionMultipleChoiceType
           {...{ currentPage, submissionsPaginated, onDelete }}
         />
       )}
