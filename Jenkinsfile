@@ -16,7 +16,8 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building..'
-        pnpm build
+        sh 'node --version'
+        // pnpm build
       }
     }
     stage('Test') {
