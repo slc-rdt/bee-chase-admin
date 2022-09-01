@@ -97,8 +97,7 @@ const SubmissionsByGameTeamPage: NextPage<
 
           const answerType = Object.entries(AnswerTypes)
             .filter(([k, _]) => k === type)
-            .map(([_, v]) => v)
-            .at(0) as AnswerTypes;
+            .map(([_, v]) => v)[0] as AnswerTypes;
 
           return (
             <section key={key} className="my-4">
