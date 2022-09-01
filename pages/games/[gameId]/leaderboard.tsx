@@ -1,7 +1,7 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
 import Link from "next/link";
 import GameTeam from "../../../libs/models/game-team";
@@ -26,6 +26,12 @@ export const getServerSideProps: GetServerSideProps<
   }
 };
 
+const rankSuffixMapping = new Map([
+  [1, "st"],
+  [2, "nd"],
+  [3, "rd"],
+]);
+
 const Leaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ gameId, leaderboard }) => {
@@ -45,13 +51,6 @@ const Leaderboard: NextPage<
         {leaderboard.map((gameTeam) => {
           const rank = gameTeam.rank ?? 0;
           const lastDigit = rank % 10;
-
-          const rankSuffixMapping = new Map([
-            [1, "st"],
-            [2, "nd"],
-            [3, "rd"],
-          ]);
-
           const rankSuffix = rankSuffixMapping.get(lastDigit) ?? "th";
 
           return (
