@@ -14,4 +14,7 @@ export default interface SubmissionAnswerData {
   // gps
   latitude?: number;
   longitude?: number;
+
+  // multiple choice
+  answers?: string[];
 }

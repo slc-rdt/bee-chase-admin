@@ -19,7 +19,11 @@ const nextConfig = {
     return [
       {
         source: "/backend/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+        destination: `${process.env.BEECHASE_API_URL}/:path*`,
+      },
+      {
+        source: "/bluejack/:path*",
+        destination: `${process.env.BLUEJACK_API_URL}/:path*`,
       },
     ];
   }
