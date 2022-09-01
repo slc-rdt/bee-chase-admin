@@ -12,7 +12,9 @@ export default function useOneDriveImage(downloadUrl?: string) {
     downloadUrl ?? null,
     async (url) => {
       const { data } = await axios
-        .get<OneDriveTokenApiDto>("/bluejack/Account/GetOneDriveToken")
+        .get<OneDriveTokenApiDto>(
+          `${process.env.NEXT_PUBLIC_APP_URL}/bluejack/Account/GetOneDriveToken`
+        )
         .then((resp) =>
           axios.get(url, {
             headers: {
