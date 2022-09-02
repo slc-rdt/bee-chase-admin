@@ -92,7 +92,7 @@ const TextSubmissionItem: ComponentType<
         <Link
           href={`/games/${gameId}/submissions/mission/${submission.mission_id}`}
         >
-          <a>{submission.mission?.name}</a>
+          <a className="whitespace-pre-wrap">{submission.mission?.name}</a>
         </Link>
       </th>
 

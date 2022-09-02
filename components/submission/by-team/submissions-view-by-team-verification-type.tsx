@@ -23,7 +23,7 @@ const SubmissionsViewByTeamVerificationType: ComponentType<
         <table className="table w-full">
           <thead>
             <tr>
-              <th>Team</th>
+              <th>Mission</th>
               <th>Code</th>
               <th>Points</th>
               <th></th>
@@ -88,9 +88,9 @@ const VerificationSubmissionItem: ComponentType<
     >
       <th className="link link-primary cursor-pointer">
         <Link
-          href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
+          href={`/games/${gameId}/submissions/mission/${submission.mission_id}`}
         >
-          <a>{submission.game_team?.name}</a>
+          <a className="whitespace-pre-wrap">{submission.mission?.name}</a>
         </Link>
       </th>
 
