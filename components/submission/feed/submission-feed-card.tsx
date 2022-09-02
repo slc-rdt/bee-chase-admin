@@ -2,20 +2,18 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, {
+import {
   ComponentProps,
   ComponentType,
   useEffect,
-  useState,
+  useState
 } from "react";
 import toast from "react-hot-toast";
 import { AnswerTypes } from "../../../libs/enums";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
-import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
 import SubmissionService from "../../../libs/services/submission-service";
-import convertTimeServerToLocal from "../../../libs/utils/convert-time-server-to-local";
 import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
 import SubmissionFeedCardGpsContent from "./submission-feed-card-gps-content";
 import SubmissionFeedCardImageContent from "./submission-feed-card-image-content";
@@ -69,7 +67,7 @@ const SubmissionFeedCard: ComponentType<
         <header className="card-title">
           <h2>
             <Link
-              href={`/games/${gameId}/submission/teams/${submission.game_team_id}`}
+              href={`/games/${gameId}/submissions/team/${submission.game_team_id}`}
             >
               <a className="link link-primary font-bold">
                 {submission.game_team?.name}
