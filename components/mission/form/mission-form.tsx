@@ -32,9 +32,10 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const { control, register, handleSubmit, watch, setValue } =
     useForm<MissionFormValues>({
       defaultValues: {
-        ...(mission ?? {}),
+        answer_type: AnswerTypes.IMAGE,
+        point_value: 100,
 
-        answer_type: mission?.answer_type ?? AnswerTypes.IMAGE,
+        ...(mission ?? {}),
 
         mission_data: {
           ...missionData,
@@ -46,7 +47,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
           radius: missionData.radius ?? 100,
         },
 
-        availability: AvailabilityTypes.AVAILABLE,
+        availability: AvailabilityTypes.AVAILABLE,  
 
         shown_in_feed:
           typeof mission?.shown_in_feed === "undefined"
