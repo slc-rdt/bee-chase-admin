@@ -5,11 +5,11 @@ export enum AvailabilityTypes {
 }
 
 export enum AnswerTypes {
-  IMAGE,
-  TEXT,
-  GPS,
-  MULTIPLE_CHOICE,
-  VERIFICATION,
+  MULTIPLE_CHOICE = 3,
+  TEXT = 1,
+  VERIFICATION = 4,
+  IMAGE = 0,
+  GPS = 2,
 }
 
 export enum AutomationType {
@@ -26,14 +26,14 @@ export enum AutomationTimeType {
 }
 
 export enum MediaType {
-  PHOTO_AND_VIDEO,
-  PHOTO_ONLY,
-  VIDEO_ONLY,
+  PHOTO_ONLY = 1,
+  VIDEO_ONLY = 2,
+  PHOTO_AND_VIDEO = 0,
 }
 
 export enum SubmissionSource {
-  LIVE_CAPTURE_AND_LIBRARY,
-  LIVE_CAPTURE_ONLY,
+  LIVE_CAPTURE_ONLY = 1,
+  LIVE_CAPTURE_AND_LIBRARY = 0,
 }
 
 export enum GameStatus {
