@@ -52,9 +52,12 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
       </div>
 
       <div className="flex-none gap-2">
-        {game && <GameStatusBadge game={game} />}
-
-        <div className="divider divider-horizontal" />
+        {game && (
+          <>
+            <GameStatusBadge game={game} />
+            <div className="divider divider-horizontal" />
+          </>
+        )}
 
         <div className="dropdown-end dropdown">
           <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
