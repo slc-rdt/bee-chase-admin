@@ -91,6 +91,7 @@ const SubmissionFeedCard: ComponentType<
 
         <section className="card-actions justify-end">
           <ConfirmationModal
+            className="btn btn-error gap-2"
             modalKey={submission.id}
             isLoading={isLoading}
             onConfirm={onDelete}

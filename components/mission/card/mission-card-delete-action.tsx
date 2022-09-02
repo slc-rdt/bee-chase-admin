@@ -33,6 +33,7 @@ const MissionCardDeleteAction: ComponentType<
 
   return (
     <ConfirmationModal
+      className="btn btn-error gap-2"
       modalKey={mission.id}
       isLoading={isLoading}
       onConfirm={() => onDelete(mission)}

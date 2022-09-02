@@ -1,9 +1,4 @@
-import {
-  CheckBadgeIcon,
-  CheckCircleIcon,
-  NoSymbolIcon,
-  XCircleIcon,
-} from "@heroicons/react/20/solid";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
 import { ComponentProps, ComponentType } from "react";
 import Modal from "./modal";
 
@@ -15,12 +10,12 @@ interface IConfirmationModal {
 
 const ConfirmationModal: ComponentType<
   ComponentProps<"label"> & IConfirmationModal
-> = ({ modalKey, onConfirm, isLoading, children, ...rest }) => {
+> = ({ modalKey, onConfirm, isLoading, children, className, ...rest }) => {
   return (
     <>
       <label
         htmlFor={modalKey}
-        className="modal-button btn btn-error gap-2"
+        className={`modal-button ${className}`}
         {...rest}
       >
         {children}

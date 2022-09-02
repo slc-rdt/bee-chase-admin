@@ -109,6 +109,7 @@ const MultipleChoiceSubmissionItem: ComponentType<
       <td>{submission.mission?.point_value}</td>
       <td>
         <ConfirmationModal
+          className="btn btn-error gap-2"
           modalKey={submission.id}
           isLoading={isLoading}
           onConfirm={() => onDeleteClicked(submission)}
