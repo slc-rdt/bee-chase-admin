@@ -1,9 +1,9 @@
 import {
   CameraIcon,
-  CheckBadgeIcon,
   DocumentTextIcon,
   ListBulletIcon,
   MapPinIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import { ComponentProps, ComponentType } from "react";
 import { AnswerTypes, AvailabilityTypes } from "../../../libs/enums";
@@ -61,7 +61,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
                     <ListBulletIcon className="h-6 w-6" />
                   ),
                   [AnswerTypes.VERIFICATION]: (
-                    <CheckBadgeIcon className="h-6 w-6" />
+                    <ShieldCheckIcon className="h-6 w-6" />
                   ),
                 }[mission.answer_type]
               }
