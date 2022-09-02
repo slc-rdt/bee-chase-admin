@@ -1,5 +1,6 @@
 import {
   CameraIcon,
+  CheckBadgeIcon,
   DocumentTextIcon,
   ListBulletIcon,
   MapPinIcon,
@@ -58,6 +59,9 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
                   [AnswerTypes.GPS]: <MapPinIcon className="h-6 w-6" />,
                   [AnswerTypes.MULTIPLE_CHOICE]: (
                     <ListBulletIcon className="h-6 w-6" />
+                  ),
+                  [AnswerTypes.VERIFICATION]: (
+                    <CheckBadgeIcon className="h-6 w-6" />
                   ),
                 }[mission.answer_type]
               }

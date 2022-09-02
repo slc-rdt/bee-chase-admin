@@ -9,6 +9,7 @@ export enum AnswerTypes {
   TEXT,
   GPS,
   MULTIPLE_CHOICE,
+  VERIFICATION,
 }
 
 export enum AutomationType {
