@@ -1,20 +1,15 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
-import { useState } from "react";
-import useSWRInfinite from "swr/infinite";
-import useService from "../../../libs/hooks/common/use-service";
-import SubmissionService from "../../../libs/services/submission-service";
-import { useRouter } from "next/router";
-import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
-import Submission from "../../../libs/models/submission";
-import { useSession } from "next-auth/react";
-import handleServerSideError from "../../../libs/utils/handle-server-side-error";
-import createServerSideService from "../../../libs/utils/create-server-side-service";
 import Pagination from "../../../components/common/pagination";
 import SubmissionFeedCard from "../../../components/submission/feed/submission-feed-card";
+import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import Submission from "../../../libs/models/submission";
+import SubmissionService from "../../../libs/services/submission-service";
+import createServerSideService from "../../../libs/utils/create-server-side-service";
+import handleServerSideError from "../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
   {

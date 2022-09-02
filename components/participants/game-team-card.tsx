@@ -1,7 +1,7 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
@@ -34,15 +34,20 @@ const GameTeamCard: ComponentType<ComponentProps<"div"> & ITeamCard> = ({
       key={gameTeam.id}
       className={`card card-side shadow-xl ${isLoading && "animate-pulse"}`}
     >
-      {gameTeam.color && (
+      <section className="ml-6 mt-10">
         <div
-          className="w-4 sm:w-6"
+          className="h-10 w-10 rounded-full border"
           style={{ backgroundColor: gameTeam.color }}
         />
-      )}
+      </section>
 
       <div className="card-body">
-        <h3 className="card-title">{gameTeam.name}</h3>
+        <Link
+          href={`/games/${gameTeam.game_id}/submissions/team/${gameTeam.id}`}
+        >
+          <a className="link card-title link-primary">{gameTeam.name}</a>
+        </Link>
+
         <p>
           {gameTeam.access_code
             ? `Passcode: ${gameTeam.access_code}`
