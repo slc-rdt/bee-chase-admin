@@ -2,19 +2,23 @@ import {
   CameraIcon as OutlineCameraIcon,
   ChartBarIcon as OutlineChartBarIcon,
   ClipboardIcon as OutlineClipboardIcon,
-  ClockIcon as OutlineClockIcon, FlagIcon as OutlineFlagIcon,
+  ClockIcon as OutlineClockIcon,
+  FlagIcon as OutlineFlagIcon,
   RectangleStackIcon as OutlineRectangleStackIcon,
   UserGroupIcon as OutlineUserGroupIcon,
-  UsersIcon as OutlineUsersIcon
+  UsersIcon as OutlineUsersIcon,
+  ShieldCheckIcon as OutlineShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import {
   CameraIcon as SolidCameraIcon,
   ChartBarIcon as SolidChartBarIcon,
   ClipboardIcon as SolidClipboardIcon,
-  ClockIcon as SolidClockIcon, FlagIcon as SolidFlagIcon,
+  ClockIcon as SolidClockIcon,
+  FlagIcon as SolidFlagIcon,
   RectangleStackIcon as SolidRectangleStackIcon,
   UserGroupIcon as SolidUserGroupIcon,
-  UsersIcon as SolidUsersIcon
+  UsersIcon as SolidUsersIcon,
+  ShieldCheckIcon as SolidShieldCheckIcon,
 } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import Game from "../../models/game";
@@ -77,6 +81,13 @@ export default function useSidebarMenus(game?: Game): MenuItem[] {
       path: `/games/${gameId}/admins`,
       icon: <OutlineUsersIcon className="h-6 w-6" />,
       activeIcon: <SolidUsersIcon className="h-6 w-6" />,
+      isActive: false,
+    },
+    {
+      label: "Verifications",
+      path: `/games/${gameId}/verifications`,
+      icon: <OutlineShieldCheckIcon className="h-6 w-6" />,
+      activeIcon: <SolidShieldCheckIcon className="h-6 w-6" />,
       isActive: false,
     },
 

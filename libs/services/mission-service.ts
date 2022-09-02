@@ -1,8 +1,10 @@
+import { ParsedUrlQuery } from "querystring";
 import CreateMissionDto from "../dtos/create-mission-dto";
 import PaginateRequestDto from "../dtos/paginate-request-dto";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import UpdateMissionDto from "../dtos/update-mission-dto";
 import Mission from "../models/mission";
+import MissionCode from "../models/mission-code";
 import AbstractService from "./abstract-service";
 
 export default class MissionService extends AbstractService {
@@ -13,7 +15,10 @@ export default class MissionService extends AbstractService {
     return data;
   }
 
-  public async getAllPaginated(gameId: string, payload: PaginateRequestDto) {
+  public async getAllPaginated(
+    gameId: string,
+    payload: PaginateRequestDto | ParsedUrlQuery
+  ) {
     const { data } = await this.axios.get<PaginateResponseDto<Mission>>(
       `${this.apiUrl}/games/${gameId}/missions`,
       {
@@ -59,6 +64,13 @@ export default class MissionService extends AbstractService {
   public async delete(gameId: string, mission: Mission) {
     const { data } = await this.axios.delete<Mission>(
       `${this.apiUrl}/games/${gameId}/missions/${mission.id}`
+    );
+    return data;
+  }
+
+  public async getVerificationCode(gameId: string, missionId: string) {
+    const { data } = await this.axios.get<MissionCode>(
+      `${this.apiUrl}/games/${gameId}/missions/${missionId}`
     );
     return data;
   }
