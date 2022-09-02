@@ -1,9 +1,5 @@
 import { ComponentProps, ComponentType } from "react";
-import {
-  UseFormRegister,
-  UseFormRegisterReturn,
-  UseFormWatch,
-} from "react-hook-form";
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { MissionFormValues } from "./mission-form";
 
 interface IMissionFormTextType {
@@ -46,6 +42,9 @@ const MissionFormTextType: ComponentType<
             </div>
           ))}
         </div>
+        <span className="label-text-alt">
+          Press <span className="kbd">Enter</span> to add an answer
+        </span>
       </label>
     </section>
   );
