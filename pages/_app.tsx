@@ -34,6 +34,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
+
+      <div id="modal-container"></div>
     </SessionProvider>
   );
 }

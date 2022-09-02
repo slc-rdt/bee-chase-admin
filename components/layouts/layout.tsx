@@ -9,7 +9,7 @@ const Layout: ComponentType<ComponentProps<"div">> = ({
   return (
     <div className="drawer-mobile drawer" {...rest}>
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
+      <div className="drawer-content flex flex-col" style={{ zIndex: undefined }}>
         <Navbar />
         <main className="w-full p-8">{children}</main>
       </div>
