@@ -1,4 +1,5 @@
-import React, { ComponentProps, ComponentType } from "react";
+import { ClipboardIcon } from "@heroicons/react/20/solid";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
 import Game from "../../libs/models/game";
 
@@ -30,9 +31,10 @@ const GameAccessCodeButton: ComponentType<
           e.stopPropagation();
           onGameCodeClick();
         }}
-        className={`btn btn-secondary ${className}`}
+        className={`btn btn-secondary gap-2 ${className}`}
         {...rest}
       >
+        <ClipboardIcon className="h-5 w-5" />
         {game.access_code}
       </button>
     </div>
