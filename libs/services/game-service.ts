@@ -12,10 +12,10 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async getAllPaginated({ page }: PaginateRequestDto) {
+  public async getAllPaginated(payload: PaginateRequestDto) {
     const { data } = await this.axios.get<PaginateResponseDto<Game>>(
       `${this.apiUrl}/games`,
-      { params: { page } }
+      { params: payload }
     );
     return data;
   }

@@ -1,15 +1,12 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
 import AddAdminUserCard from "../../../components/add-admin/add-admin-user-card";
 import Pagination from "../../../components/common/pagination";
+import SearchBar from "../../../components/common/search-bar";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
-import useLoading from "../../../libs/hooks/common/use-loading";
 import Game from "../../../libs/models/game";
 import User from "../../../libs/models/user";
 import GameService from "../../../libs/services/game-service";
@@ -19,6 +16,7 @@ import handleServerSideError from "../../../libs/utils/handle-server-side-error"
 
 export const getServerSideProps: GetServerSideProps<
   {
+    gameId: string;
     game: Game;
     pagintedUsers: PaginateResponseDto<User>;
     page: number;
@@ -27,8 +25,8 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
   try {
     const gameId = context.params?.gameId ?? "";
-    const keyword = context.query.search ?? "";
     const page = Number(context.query.page ?? 1);
+    const q = context.query.q?.toString() ?? "";
 
     const [userService, gameService] = await Promise.all([
       createServerSideService(context.req, UserService),
@@ -36,12 +34,13 @@ export const getServerSideProps: GetServerSideProps<
     ]);
 
     const [users, game] = await Promise.all([
-      userService.search({ search: `${keyword}`, page }),
+      userService.search({ page, q }),
       gameService.getOneById(gameId),
     ]);
 
     return {
       props: {
+        gameId,
         game,
         pagintedUsers: users,
         page,
@@ -57,40 +56,12 @@ export const getServerSideProps: GetServerSideProps<
 
 const AdminsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ game, pagintedUsers, page }) => {
-  const router = useRouter();
-  const { register, handleSubmit } = useForm<{ keyword: string }>();
-  const { isLoading, doAction } = useLoading();
-
-  const onSubmit = handleSubmit((data) => {
-    doAction(
-      router.push(`/games/${router.query.gameId}/admins?search=${data.keyword}`)
-    );
-  });
-
+> = ({ gameId, game, pagintedUsers, page }) => {
   return (
     <div className="mx-auto max-w-screen-lg">
       <h2 className="mb-2 text-3xl font-bold">Manage Admins</h2>
 
-      <section className="form-control">
-        <form onSubmit={onSubmit} className="input-group">
-          <input
-            {...register("keyword")}
-            type="text"
-            placeholder="Search..."
-            className="input input-bordered w-full"
-          />
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`btn btn-square btn-primary ${
-              isLoading && "btn-square loading"
-            }`}
-          >
-            {!isLoading && <MagnifyingGlassIcon className="h-6 w-6" />}
-          </button>
-        </form>
-      </section>
+      <SearchBar pathname={`/games/${gameId}/admins`} />
 
       <section className="grid grid-cols-1 gap-4">
         <Pagination

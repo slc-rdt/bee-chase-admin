@@ -2,6 +2,7 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import Pagination from "../../components/common/pagination";
+import SearchBar from "../../components/common/search-bar";
 import GameCard from "../../components/game/game-card";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Game from "../../libs/models/game";
@@ -16,7 +17,8 @@ export const getServerSideProps: GetServerSideProps<{
   try {
     const gameService = await createServerSideService(context.req, GameService);
     const page = Number(context.query.page ?? 1);
-    const paginatedGames = await gameService.getAllPaginated({ page });
+    const q = context.query.q?.toString() ?? "";
+    const paginatedGames = await gameService.getAllPaginated({ page, q });
 
     return {
       props: {
@@ -44,6 +46,8 @@ const GamesPage = ({
           </a>
         </Link>
       </section>
+
+      <SearchBar pathname="/games" className="my-4" />
 
       <Pagination
         pagination={paginatedGames}
