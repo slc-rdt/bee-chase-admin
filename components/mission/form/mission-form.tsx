@@ -32,6 +32,7 @@ const MissionForm: ComponentType<ComponentProps<"div"> & IMissionForm> = ({
   const { control, register, handleSubmit, watch, setValue } =
     useForm<MissionFormValues>({
       defaultValues: {
+        answer_type: AnswerTypes.MULTIPLE_CHOICE,
         point_value: 100,
 
         ...(mission ?? {}),

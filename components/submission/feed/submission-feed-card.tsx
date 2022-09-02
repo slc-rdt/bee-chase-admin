@@ -2,12 +2,7 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  ComponentProps,
-  ComponentType,
-  useEffect,
-  useState
-} from "react";
+import { ComponentProps, ComponentType, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AnswerTypes } from "../../../libs/enums";
 import useLoading from "../../../libs/hooks/common/use-loading";
@@ -15,6 +10,7 @@ import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
 import SubmissionService from "../../../libs/services/submission-service";
 import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
+import ConfirmationModal from "../../common/confirmation-modal";
 import SubmissionFeedCardGpsContent from "./submission-feed-card-gps-content";
 import SubmissionFeedCardImageContent from "./submission-feed-card-image-content";
 import SubmissionFeedCardTextContent from "./submission-feed-card-text-content";
@@ -94,14 +90,14 @@ const SubmissionFeedCard: ComponentType<
         )}
 
         <section className="card-actions justify-end">
-          <button
-            onClick={onDelete}
-            className={`btn btn-error gap-2 ${isLoading && "loading"}`}
-            disabled={isLoading}
+          <ConfirmationModal
+            modalKey={submission.id}
+            isLoading={isLoading}
+            onConfirm={onDelete}
           >
-            {!isLoading && <TrashIcon className="h-5 w-5" />}
+            <TrashIcon className="h-5 w-5" />
             Delete
-          </button>
+          </ConfirmationModal>
         </section>
       </section>
     </div>

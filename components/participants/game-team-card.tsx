@@ -7,6 +7,7 @@ import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import GameTeam from "../../libs/models/game-team";
 import GameTeamService from "../../libs/services/game-team-service";
+import ConfirmationModal from "../common/confirmation-modal";
 
 interface ITeamCard {
   gameTeam: GameTeam;
@@ -64,14 +65,14 @@ const GameTeamCard: ComponentType<ComponentProps<"div"> & ITeamCard> = ({
             </a>
           </Link>
 
-          <button
-            onClick={() => onDelete(gameTeam)}
-            className="btn btn-error gap-2"
-            disabled={isLoading}
+          <ConfirmationModal
+            modalKey={gameTeam.id}
+            isLoading={isLoading}
+            onConfirm={() => onDelete(gameTeam)}
           >
             <TrashIcon className="h-5 w-5" />
             Delete
-          </button>
+          </ConfirmationModal>
         </div>
       </div>
     </div>

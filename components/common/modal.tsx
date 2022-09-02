@@ -17,7 +17,7 @@ const Modal: ComponentType<ComponentProps<"div"> & IModal> = ({
       <input type="checkbox" id={modalKey} className="modal-toggle" />
 
       <div className={`modal ${className}`} {...rest}>
-        <div className="modal-box">
+        <div className="modal-box relative">
           {title && <h3 className="text-lg font-bold">{title}</h3>}
           {children}
         </div>

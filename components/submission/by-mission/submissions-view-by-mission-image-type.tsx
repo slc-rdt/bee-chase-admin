@@ -8,6 +8,7 @@ import useOneDriveImage from "../../../libs/hooks/common/use-one-drive-image";
 import Submission from "../../../libs/models/submission";
 import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
 import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
+import ConfirmationModal from "../../common/confirmation-modal";
 import Pagination from "../../common/pagination";
 
 interface ISubmissionsViewByMissionTextType {
@@ -85,14 +86,14 @@ const ImageSubmissionItem: ComponentType<
         </p>
 
         <div className="card-actions justify-end">
-          <button
-            onClick={() => onDeleteClicked(submission)}
-            disabled={isLoading}
-            className={`btn btn-error gap-2 ${isLoading && "loading"}`}
+          <ConfirmationModal
+            modalKey={submission.id}
+            isLoading={isLoading}
+            onConfirm={() => onDeleteClicked(submission)}
           >
-            {!isLoading && <TrashIcon className="h-5 w-5" />}
+            <TrashIcon className="h-5 w-5" />
             Delete
-          </button>
+          </ConfirmationModal>
         </div>
       </div>
     </div>

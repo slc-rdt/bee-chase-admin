@@ -8,6 +8,7 @@ import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
+import ConfirmationModal from "../common/confirmation-modal";
 import GameAccessCodeButton from "./game-access-code-button";
 import GameStatusBadge from "./game-status-badge";
 
@@ -15,7 +16,7 @@ interface IGameCard {
   game: Game;
 }
 
-const GameCard: ComponentType<ComponentProps<"a"> & IGameCard> = ({
+const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
   game,
   ...rest
 }) => {
@@ -44,75 +45,68 @@ const GameCard: ComponentType<ComponentProps<"a"> & IGameCard> = ({
   };
 
   return (
-    <Link href={`/games/${game.id}/missions`}>
-      <a className="card w-full cursor-pointer bg-base-100 shadow-xl" {...rest}>
-        <div className="card-body">
-          <section>
-            <header className="flex flex-wrap items-center gap-4">
-              <h2 className="card-title">{game.name}</h2>
-              <div>
-                <GameStatusBadge game={game} />
-              </div>
-            </header>
+    <div className="card w-full bg-base-100 shadow-xl" {...rest}>
+      <div className="card-body">
+        <Link href={`/games/${game.id}/missions`}>
+          <a>
+            <section>
+              <header className="flex flex-wrap items-center gap-4">
+                <h2 className="card-title">{game.name}</h2>
+                <div>
+                  <GameStatusBadge game={game} />
+                </div>
+              </header>
 
-            <p className="my-4 truncate">{game.description}</p>
+              <p className="my-4 truncate">{game.description}</p>
 
-            <section className="font-medium">
-              {game.start_time && (
-                <p>
-                  Start:{" "}
-                  {DateTime.fromISO(game.start_time.toString())
-                    .toUTC()
-                    .toLocal()
-                    .toFormat("yyyy LLL dd 'at' HH:mm")}
-                </p>
-              )}
+              <section className="font-medium">
+                {game.start_time && (
+                  <p>
+                    Start:{" "}
+                    {DateTime.fromISO(game.start_time.toString())
+                      .toUTC()
+                      .toLocal()
+                      .toFormat("yyyy LLL dd 'at' HH:mm")}
+                  </p>
+                )}
 
-              {game.end_time && (
-                <p>
-                  End:{" "}
-                  {DateTime.fromISO(game.end_time.toString())
-                    .toUTC()
-                    .toLocal()
-                    .toFormat("yyyy LLL dd 'at' HH:mm")}
-                </p>
-              )}
+                {game.end_time && (
+                  <p>
+                    End:{" "}
+                    {DateTime.fromISO(game.end_time.toString())
+                      .toUTC()
+                      .toLocal()
+                      .toFormat("yyyy LLL dd 'at' HH:mm")}
+                  </p>
+                )}
+              </section>
             </section>
-          </section>
+          </a>
+        </Link>
 
-          <section className="flex flex-grow justify-end gap-2">
-            <GameAccessCodeButton game={game} />
+        <section className="card-actions justify-end gap-2">
+          <GameAccessCodeButton game={game} />
 
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onShare(game);
-              }}
-              className="btn btn-primary gap-2"
-            >
-              <ShareIcon className="h-5 w-5" />
-              Share
-            </button>
+          <button
+            type="button"
+            onClick={() => onShare(game)}
+            className="btn btn-primary gap-2"
+          >
+            <ShareIcon className="h-5 w-5" />
+            Share
+          </button>
 
-            <button
-              type="button"
-              disabled={isLoading}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onDelete(game);
-              }}
-              className={`btn btn-error gap-2 ${isLoading && "loading"}`}
-            >
-              <TrashIcon className="h-5 w-5" />
-              Delete
-            </button>
-          </section>
-        </div>
-      </a>
-    </Link>
+          <ConfirmationModal
+            modalKey={game.id}
+            isLoading={isLoading}
+            onConfirm={() => onDelete(game)}
+          >
+            <TrashIcon className="h-5 w-5" />
+            Delete
+          </ConfirmationModal>
+        </section>
+      </div>
+    </div>
   );
 };
 

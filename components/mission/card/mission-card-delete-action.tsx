@@ -6,6 +6,7 @@ import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Mission from "../../../libs/models/mission";
 import MissionService from "../../../libs/services/mission-service";
+import ConfirmationModal from "../../common/confirmation-modal";
 
 interface IMissionCardDeleteAction {
   mission: Mission;
@@ -31,14 +32,14 @@ const MissionCardDeleteAction: ComponentType<
   };
 
   return (
-    <button
-      disabled={isLoading}
-      onClick={() => onDelete(mission)}
-      className={`btn btn-error gap-2 ${isLoading && "loading"}`}
-      {...rest}
+    <ConfirmationModal
+      modalKey={mission.id}
+      isLoading={isLoading}
+      onConfirm={() => onDelete(mission)}
     >
-      {!isLoading && <TrashIcon className="h-5 w-5" />} Delete
-    </button>
+      <TrashIcon className="h-5 w-5" />
+      Delete
+    </ConfirmationModal>
   );
 };
 
