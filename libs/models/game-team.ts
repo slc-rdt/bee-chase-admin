@@ -1,4 +1,5 @@
 import BaseModel from "./base-model";
+import GameTeamUser from "./game-team-user";
 import Submission from "./submission";
 
 export default interface GameTeam extends BaseModel {
@@ -10,4 +11,5 @@ export default interface GameTeam extends BaseModel {
   submissions_count?: number;
   missions_sum_point_value?: number;
   rank?: number;
+  members?: GameTeamUser[];
 }

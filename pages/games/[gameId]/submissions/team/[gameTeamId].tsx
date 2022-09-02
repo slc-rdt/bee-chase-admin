@@ -8,6 +8,7 @@ import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto"
 import { AnswerTypes } from "../../../../../libs/enums";
 import GameTeam from "../../../../../libs/models/game-team";
 import Submission from "../../../../../libs/models/submission";
+import User from "../../../../../libs/models/user";
 import GameService from "../../../../../libs/services/game-service";
 import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
@@ -17,6 +18,7 @@ import normalizeConstantCase from "../../../../../libs/utils/normalize-constant-
 export const getServerSideProps: GetServerSideProps<
   {
     gameTeam?: GameTeam;
+    members: User[];
     submissionsPaginationsGroupedByAnswerTypes: {
       [key: string]: PaginateResponseDto<Submission>;
     };
@@ -48,12 +50,19 @@ export const getServerSideProps: GetServerSideProps<
       );
     });
 
-    const [leaderboard, ...submissionsPaginations] = await Promise.all([
-      gameService.getLeaderboard(gameId),
+    const [gameTeam, members, ...submissionsPaginations] = await Promise.all([
+      gameService
+        .getLeaderboard(gameId)
+        .then((leaderboard) =>
+          leaderboard.find((gameTeam) => gameTeam.id === gameTeamId)
+        ),
+
+      gameTeamService
+        .getOneById(gameId, gameTeamId)
+        .then((team) => team.members?.map((member) => member.user)),
+
       ...submissionsPaginatedPromises,
     ]);
-
-    const gameTeam = leaderboard.find((gameTeam) => gameTeam.id === gameTeamId);
 
     const submissionsPaginationsGroupedByAnswerTypes = Object.fromEntries(
       missionTypeValues.map((typeValue, idx) => [
@@ -65,6 +74,7 @@ export const getServerSideProps: GetServerSideProps<
     return {
       props: {
         gameTeam,
+        members,
         submissionsPaginationsGroupedByAnswerTypes,
       },
     };
@@ -78,7 +88,7 @@ export const getServerSideProps: GetServerSideProps<
 
 const SubmissionsByGameTeamPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ gameTeam, submissionsPaginationsGroupedByAnswerTypes }) => {
+> = ({ gameTeam, members, submissionsPaginationsGroupedByAnswerTypes }) => {
   return (
     <>
       <header className="text-center">
@@ -88,6 +98,19 @@ const SubmissionsByGameTeamPage: NextPage<
           {gameTeam?.missions_sum_point_value} points
         </p>
       </header>
+
+      <section className="my-4">
+        <h3 className="mb-4 text-2xl font-bold">Members</h3>
+        <ol className="list-inside list-decimal">
+          {members.map((member) => (
+            <li key={member.id}>
+              {member.username} - {member.name}
+            </li>
+          ))}
+        </ol>
+
+        <div className="divider" />
+      </section>
 
       {Object.entries(submissionsPaginationsGroupedByAnswerTypes).map(
         ([type, pagination]) => {
