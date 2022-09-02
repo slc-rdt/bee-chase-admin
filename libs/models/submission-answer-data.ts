@@ -1,6 +1,5 @@
 export default interface SubmissionAnswerData {
   // image
-  // urls?: string[];
   download_url?: string;
   last_modified_date_time?: string;
   hash?: string;
@@ -17,4 +16,7 @@ export default interface SubmissionAnswerData {
 
   // multiple choice
   answers?: string[];
+
+  // verification
+  code?: string;
 }

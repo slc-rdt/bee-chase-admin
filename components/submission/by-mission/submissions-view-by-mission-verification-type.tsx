@@ -8,14 +8,14 @@ import Submission from "../../../libs/models/submission";
 import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
 import PaginationButtons from "../../common/pagination-buttons";
 
-interface ISubmissionsViewByMissionMultipleChoiceType {
+interface ISubmissionsViewByMissionVerificationType {
   currentPage: number;
   submissionsPaginated: PaginateResponseDto<Submission>;
   onDelete: (submission: Submission) => Promise<void>;
 }
 
-const SubmissionsViewByMissionMultipleChoiceType: ComponentType<
-  ComponentProps<"div"> & ISubmissionsViewByMissionMultipleChoiceType
+const SubmissionsViewByMissionVerificationType: ComponentType<
+  ComponentProps<"div"> & ISubmissionsViewByMissionVerificationType
 > = ({ currentPage, submissionsPaginated, onDelete }) => {
   return (
     <>
@@ -24,7 +24,7 @@ const SubmissionsViewByMissionMultipleChoiceType: ComponentType<
           <thead>
             <tr>
               <th>Team</th>
-              <th>Answers</th>
+              <th>Code</th>
               <th>Points</th>
               <th></th>
             </tr>
@@ -39,7 +39,7 @@ const SubmissionsViewByMissionMultipleChoiceType: ComponentType<
             )}
 
             {submissionsPaginated.data.map((submission) => (
-              <MultipleChoiceSubmissionItem
+              <VerificationSubmissionItem
                 key={submission.id}
                 submission={submission}
                 onDelete={onDelete}
@@ -63,13 +63,13 @@ const SubmissionsViewByMissionMultipleChoiceType: ComponentType<
   );
 };
 
-interface IMultipleChoiceSubmissionItem {
+interface IVerificationSubmissionItem {
   submission: Submission;
   onDelete: (submission: Submission) => Promise<void>;
 }
 
-const MultipleChoiceSubmissionItem: ComponentType<
-  ComponentProps<"tr"> & IMultipleChoiceSubmissionItem
+const VerificationSubmissionItem: ComponentType<
+  ComponentProps<"tr"> & IVerificationSubmissionItem
 > = ({ submission, onDelete, ...rest }) => {
   const router = useRouter();
   const { isLoading, doAction } = useLoading();
@@ -94,17 +94,8 @@ const MultipleChoiceSubmissionItem: ComponentType<
         </Link>
       </th>
 
-      <td>
-        <div className="flex flex-wrap gap-2">
-          {parseJsonIfString(submission.answer_data).answers?.map(
-            (answer, idx) => (
-              <span key={idx} className="badge badge-primary">
-                {answer}
-              </span>
-            )
-          )}
-        </div>
-      </td>
+      <td>{parseJsonIfString(submission.answer_data).code}</td>
+
       <td>{submission.mission?.point_value}</td>
       <td>
         <button
@@ -120,4 +111,4 @@ const MultipleChoiceSubmissionItem: ComponentType<
   );
 };
 
-export default SubmissionsViewByMissionMultipleChoiceType;
+export default SubmissionsViewByMissionVerificationType;
