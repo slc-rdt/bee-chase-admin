@@ -1,24 +1,12 @@
 import Link from "next/link";
 import { ComponentProps, ComponentType } from "react";
-import toast from "react-hot-toast";
 import useCurrentGame from "../../libs/hooks/layout/use-current-game";
 import useSidebarMenus from "../../libs/hooks/layout/use-sidebar-menus";
+import GameAccessCodeButton from "../game/game-access-code-button";
 
 const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
   const { game } = useCurrentGame();
   const sidebarMenus = useSidebarMenus(game);
-
-  const onGameCodeClick = async () => {
-    try {
-      if (game?.access_code) {
-        await navigator.clipboard.writeText(game.access_code);
-        toast.success("Code copied to clipboard!");
-      }
-    } catch (error) {
-      toast.success("Failed to copy code to clipboard.");
-      console.error(error);
-    }
-  };
 
   const hasNoSidebarMenus = sidebarMenus.length === 0;
 
@@ -59,12 +47,7 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
         <div className="flex h-full flex-col justify-end">
           <h2 className="mb-4">Join Code</h2>
 
-          <button
-            onClick={onGameCodeClick}
-            className="btn btn-secondary btn-block"
-          >
-            {game?.access_code}
-          </button>
+          {game && <GameAccessCodeButton game={game} className="btn-block" />}
         </div>
       </div>
     </nav>

@@ -8,6 +8,7 @@ import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
+import GameAccessCodeButton from "./game-access-code-button";
 import GameStatusBadge from "./game-status-badge";
 
 interface IGameCard {
@@ -80,6 +81,8 @@ const GameCard: ComponentType<ComponentProps<"a"> & IGameCard> = ({
           </section>
 
           <section className="flex flex-grow justify-end gap-2">
+            <GameAccessCodeButton game={game} />
+
             <button
               type="button"
               onClick={(e) => {
