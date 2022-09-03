@@ -36,7 +36,14 @@ type MenuItem = IMenu | null;
 export default function useSidebarMenus(game?: Game): MenuItem[] {
   const router = useRouter();
 
-  if (!game) return [];
+  const fullscreenRoutes = ["/verifications/[missionId]"];
+  const currentRouteMustBeFullscreen = fullscreenRoutes.some((route) =>
+    router.pathname.includes(route)
+  );
+
+  if (!game || currentRouteMustBeFullscreen) {
+    return [];
+  }
 
   const gameId = game?.id;
 

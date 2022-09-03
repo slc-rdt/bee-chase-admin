@@ -57,9 +57,12 @@ const VerificationsPage: NextPage<
         currentPage={page}
         pagination={missionsPaginated}
         render={(mission) => (
-          <Link href={`/games/${gameId}/verifications/${mission.id}`}>
+          <Link
+            key={mission.id}
+            href={`/games/${gameId}/verifications/${mission.id}`}
+          >
             <a>
-              <MissionCard key={mission.id} mission={mission} />
+              <MissionCard mission={mission} />
             </a>
           </Link>
         )}
