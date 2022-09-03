@@ -44,7 +44,7 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
         )}
 
         <Link href="/games">
-          <a className="btn btn-ghost gap-2 text-xl normal-case">
+          <a className="btn btn-ghost hidden gap-2 text-xl normal-case md:flex">
             <HomeIcon className="h-5 w-5" />
             BeeChase
           </a>
