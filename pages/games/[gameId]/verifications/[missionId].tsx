@@ -104,7 +104,9 @@ const VerificationDetailPage: NextPage<
       </section>
 
       <section>
-        <h2 className="text-center text-9xl font-bold">{missionCode.code}</h2>
+        <h2 className="text-center font-mono text-9xl font-bold uppercase">
+          {missionCode.code}
+        </h2>
       </section>
 
       <section className="grid place-items-center">
