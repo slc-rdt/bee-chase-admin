@@ -2,6 +2,7 @@ import BaseModel from "./base-model";
 import GameTeam from "./game-team";
 import Mission from "./mission";
 import SubmissionAnswerData from "./submission-answer-data";
+import User from "./user";
 
 export default interface Submission extends BaseModel {
   id: string;
@@ -12,4 +13,6 @@ export default interface Submission extends BaseModel {
   game_team?: GameTeam;
   mission_id: string;
   mission?: Mission;
+  user_id: string;
+  user?: User;
 }

@@ -6,11 +6,11 @@ import AbstractService from "./abstract-service";
 export default class SubmissionService extends AbstractService {
   public async getAllPaginatedByGame(
     gameId: string,
-    params: PaginateRequestDto
+    params: PaginateRequestDto & { withUser: boolean }
   ) {
     const { data } = await this.axios.get<PaginateResponseDto<Submission>>(
       `${this.apiUrl}/games/${gameId}/submissions`,
-      { params: params }
+      { params }
     );
     return data;
   }

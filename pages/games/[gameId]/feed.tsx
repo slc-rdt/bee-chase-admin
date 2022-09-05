@@ -1,7 +1,7 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
 import Pagination from "../../../components/common/pagination";
 import SubmissionFeedCard from "../../../components/submission/feed/submission-feed-card";
@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<
 
     const submissionsPaginated = await submissionService.getAllPaginatedByGame(
       gameId,
-      { page }
+      { page, withUser: true }
     );
 
     return {

@@ -29,6 +29,7 @@ const SubmissionFeedCard: ComponentType<
 
   const gameId = router.query.gameId;
 
+  const answerType = Number(submission.mission?.answer_type);
   const answerData = parseJsonIfString(submission.answer_data);
 
   const onDelete = async () => {
@@ -75,17 +76,29 @@ const SubmissionFeedCard: ComponentType<
           </h2>
         </header>
 
-        <small>{when}</small>
+        <small>
+          {when} <br />
+          {submission.user && (
+            <>
+              Submitted by:{" "}
+              <span className="font-bold">
+                {submission.user.username} - {submission.user.name}
+              </span>
+            </>
+          )}
+        </small>
 
         <p>{submission.caption}</p>
 
-        {Number(submission.mission?.answer_type) === AnswerTypes.GPS && (
+        {answerType === AnswerTypes.GPS && (
           <SubmissionFeedCardGpsContent {...{ submission, answerData }} />
         )}
-        {Number(submission.mission?.answer_type) === AnswerTypes.IMAGE && (
+
+        {answerType === AnswerTypes.IMAGE && (
           <SubmissionFeedCardImageContent {...{ submission, answerData }} />
         )}
-        {Number(submission.mission?.answer_type) === AnswerTypes.TEXT && (
+
+        {answerType === AnswerTypes.TEXT && (
           <SubmissionFeedCardTextContent {...{ submission, answerData }} />
         )}
 
