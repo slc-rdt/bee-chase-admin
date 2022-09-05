@@ -79,7 +79,7 @@ const GameCopyPage: NextPage<
           <button
             disabled={isLoading}
             onClick={onCopy}
-            className={`btn btn-primary ${isLoading && "loading"}`}
+            className={`btn btn-primary gap-2 ${isLoading && "loading"}`}
           >
             {!isLoading && <DocumentDuplicateIcon className="h-5 w-5" />}
             Make a copy
