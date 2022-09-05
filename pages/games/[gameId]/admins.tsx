@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<
     ]);
 
     const [users, game] = await Promise.all([
-      userService.search({ page, q }),
+      userService.search({ page, q, admin: true }),
       gameService.getOneById(gameId),
     ]);
 
@@ -59,7 +59,7 @@ const AdminsPage: NextPage<
 > = ({ gameId, game, pagintedUsers, page }) => {
   return (
     <div className="mx-auto max-w-screen-lg">
-      <h2 className="mb-2 text-3xl font-bold">Manage Admins</h2>
+      <h2 className="mb-4 text-3xl font-bold">Manage Admins</h2>
 
       <SearchBar pathname={`/games/${gameId}/admins`} />
 
