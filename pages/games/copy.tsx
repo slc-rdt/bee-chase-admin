@@ -54,7 +54,7 @@ const GameCopyPage: NextPage<
   const { isLoading, doAction } = useLoading();
 
   const onCopy = async () => {
-    await toast.promise(doAction(gameService.copy(game.id)), {
+    await toast.promise(doAction(gameService.clone(game.id)), {
       loading: "Copying game...",
       success: "Game copied!",
       error: "Failed to copy game",

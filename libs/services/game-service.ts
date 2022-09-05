@@ -69,9 +69,9 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async copy(gameId: string) {
+  public async clone(gameId: string) {
     const { data } = await this.axios.post<Game>(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/games/copy`,
+      `${this.apiUrl}/games/${gameId}/clone`,
       { gameId }
     );
     return data;
