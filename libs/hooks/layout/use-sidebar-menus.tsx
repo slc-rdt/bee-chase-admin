@@ -90,13 +90,13 @@ export default function useSidebarMenus(game?: Game): MenuItem[] {
       activeIcon: <SolidUsersIcon className="h-6 w-6" />,
       isActive: false,
     },
-    // {
-    //   label: "Verifications",
-    //   path: `/games/${gameId}/verifications`,
-    //   icon: <OutlineShieldCheckIcon className="h-6 w-6" />,
-    //   activeIcon: <SolidShieldCheckIcon className="h-6 w-6" />,
-    //   isActive: false,
-    // },
+    {
+      label: "Verifications",
+      path: `/games/${gameId}/verifications`,
+      icon: <OutlineShieldCheckIcon className="h-6 w-6" />,
+      activeIcon: <SolidShieldCheckIcon className="h-6 w-6" />,
+      isActive: false,
+    },
 
     null,
 

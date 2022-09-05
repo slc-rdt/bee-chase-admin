@@ -1,25 +1,26 @@
-import QRCode from "qrcode";
-import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
-import useService from "../../../../libs/hooks/common/use-service";
-import MissionService from "../../../../libs/services/mission-service";
+import {
+  ArrowLeftIcon,
+  MagnifyingGlassMinusIcon,
+  MagnifyingGlassPlusIcon,
+} from "@heroicons/react/20/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
-import createServerSideService from "../../../../libs/utils/create-server-side-service";
-import MissionCode from "../../../../libs/models/mission-code";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import QRCode from "qrcode";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import {
-  MagnifyingGlassMinusIcon,
-  MagnifyingGlassPlusIcon,
-} from "@heroicons/react/20/solid";
+import MissionCode from "../../../../libs/models/mission-code";
+import MissionService from "../../../../libs/services/mission-service";
+import createServerSideService from "../../../../libs/utils/create-server-side-service";
+import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
-  { missionCode: MissionCode; duration: number },
+  { gameId: string; missionCode: MissionCode; duration: number },
   { gameId: string; missionId: string }
 > = async (context) => {
   const gameId = context.params?.gameId ?? "";
@@ -38,7 +39,7 @@ export const getServerSideProps: GetServerSideProps<
       { duration }
     );
 
-    return { props: { missionCode, duration } };
+    return { props: { gameId, missionCode, duration } };
   } catch (error) {
     return handleServerSideError(error, {
       destination: `/games/${gameId}/verifications`,
@@ -49,7 +50,7 @@ export const getServerSideProps: GetServerSideProps<
 
 const VerificationDetailPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ missionCode, duration }) => {
+> = ({ gameId, missionCode, duration }) => {
   const qrCodeSizeMultiplier = 32;
 
   const router = useRouter();
@@ -115,6 +116,15 @@ const VerificationDetailPage: NextPage<
             alt="qr code"
           />
         )}
+      </section>
+
+      <section className="grid place-items-center">
+        <Link href={`/games/${gameId}/verifications`}>
+          <a className="btn btn-primary gap-2">
+            <ArrowLeftIcon className="h-5 w-5" />
+            Done
+          </a>
+        </Link>
       </section>
     </>
   );

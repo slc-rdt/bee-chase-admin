@@ -16,8 +16,10 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
 
   const user = data?.user;
 
+  const isLogin = router.pathname.startsWith("/auth/login");
+  const isVerification = router.pathname.includes("/verification");
   const shouldShowNavbar =
-    status === "authenticated" && !router.pathname.startsWith("/auth/login");
+    status === "authenticated" && !isLogin && !isVerification;
 
   const onLogout = async () => {
     const data = await signOut({
