@@ -35,6 +35,18 @@ export default class MissionService extends AbstractService {
     return data;
   }
 
+  public async getVerificationCode(
+    gameId: string,
+    missionId: string,
+    params: { duration: number }
+  ) {
+    const { data } = await this.axios.get<MissionCode>(
+      `${this.apiUrl}/games/${gameId}/missions/${missionId}/generate-code`,
+      { params }
+    );
+    return data;
+  }
+
   public async create(gameId: string, payload: CreateMissionDto) {
     const { data } = await this.axios.post<Mission>(
       `${this.apiUrl}/games/${gameId}/missions`,
@@ -64,13 +76,6 @@ export default class MissionService extends AbstractService {
   public async delete(gameId: string, mission: Mission) {
     const { data } = await this.axios.delete<Mission>(
       `${this.apiUrl}/games/${gameId}/missions/${mission.id}`
-    );
-    return data;
-  }
-
-  public async getVerificationCode(gameId: string, missionId: string) {
-    const { data } = await this.axios.get<MissionCode>(
-      `${this.apiUrl}/games/${gameId}/missions/${missionId}`
     );
     return data;
   }
