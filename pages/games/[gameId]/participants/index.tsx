@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
   try {
     const page = Number(context.query.page ?? 1);
-    const q = context.query.q?.toString() ?? ";";
+    const q = context.query.q?.toString() ?? "";
 
     const [gameService, gameTeamService] = await Promise.all([
       createServerSideService(context.req, GameService),
