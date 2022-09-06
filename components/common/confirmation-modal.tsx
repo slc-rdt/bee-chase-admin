@@ -28,7 +28,7 @@ const ConfirmationModal: ComponentType<
             disabled={isLoading}
             className={`btn btn-error gap-2 ${isLoading && "loading"}`}
           >
-            <CheckCircleIcon className="h-5 w-5" />
+            {!isLoading && <CheckCircleIcon className="h-5 w-5" />}
             Yes
           </button>
           <label htmlFor={modalKey} className="btn btn-success gap-2">
