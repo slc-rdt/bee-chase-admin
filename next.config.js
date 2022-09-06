@@ -13,6 +13,11 @@ const nextConfig = {
         destination: "/auth/login",
         permanent: true,
       },
+      {
+        source: "/games/:id",
+        destination: "/games/:id/missions",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
@@ -26,7 +31,7 @@ const nextConfig = {
         destination: `${process.env.BLUEJACK_API_URL}/:path*`,
       },
     ];
-  }
+  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
