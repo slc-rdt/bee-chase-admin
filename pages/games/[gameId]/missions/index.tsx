@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import Pagination from "../../../../components/common/pagination";
 import MissionCard from "../../../../components/mission/card/mission-card";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
+import useLoading from "../../../../libs/hooks/common/use-loading";
+import useService from "../../../../libs/hooks/common/use-service";
 import Mission from "../../../../libs/models/mission";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
@@ -52,6 +54,12 @@ const MissionsPage = ({
   paginatedMissions,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+  const missionService = useService(MissionService);
+  const { isLoading, doAction } = useLoading();
+
+  const onPressUp = (mission: Mission) => {};
+
+  const onPressDown = (mission: Mission) => {};
 
   return (
     <div className="mx-auto max-w-screen-lg">
@@ -79,15 +87,29 @@ const MissionsPage = ({
       <Pagination
         pagination={paginatedMissions}
         currentPage={page}
-        render={(mission) => (
-          <MissionCard
-            key={mission.id}
-            mission={mission}
-            editable
-            deletable
-            showAvailability
-          />
-        )}
+        render={(mission, idx) => {
+          const perPage =
+            paginatedMissions.per_page ??
+            paginatedMissions.meta?.per_page ??
+            -1;
+
+          // start from 16 if page 2, etc...
+          const pageOffset = (page - 1) * perPage;
+          const number = idx + 1 + pageOffset;
+
+          return (
+            <MissionCard
+              key={mission.id}
+              mission={mission}
+              number={number}
+              onPressUp={() => onPressUp(mission)}
+              onPressDown={() => onPressDown(mission)}
+              editable
+              deletable
+              showAvailability
+            />
+          );
+        }}
       />
     </div>
   );

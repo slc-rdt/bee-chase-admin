@@ -5,6 +5,7 @@ import PaginateResponseDto from "../dtos/paginate-response-dto";
 import UpdateMissionDto from "../dtos/update-mission-dto";
 import Mission from "../models/mission";
 import MissionCode from "../models/mission-code";
+import parseStringIfJson from "../utils/parse-string-if-json";
 import AbstractService from "./abstract-service";
 
 export default class MissionService extends AbstractService {
@@ -54,7 +55,7 @@ export default class MissionService extends AbstractService {
         ...payload,
         // Laravel validates JSON type as string, so we must stringify this first
         // else Laravel will recognize it as empty string \ :v /
-        mission_data: JSON.stringify(payload.mission_data),
+        mission_data: parseStringIfJson(payload.mission_data),
       }
     );
     return data;
@@ -67,7 +68,7 @@ export default class MissionService extends AbstractService {
         ...payload,
         // Laravel validates JSON type as string, so we must stringify this first
         // else Laravel will recognize it as empty string \ :v /
-        mission_data: JSON.stringify(payload.mission_data),
+        mission_data: parseStringIfJson(payload.mission_data),
       }
     );
     return data;
@@ -78,5 +79,19 @@ export default class MissionService extends AbstractService {
       `${this.apiUrl}/games/${gameId}/missions/${mission.id}`
     );
     return data;
+  }
+
+  public async swapMissionIndex(mission1: Mission, mission2: Mission) {
+    [mission1.mission_index, mission2.mission_index] = [
+      mission2.mission_index,
+      mission1.mission_index,
+    ];
+
+    const gameId = mission1.game_id || mission2.game_id;
+
+    return await Promise.all([
+      this.update(gameId, mission1 as UpdateMissionDto),
+      this.update(gameId, mission2 as UpdateMissionDto),
+    ]);
   }
 }

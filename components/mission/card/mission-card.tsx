@@ -1,5 +1,7 @@
 import {
   CameraIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   DocumentTextIcon,
   ListBulletIcon,
   MapPinIcon,
@@ -14,17 +16,27 @@ import MissionCardEditAction from "./mission-card-edit-action";
 
 interface IMissionCard {
   mission: Mission;
+
+  number?: number;
+  onPressUp?: () => void;
+  onPressDown?: () => void;
+
   editable?: boolean;
   deletable?: boolean;
   clonable?: boolean;
   showAvailability?: boolean;
+
   checked?: boolean;
   onCheck?: (isChecked: boolean) => void;
+
   isLoading?: boolean;
 }
 
 const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
   mission,
+  number,
+  onPressUp,
+  onPressDown,
   editable,
   deletable,
   clonable,
@@ -45,6 +57,26 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             className="checkbox checkbox-primary"
             defaultChecked={checked}
           />
+        </section>
+      )}
+
+      {typeof number !== "undefined" && (
+        <section className="ml-8 flex flex-col items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={onPressUp}
+            className="btn btn-ghost btn-square"
+          >
+            <ChevronUpIcon />
+          </button>
+          <p className="text-xl font-bold">#{number}</p>
+          <button
+            type="button"
+            onClick={onPressDown}
+            className="btn btn-ghost btn-square"
+          >
+            <ChevronDownIcon />
+          </button>
         </section>
       )}
 

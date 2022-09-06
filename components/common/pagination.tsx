@@ -6,7 +6,7 @@ interface IPagination<T> extends ComponentProps<"section"> {
   currentPage: number;
   pagination: PaginateResponseDto<T>;
   paginationKey?: string;
-  render: (data: T) => JSX.Element;
+  render: (data: T, index: number, array: T[]) => JSX.Element;
 }
 
 const Pagination = <T extends unknown>({
