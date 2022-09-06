@@ -12,8 +12,7 @@ export default function handleServerSideError(
   if (!error || !(error instanceof Error)) {
     message = "Unknown error occurred.";
   } else if (error instanceof AxiosError) {
-    message =
-      error.response?.data?.message ?? error.message ?? error.cause?.message;
+    message = error.response?.data?.message ?? error.message;
     responseStatusCode = error.response?.status ?? -1;
   } else if (error instanceof Error) {
     message = error.message;
