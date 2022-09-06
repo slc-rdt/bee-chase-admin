@@ -4,10 +4,10 @@ import User from "../models/user";
 import AbstractService from "./abstract-service";
 
 export default class UserService extends AbstractService {
-  public async search(payload: PaginateRequestDto & { admin: boolean }) {
+  public async search(params: PaginateRequestDto & { admin: boolean }) {
     const { data } = await this.axios.get<PaginateResponseDto<User>>(
       `${this.apiUrl}/users`,
-      { params: payload }
+      { params }
     );
     return data;
   }
