@@ -1,12 +1,14 @@
 import { SessionProvider, useSession } from "next-auth/react";
 import { AppProps } from "next/app";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import NextNProgress from "nextjs-progressbar";
 import { ComponentType } from "react";
 import { Toaster } from "react-hot-toast";
-import Layout from "../components/layouts/layout";
 import "../styles/globals.css";
+
+const NextNProgress = dynamic(() => import("nextjs-progressbar"));
+const Layout = dynamic(() => import("../components/layouts/layout"));
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
