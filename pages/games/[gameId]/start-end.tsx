@@ -1,13 +1,17 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
-import StartEndForm from "../../../components/start-end/start-end-form";
+import dynamic from "next/dynamic";
 import Game from "../../../libs/models/game";
 import GameService from "../../../libs/services/game-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../libs/utils/handle-server-side-error";
+
+const StartEndForm = dynamic(
+  () => import("../../../components/start-end/start-end-form")
+);
 
 export const getServerSideProps: GetServerSideProps<
   { game: Game },
