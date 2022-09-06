@@ -62,21 +62,25 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
 
       {typeof number !== "undefined" && (
         <section className="ml-8 flex flex-col items-center justify-center gap-2">
-          <button
-            type="button"
-            onClick={onPressUp}
-            className="btn btn-ghost btn-square"
-          >
-            <ChevronUpIcon />
-          </button>
+          {onPressUp && (
+            <button
+              type="button"
+              onClick={onPressUp}
+              className="btn btn-ghost btn-square"
+            >
+              <ChevronUpIcon />
+            </button>
+          )}
           <p className="text-xl font-bold">#{number}</p>
-          <button
-            type="button"
-            onClick={onPressDown}
-            className="btn btn-ghost btn-square"
-          >
-            <ChevronDownIcon />
-          </button>
+          {onPressDown && (
+            <button
+              type="button"
+              onClick={onPressDown}
+              className="btn btn-ghost btn-square"
+            >
+              <ChevronDownIcon />
+            </button>
+          )}
         </section>
       )}
 

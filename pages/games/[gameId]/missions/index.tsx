@@ -57,9 +57,14 @@ const MissionsPage = ({
   const missionService = useService(MissionService);
   const { isLoading, doAction } = useLoading();
 
-  const onPressUp = (mission: Mission) => {};
+  const perPage =
+    paginatedMissions.per_page ?? paginatedMissions.meta?.per_page ?? -1;
+  const total = paginatedMissions.total ?? paginatedMissions.meta?.total ?? -1;
 
-  const onPressDown = (mission: Mission) => {};
+  const swapMissionIndex = async (mission: Mission, targetIndex: number) => {
+    await doAction(missionService.swapMissionIndex(mission, targetIndex));
+    router.push(router.asPath);
+  };
 
   return (
     <div className="mx-auto max-w-screen-lg">
@@ -88,11 +93,6 @@ const MissionsPage = ({
         pagination={paginatedMissions}
         currentPage={page}
         render={(mission, idx) => {
-          const perPage =
-            paginatedMissions.per_page ??
-            paginatedMissions.meta?.per_page ??
-            -1;
-
           // start from 16 if page 2, etc...
           const pageOffset = (page - 1) * perPage;
           const number = idx + 1 + pageOffset;
@@ -102,8 +102,17 @@ const MissionsPage = ({
               key={mission.id}
               mission={mission}
               number={number}
-              onPressUp={() => onPressUp(mission)}
-              onPressDown={() => onPressDown(mission)}
+              isLoading={isLoading}
+              onPressUp={
+                number > 1
+                  ? () => swapMissionIndex(mission, idx - 1)
+                  : undefined
+              }
+              onPressDown={
+                number < total
+                  ? () => swapMissionIndex(mission, idx + 1)
+                  : undefined
+              }
               editable
               deletable
               showAvailability

@@ -81,17 +81,11 @@ export default class MissionService extends AbstractService {
     return data;
   }
 
-  public async swapMissionIndex(mission1: Mission, mission2: Mission) {
-    [mission1.mission_index, mission2.mission_index] = [
-      mission2.mission_index,
-      mission1.mission_index,
-    ];
-
-    const gameId = mission1.game_id || mission2.game_id;
-
-    return await Promise.all([
-      this.update(gameId, mission1 as UpdateMissionDto),
-      this.update(gameId, mission2 as UpdateMissionDto),
-    ]);
+  public async swapMissionIndex(mission: Mission, mission_dest_idx: number) {
+    const { data } = await this.axios.patch(
+      `${this.apiUrl}/games/${mission.game_id}/missions/${mission.id}/swap`,
+      { mission_dest_idx }
+    );
+    return data;
   }
 }
