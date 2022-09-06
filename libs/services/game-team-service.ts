@@ -1,4 +1,5 @@
 import { GameTeamFormValues } from "../../components/participants/game-team-form";
+import PaginateRequestDto from "../dtos/paginate-request-dto";
 import PaginateResponseDto from "../dtos/paginate-response-dto";
 import { AnswerTypes } from "../enums";
 import GameTeam from "../models/game-team";
@@ -9,6 +10,14 @@ export default class GameTeamService extends AbstractService {
   public async getAll(gameId: string) {
     const { data } = await this.axios.get<GameTeam[]>(
       `${this.apiUrl}/games/${gameId}/game_teams`
+    );
+    return data;
+  }
+
+  public async getAllPaginated(gameId: string, params: PaginateRequestDto) {
+    const { data } = await this.axios.get<PaginateResponseDto<GameTeam>>(
+      `${this.apiUrl}/games/${gameId}/game_teams`,
+      { params }
     );
     return data;
   }

@@ -15,12 +15,22 @@ import GameService from "../../../../libs/services/game-service";
 import GameTeamService from "../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
+import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
+import Pagination from "../../../../components/common/pagination";
+import SearchBar from "../../../../components/common/search-bar";
 
 export const getServerSideProps: GetServerSideProps<
-  { game: Game; gameTeams: GameTeam[] },
+  {
+    page: number;
+    game: Game;
+    gameTeamsPaginated: PaginateResponseDto<GameTeam>;
+  },
   { gameId: string }
 > = async (context) => {
   try {
+    const page = Number(context.query.page ?? 1);
+    const q = context.query.q?.toString() ?? ";";
+
     const [gameService, gameTeamService] = await Promise.all([
       createServerSideService(context.req, GameService),
       createServerSideService(context.req, GameTeamService),
@@ -28,17 +38,12 @@ export const getServerSideProps: GetServerSideProps<
 
     const gameId = context.params?.gameId ?? "";
 
-    const [game, gameTeams] = await Promise.all([
+    const [game, gameTeamsPaginated] = await Promise.all([
       gameService.getOneById(gameId),
-      gameTeamService.getAll(gameId),
+      gameTeamService.getAllPaginated(gameId, { page, q }),
     ]);
 
-    return {
-      props: {
-        game,
-        gameTeams,
-      },
-    };
+    return { props: { page, game, gameTeamsPaginated } };
   } catch (error) {
     return handleServerSideError(error, {
       destination: "/games",
@@ -49,7 +54,7 @@ export const getServerSideProps: GetServerSideProps<
 
 const ParticipantsPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ game, gameTeams }) => {
+> = ({ page, game, gameTeamsPaginated }) => {
   return (
     <div className="mx-auto max-w-screen-lg">
       <h2 className="mb-2 text-3xl font-bold">Participants</h2>
@@ -91,18 +96,16 @@ const ParticipantsPage: NextPage<
 
       <GameParticipantsAllowUserCreateTeamForm game={game} />
 
-      <section className="grid grid-cols-1 gap-4">
-        {gameTeams.length === 0 && (
-          <div className="card shadow-xl">
-            <div className="card-body">
-              <h2 className="font-lg text-center font-medium">No teams yet.</h2>
-            </div>
-          </div>
-        )}
+      <SearchBar pathname={`/games/${game.id}/participants`} />
 
-        {gameTeams.map((gameTeam) => (
-          <GameTeamCard key={gameTeam.id} gameTeam={gameTeam} />
-        ))}
+      <section className="grid grid-cols-1 gap-4">
+        <Pagination
+          currentPage={page}
+          pagination={gameTeamsPaginated}
+          render={(gameTeam) => (
+            <GameTeamCard key={gameTeam.id} gameTeam={gameTeam} />
+          )}
+        />
       </section>
     </div>
   );
