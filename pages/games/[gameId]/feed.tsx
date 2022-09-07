@@ -1,13 +1,17 @@
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { InView } from "react-intersection-observer";
 import useSWRInfinite from "swr/infinite";
-import SubmissionFeedCard from "../../../components/submission/feed/submission-feed-card";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
 import SubmissionService from "../../../libs/services/submission-service";
+
+const SubmissionFeedCard = dynamic(
+  () => import("../../../components/submission/feed/submission-feed-card")
+);
 
 const GameActivityFeed = () => {
   const router = useRouter();

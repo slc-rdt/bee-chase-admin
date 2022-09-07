@@ -1,14 +1,16 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import Pagination from "../../components/common/pagination";
-import SearchBar from "../../components/common/search-bar";
-import GameCard from "../../components/game/game-card";
 import PaginateResponseDto from "../../libs/dtos/paginate-response-dto";
 import Game from "../../libs/models/game";
 import GameService from "../../libs/services/game-service";
 import createServerSideService from "../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../libs/utils/handle-server-side-error";
+
+const SearchBar = dynamic(() => import("../../components/common/search-bar"));
+const GameCard = dynamic(() => import("../../components/game/game-card"));
 
 export const getServerSideProps: GetServerSideProps<{
   page: number;
