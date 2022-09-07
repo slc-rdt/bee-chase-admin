@@ -1,67 +1,69 @@
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
-import Pagination from "../../../components/common/pagination";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { InView } from "react-intersection-observer";
+import useSWRInfinite from "swr/infinite";
 import SubmissionFeedCard from "../../../components/submission/feed/submission-feed-card";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import useLoading from "../../../libs/hooks/common/use-loading";
+import useService from "../../../libs/hooks/common/use-service";
 import Submission from "../../../libs/models/submission";
 import SubmissionService from "../../../libs/services/submission-service";
-import createServerSideService from "../../../libs/utils/create-server-side-service";
-import handleServerSideError from "../../../libs/utils/handle-server-side-error";
 
-export const getServerSideProps: GetServerSideProps<
-  {
-    page: number;
-    submissionsPaginated: PaginateResponseDto<Submission>;
-  },
-  {
-    gameId: string;
-  }
-> = async (context) => {
-  try {
-    const gameId = context.params?.gameId ?? "";
-    const page = Number(context.query.page ?? 1);
+const GameActivityFeed = () => {
+  const router = useRouter();
+  const submissionService = useService(SubmissionService);
+  const { status } = useSession();
+  const { isLoading, doAction } = useLoading();
 
-    const submissionService = await createServerSideService(
-      context.req,
-      SubmissionService
-    );
+  const gameId = router.query.gameId?.toString() ?? "";
 
-    const submissionsPaginated = await submissionService.getAllPaginatedByGame(
-      gameId,
-      { page, withUser: true }
-    );
+  const { data, size, setSize } = useSWRInfinite(
+    (pageIndex, previousPageData: PaginateResponseDto<Submission> | null) => {
+      if (status !== "authenticated") return null;
 
-    return {
-      props: {
-        page,
-        submissionsPaginated,
-      },
-    };
-  } catch (error) {
-    return handleServerSideError(error, {
-      destination: "/games",
-      permanent: false,
-    });
-  }
-};
+      const page = pageIndex + 1;
 
-const GameActivityFeed: NextPage<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ page, submissionsPaginated }) => {
+      if (previousPageData) {
+        const lastPage =
+          previousPageData.last_page ?? previousPageData.meta?.last_page ?? -1;
+        if (page > lastPage) return null;
+      }
+
+      return ["feeds", pageIndex + 1];
+    },
+    async (_, page) => {
+      return await doAction(
+        submissionService.getAllPaginatedByGame(gameId, {
+          page,
+          withUser: true,
+        })
+      );
+    }
+  );
+
   return (
     <div className="mx-auto max-w-screen-md">
       <h2 className="mb-4 text-3xl font-bold">Activity Feed</h2>
 
-      <Pagination
-        currentPage={page}
-        pagination={submissionsPaginated}
-        render={(submission) => (
+      {data
+        ?.flatMap((d) => d.data)
+        .map((submission) => (
           <SubmissionFeedCard key={submission.id} submission={submission} />
-        )}
-      />
+        ))}
+
+      <InView
+        as="section"
+        onChange={() => setSize(size + 1)}
+        className="my-4 flex justify-center"
+      >
+        <button
+          onClick={() => setSize(size + 1)}
+          className={`btn btn-primary ${isLoading && "loading"}`}
+          disabled={isLoading}
+        >
+          Load More
+        </button>
+      </InView>
     </div>
   );
 };
