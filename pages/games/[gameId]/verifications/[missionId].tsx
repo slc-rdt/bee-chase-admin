@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
   const gameId = context.params?.gameId ?? "";
   const missionId = context.params?.missionId ?? "";
-  const duration = Number(context.query.duration ?? 7);
+  const duration = Number(context.query.duration ?? 12);
 
   try {
     const missionService = await createServerSideService(
