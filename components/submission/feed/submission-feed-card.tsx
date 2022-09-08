@@ -17,11 +17,12 @@ import SubmissionFeedCardTextContent from "./submission-feed-card-text-content";
 
 interface ISubmissionFeedCard {
   submission: Submission;
+  onDelete: (submission: Submission) => void;
 }
 
 const SubmissionFeedCard: ComponentType<
   ComponentProps<"div"> & ISubmissionFeedCard
-> = ({ submission, ...rest }) => {
+> = ({ submission, onDelete, ...rest }) => {
   const router = useRouter();
   const submissionService = useService(SubmissionService);
   const { isLoading, doAction } = useLoading();
@@ -32,14 +33,14 @@ const SubmissionFeedCard: ComponentType<
   const answerType = Number(submission.mission?.answer_type);
   const answerData = parseJsonIfString(submission.answer_data);
 
-  const onDelete = async () => {
+  const onDeleteConfirmed = async () => {
     await toast.promise(doAction(submissionService.delete(submission)), {
       loading: "Deleting submission...",
       success: "Submission deleted!",
       error: "Failed to delete submission.",
     });
 
-    router.push(router.asPath);
+    onDelete(submission);
   };
 
   useEffect(() => {
@@ -107,7 +108,7 @@ const SubmissionFeedCard: ComponentType<
             className="btn btn-error gap-2"
             modalKey={submission.id}
             isLoading={isLoading}
-            onConfirm={onDelete}
+            onConfirm={onDeleteConfirmed}
           >
             <TrashIcon className="h-5 w-5" />
             Delete

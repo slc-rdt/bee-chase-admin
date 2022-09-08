@@ -21,7 +21,7 @@ const GameActivityFeed = () => {
 
   const gameId = router.query.gameId?.toString() ?? "";
 
-  const { data, size, setSize } = useSWRInfinite(
+  const { data, mutate, size, setSize } = useSWRInfinite(
     (pageIndex, previousPageData: PaginateResponseDto<Submission> | null) => {
       if (status !== "authenticated") return null;
 
@@ -49,11 +49,26 @@ const GameActivityFeed = () => {
     <div className="mx-auto max-w-screen-md">
       <h2 className="mb-4 text-3xl font-bold">Activity Feed</h2>
 
-      {data
-        ?.flatMap((d) => d.data)
-        .map((submission) => (
-          <SubmissionFeedCard key={submission.id} submission={submission} />
-        ))}
+      {data?.map((pagination) => {
+        const onDelete = (submission: Submission) => {
+          const filtered = data.map((d) => {
+            return {
+              ...d,
+              data: d.data.filter((s) => s.id !== submission.id),
+            };
+          });
+
+          mutate(filtered);
+        };
+
+        return pagination.data.map((submission) => (
+          <SubmissionFeedCard
+            key={submission.id}
+            submission={submission}
+            onDelete={onDelete}
+          />
+        ));
+      })}
 
       <InView
         as="section"
