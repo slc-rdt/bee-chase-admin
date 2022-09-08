@@ -51,7 +51,7 @@ const GamesPage = ({
 
   return (
     <div className="mx-auto mt-8 max-w-screen-lg">
-      <section className="flex flex-wrap justify-between">
+      <section className="flex flex-wrap justify-between gap-4">
         <h1 className="text-2xl font-bold">My Games</h1>
 
         <section className="flex flex-wrap gap-2">
