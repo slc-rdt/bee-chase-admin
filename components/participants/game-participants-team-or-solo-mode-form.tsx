@@ -1,8 +1,5 @@
 import { useRouter } from "next/router";
-import {
-  ComponentProps,
-  ComponentType
-} from "react";
+import { ComponentProps, ComponentType } from "react";
 import toast from "react-hot-toast";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
@@ -47,14 +44,14 @@ const GameParticipantsTeamOrSoloModeForm: ComponentType<
       <div className="flex flex-wrap gap-4">
         <label className="label cursor-pointer gap-2">
           <input
-            onChange={() => doUpdate(9999)}
+            onChange={() => doUpdate(10)}
             disabled={isLoading}
             type="radio"
             name="is_solo"
             className="radio radio-primary"
             defaultChecked={game.max_player_per_team > 1}
           />
-          <span className="label-text">In teams</span>
+          <span className="label-text">In teams (max. 10 users)</span>
         </label>
         <label className="label cursor-pointer gap-2">
           <input
