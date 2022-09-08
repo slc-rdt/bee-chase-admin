@@ -4,6 +4,7 @@ import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Game from "../models/game";
 import GameTeam from "../models/game-team";
 import User from "../models/user";
+import getFilenameFromAxiosHeader from "../utils/get-filename-from-axios-header";
 import AbstractService from "./abstract-service";
 
 export default class GameService extends AbstractService {
@@ -75,5 +76,14 @@ export default class GameService extends AbstractService {
       { gameId }
     );
     return data;
+  }
+
+  public async export(): Promise<[string, Blob]> {
+    const { headers, data } = await this.axios.get<Blob>(
+      `${this.apiUrl}/games/export_excel`,
+      { responseType: "blob" }
+    );
+    const filename = getFilenameFromAxiosHeader(headers);
+    return [filename, data];
   }
 }
