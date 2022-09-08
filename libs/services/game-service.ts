@@ -78,9 +78,27 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async export(): Promise<[string, Blob]> {
+  public async exportGames(): Promise<[string, Blob]> {
     const { headers, data } = await this.axios.get<Blob>(
       `${this.apiUrl}/games/export_excel`,
+      { responseType: "blob" }
+    );
+    const filename = getFilenameFromAxiosHeader(headers);
+    return [filename, data];
+  }
+
+  public async exportLeaderboard(gameId: string): Promise<[string, Blob]> {
+    const { headers, data } = await this.axios.get<Blob>(
+      `${this.apiUrl}/games/${gameId}/leaderboard/export_excel`,
+      { responseType: "blob" }
+    );
+    const filename = getFilenameFromAxiosHeader(headers);
+    return [filename, data];
+  }
+
+  public async exportSubmissions(gameId: string): Promise<[string, Blob]> {
+    const { headers, data } = await this.axios.get<Blob>(
+      `${this.apiUrl}/games/${gameId}/submission/export_excel`,
       { responseType: "blob" }
     );
     const filename = getFilenameFromAxiosHeader(headers);

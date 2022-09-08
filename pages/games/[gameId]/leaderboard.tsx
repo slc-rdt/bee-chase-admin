@@ -1,9 +1,13 @@
+import { ArrowDownOnSquareIcon } from "@heroicons/react/20/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
 import Link from "next/link";
+import useDownloadBlob from "../../../libs/hooks/common/use-download-blob";
+import useLoading from "../../../libs/hooks/common/use-loading";
+import useService from "../../../libs/hooks/common/use-service";
 import GameTeam from "../../../libs/models/game-team";
 import GameService from "../../../libs/services/game-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
@@ -35,9 +39,29 @@ const rankSuffixMapping = new Map([
 const Leaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ gameId, leaderboard }) => {
+  const gameService = useService(GameService);
+  const downloadBlob = useDownloadBlob();
+  const { isLoading, doAction } = useLoading();
+
+  const onExport = async () => {
+    const exportedGame = await doAction(gameService.exportLeaderboard(gameId));
+    downloadBlob(...exportedGame);
+  };
+
   return (
     <div className="mx-auto max-w-screen-lg">
-      <h2 className="text-3xl font-bold">Leaderboard</h2>
+      <header className="flex flex-wrap items-center justify-between gap-4">
+        <h2 className="text-3xl font-bold">Leaderboard</h2>
+
+        <button
+          onClick={onExport}
+          disabled={isLoading}
+          className={`btn btn-secondary gap-2 ${isLoading && "loading"}`}
+        >
+          {!isLoading && <ArrowDownOnSquareIcon className="h-5 w-5" />}
+          Export leaderboard
+        </button>
+      </header>
 
       <section className="grid grid-cols-1 gap-4">
         {leaderboard.length === 0 && (

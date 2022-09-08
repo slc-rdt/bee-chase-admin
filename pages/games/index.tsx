@@ -45,7 +45,7 @@ const GamesPage = ({
   const { isLoading, doAction } = useLoading();
 
   const onExport = async () => {
-    const exportedGame = await doAction(gameService.export());
+    const exportedGame = await doAction(gameService.exportGames());
     downloadBlob(...exportedGame);
   };
 
