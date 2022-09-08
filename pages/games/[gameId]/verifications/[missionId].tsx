@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
   const gameId = context.params?.gameId ?? "";
   const missionId = context.params?.missionId ?? "";
-  const duration = Number(context.query.duration ?? 12);
+  const duration = Number(context.query.duration ?? 30);
 
   try {
     const missionService = await createServerSideService(
@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<
     const missionCode = await missionService.getVerificationCode(
       gameId,
       missionId,
-      { duration }
+      { duration, withMission: true }
     );
 
     return { props: { gameId, missionCode, duration } };
@@ -84,6 +84,12 @@ const VerificationDetailPage: NextPage<
 
   return (
     <>
+      <section className="mb-4">
+        <h2 className="text-center text-xl font-bold">
+          {missionCode.mission?.name}
+        </h2>
+      </section>
+
       <section className="mx-auto mb-4 max-w-screen-md">
         <div className="flex flex-wrap items-center justify-center gap-4">
           <button

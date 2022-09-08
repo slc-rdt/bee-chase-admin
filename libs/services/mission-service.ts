@@ -39,7 +39,7 @@ export default class MissionService extends AbstractService {
   public async getVerificationCode(
     gameId: string,
     missionId: string,
-    params: { duration: number }
+    params: { duration: number; withMission: boolean; }
   ) {
     const { data } = await this.axios.get<MissionCode>(
       `${this.apiUrl}/games/${gameId}/missions/${missionId}/generate-code`,
