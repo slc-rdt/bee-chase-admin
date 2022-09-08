@@ -19,4 +19,9 @@ export default class AuthService extends AbstractService {
     });
     return data;
   }
+
+  public async getOnedriveToken() {
+    const { data } = await this.axios.get<{ token: string; }>(`${this.apiUrl}/onedrive/token`);
+    return data;
+  }
 }

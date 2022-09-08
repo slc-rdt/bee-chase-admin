@@ -1,6 +1,8 @@
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import useSWR from "swr";
+import AuthService from "../../services/auth-service";
+import useService from "./use-service";
 
 interface OneDriveTokenApiDto {
   token?: string;
@@ -8,20 +10,18 @@ interface OneDriveTokenApiDto {
 }
 
 export default function useOneDriveImage(downloadUrl?: string) {
+  const authService = useService(AuthService);
+
   const { data, error } = useSWR<string, AxiosError<OneDriveTokenApiDto>>(
     downloadUrl ?? null,
     async (url) => {
-      const { data } = await axios
-        .get<OneDriveTokenApiDto>(
-          `${process.env.NEXT_PUBLIC_APP_URL}/bluejack/Account/GetOneDriveToken`
-        )
-        .then((resp) =>
-          axios.get(url, {
-            headers: {
-              Authorization: `Bearer ${resp.data.token}`,
-            },
-          })
-        );
+      const { token } = await authService.getOnedriveToken();
+
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       return data["@microsoft.graph.downloadUrl"];
     }
