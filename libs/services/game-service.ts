@@ -98,7 +98,7 @@ export default class GameService extends AbstractService {
 
   public async exportSubmissions(gameId: string): Promise<[string, Blob]> {
     const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/${gameId}/submission/export_excel`,
+      `${this.apiUrl}/games/${gameId}/submissions/export_excel`,
       { responseType: "blob" }
     );
     const filename = getFilenameFromAxiosHeader(headers);
