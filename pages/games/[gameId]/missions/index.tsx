@@ -105,12 +105,12 @@ const MissionsPage = ({
               isLoading={isLoading}
               onPressUp={
                 number > 1
-                  ? () => swapMissionIndex(mission, idx - 1)
+                  ? () => swapMissionIndex(mission, idx + pageOffset - 1)
                   : undefined
               }
               onPressDown={
                 number < total
-                  ? () => swapMissionIndex(mission, idx + 1)
+                  ? () => swapMissionIndex(mission, idx + pageOffset + 1) 
                   : undefined
               }
               editable
