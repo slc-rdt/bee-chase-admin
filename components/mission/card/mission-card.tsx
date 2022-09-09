@@ -66,9 +66,10 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             <button
               type="button"
               onClick={onPressUp}
-              className="btn btn-ghost btn-square"
+              disabled={isLoading}
+              className={`btn btn-ghost btn-square ${isLoading && "loading"}`}
             >
-              <ChevronUpIcon />
+              {!isLoading && <ChevronUpIcon />}
             </button>
           )}
           <p className="text-xl font-bold">#{number}</p>
@@ -76,9 +77,10 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             <button
               type="button"
               onClick={onPressDown}
-              className="btn btn-ghost btn-square"
+              disabled={isLoading}
+              className={`btn btn-square btn-ghost ${isLoading && "loading"}`}
             >
-              <ChevronDownIcon />
+              {!isLoading && <ChevronDownIcon />}
             </button>
           )}
         </section>

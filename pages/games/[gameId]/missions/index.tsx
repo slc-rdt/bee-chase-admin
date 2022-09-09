@@ -62,8 +62,10 @@ const MissionsPage = ({
   const total = paginatedMissions.total ?? paginatedMissions.meta?.total ?? -1;
 
   const swapMissionIndex = async (mission: Mission, targetIndex: number) => {
-    await doAction(missionService.swapMissionIndex(mission, targetIndex));
-    router.push(router.asPath);
+    await doAction(Promise.all([
+      missionService.swapMissionIndex(mission, targetIndex),
+      router.push(router.asPath)
+    ]));
   };
 
   return (
