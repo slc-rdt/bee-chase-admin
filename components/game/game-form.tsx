@@ -53,9 +53,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
       );
     }
 
-    console.log(tag);
-    data.tag_id = tag?.id ?? null; // tagid nya nyangkut, jadi gbs hapus tagid
-    console.log(data.tag_id);
+    data.tag_id = tag?.id ?? null;
 
     const createMessages = {
       loading: "Creating game...",
