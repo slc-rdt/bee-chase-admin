@@ -40,8 +40,6 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
     },
   });
 
-  console.log(currentTag, watch("tag_name"), game);
-
   const onSubmit = handleSubmit(async (data) => {
     let tag = tags.find((tag) => tag.name === data.tag_name);
 
@@ -55,9 +53,9 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
       );
     }
 
-    if (tag) {
-      data.tag_id = tag.id;
-    }
+    console.log(tag);
+    data.tag_id = tag?.id ?? null; // tagid nya nyangkut, jadi gbs hapus tagid
+    console.log(data.tag_id);
 
     const createMessages = {
       loading: "Creating game...",
