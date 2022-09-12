@@ -1,4 +1,5 @@
 import { Bars3Icon, HomeIcon } from "@heroicons/react/20/solid";
+import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +18,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
   const user = data?.user;
 
   const isLogin = router.pathname.startsWith("/auth/login");
-  const isVerificationDetail = router.pathname.endsWith("/verifications/[missionId]");
+  const isVerificationDetail = router.pathname.endsWith(
+    "/verifications/[missionId]"
+  );
   const shouldShowNavbar =
     status === "authenticated" && !isLogin && !isVerificationDetail;
 
@@ -60,6 +63,13 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
             <div className="divider divider-horizontal" />
           </>
         )}
+
+        <Link href="/global-leaderboard">
+          <a className="btn btn-square btn-ghost">
+            <GlobeAltIcon className="h-5 w-5" />
+          </a>
+        </Link>
+        <div className="divider divider-horizontal" />
 
         <div className="dropdown-end dropdown">
           <label tabIndex={0} className="avatar btn btn-ghost btn-circle">

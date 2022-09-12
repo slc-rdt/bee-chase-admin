@@ -2,7 +2,7 @@ import { ShareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
@@ -22,6 +22,8 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 }) => {
   const gameService = useService(GameService);
   const router = useRouter();
+  const [startTime, setStartTime] = useState(game.start_time);
+  const [endTime, setEndTime] = useState(game.end_time);
   const { isLoading, doAction } = useLoading();
 
   const onShare = async (game: Game) => {
@@ -44,6 +46,26 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
     router.push(router.asPath);
   };
 
+  useEffect(() => {
+    if (!startTime) return;
+    setStartTime(
+      DateTime.fromISO(startTime.toString())
+        .toUTC()
+        .toLocal()
+        .toFormat("yyyy LLL dd 'at' HH:mm")
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!endTime) return;
+    setEndTime(
+      DateTime.fromISO(endTime.toString())
+        .toUTC()
+        .toLocal()
+        .toFormat("yyyy LLL dd 'at' HH:mm")
+    );
+  }, []);
+
   return (
     <div className="card w-full bg-base-100 shadow-xl" {...rest}>
       <div className="card-body">
@@ -62,21 +84,13 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
               <section className="font-medium">
                 {game.start_time && (
                   <p>
-                    Start:{" "}
-                    {DateTime.fromISO(game.start_time.toString())
-                      .toUTC()
-                      .toLocal()
-                      .toFormat("yyyy LLL dd 'at' HH:mm")}
+                    <>Start: {startTime}</>
                   </p>
                 )}
 
                 {game.end_time && (
                   <p>
-                    End:{" "}
-                    {DateTime.fromISO(game.end_time.toString())
-                      .toUTC()
-                      .toLocal()
-                      .toFormat("yyyy LLL dd 'at' HH:mm")}
+                    <>End: {endTime}</>
                   </p>
                 )}
               </section>
