@@ -25,18 +25,9 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
   onGameFormSubmit,
   ...rest
 }) => {
-  // const [photo, setPhoto] = useState<File | null>(null);
   const { register, handleSubmit } = useForm<GameFormValues>();
-  // const openFileChooser = useFileChooser();
-
-  // const onAddPhoto = async () => {
-  //   const files = await openFileChooser();
-  //   const photo = files?.item(0);
-  //   if (photo) setPhoto(photo);
-  // };
 
   const onSubmit = handleSubmit((data) => {
-    // if (photo) data.photo = photo;
     onGameFormSubmit(data);
   });
 
@@ -44,29 +35,6 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
     <div className="card w-full bg-base-100 shadow-xl" {...rest}>
       <form onSubmit={onSubmit} className="card-body">
         <div className="grid grid-cols-1 gap-4">
-          {/* <section>
-            <h3 className="mb-2 font-medium">Photo</h3>
-
-            <div className="flex flex-wrap gap-4">
-              <div className="avatar">
-                <div className="h-24 w-24 rounded-xl">
-                  <img src="https://placeimg.com/192/192/people" />
-                </div>
-              </div>
-
-              <div>
-                <button onClick={onAddPhoto} className="btn btn-primary gap-2">
-                  <PlusIcon className="h-5 w-5" /> Add a photo
-                </button>
-
-                <p className="mt-2 w-full max-w-xs">
-                  Add a photo to set your Experience apart and help participants
-                  find it!
-                </p>
-              </div>
-            </div>
-          </section> */}
-
           <section className="form-control w-full">
             <label className="label">
               <span className="label-text">Name</span>
@@ -105,6 +73,23 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
                 too.
               </span>
             </label>
+          </section>
+
+          <section className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Tags</span>
+            </label>
+            <input
+              list="tags"
+              {...register("tag_id")}
+              type="text"
+              disabled={isLoading}
+              className="input input-bordered w-full"
+              // defaultValue={game?.name}
+              required
+            />
+
+            <datalist id="tags"></datalist>
           </section>
 
           <section className="form-control w-full">
