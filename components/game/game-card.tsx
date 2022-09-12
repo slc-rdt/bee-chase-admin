@@ -79,6 +79,8 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
                 </div>
               </header>
 
+              {game.tag && <small>Tag: {game.tag?.name}</small>}
+
               <p className="my-4 truncate">{game.description}</p>
 
               <section className="font-medium">

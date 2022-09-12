@@ -13,7 +13,9 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async getAllPaginated(payload: PaginateRequestDto) {
+  public async getAllPaginated(
+    payload: PaginateRequestDto & { withTag?: boolean }
+  ) {
     const { data } = await this.axios.get<PaginateResponseDto<Game>>(
       `${this.apiUrl}/games`,
       { params: payload }

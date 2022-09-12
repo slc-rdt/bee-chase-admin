@@ -66,10 +66,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
 
         <Link href="/global-leaderboard">
           <a className="btn btn-square btn-ghost">
-            <GlobeAltIcon className="h-5 w-5" />
+            <GlobeAltIcon className="h-6 w-6" />
           </a>
         </Link>
-        <div className="divider divider-horizontal" />
 
         <div className="dropdown-end dropdown">
           <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
