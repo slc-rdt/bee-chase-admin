@@ -12,6 +12,6 @@ export default interface Game extends BaseModel {
   max_player_per_team: number;
   allow_user_create_team: boolean;
   admins?: User[];
-  tag_id: string;
+  tag_id: string | null;
   tag?: Tag;
 }
