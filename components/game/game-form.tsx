@@ -45,7 +45,7 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
   const onSubmit = handleSubmit(async (data) => {
     let tag = tags.find((tag) => tag.name === data.tag_name);
 
-    if (!tag) {
+    if (!tag && data.tag_name) {
       tag = await doAction(
         toast.promise(tagService.create({ name: data.tag_name }), {
           loading: "Creating tag...",
@@ -55,7 +55,9 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
       );
     }
 
-    data.tag_id = tag.id;
+    if (tag) {
+      data.tag_id = tag.id;
+    }
 
     const createMessages = {
       loading: "Creating game...",
@@ -132,7 +134,6 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
               disabled={isLoading}
               className="input input-bordered w-full"
               defaultValue={currentTag?.name}
-              required
             />
             <label className="label">
               <span className="label-text-alt">
