@@ -80,30 +80,19 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async exportGames(): Promise<[string, Blob]> {
-    const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/export_excel`,
-      { responseType: "blob" }
-    );
-    const filename = getFilenameFromAxiosHeader(headers);
-    return [filename, data];
+  public async exportGames() {
+    return await this.getBlob(`${this.apiUrl}/games/export_excel`);
   }
 
-  public async exportLeaderboard(gameId: string): Promise<[string, Blob]> {
-    const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/${gameId}/leaderboard/export_excel`,
-      { responseType: "blob" }
+  public async exportLeaderboard(gameId: string) {
+    return await this.getBlob(
+      `${this.apiUrl}/games/${gameId}/leaderboard/export_excel`
     );
-    const filename = getFilenameFromAxiosHeader(headers);
-    return [filename, data];
   }
 
-  public async exportSubmissions(gameId: string): Promise<[string, Blob]> {
-    const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/${gameId}/submissions/export_excel`,
-      { responseType: "blob" }
+  public async exportSubmissions(gameId: string) {
+    return await this.getBlob(
+      `${this.apiUrl}/games/${gameId}/submissions/export_excel`
     );
-    const filename = getFilenameFromAxiosHeader(headers);
-    return [filename, data];
   }
 }
