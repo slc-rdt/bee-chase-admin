@@ -3,4 +3,5 @@ export default interface UpdateGameDto {
   description: string;
   password: string;
   tag_id: string;
+  tag_name: string;
 }

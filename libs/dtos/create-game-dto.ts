@@ -3,4 +3,5 @@ export default interface CreateGameDto {
   description: string;
   password: string;
   tag_id: string;
+  tag_name: string;
 }

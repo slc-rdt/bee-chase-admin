@@ -1,8 +1,13 @@
 import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
 import UpdateGameDto from "../../libs/dtos/update-game-dto";
+import useLoading from "../../libs/hooks/common/use-loading";
+import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
+import Tag from "../../libs/models/tag";
+import TagService from "../../libs/services/tag-service";
 
 type GameFormValues = CreateGameDto | UpdateGameDto;
 
@@ -15,20 +20,61 @@ type GameFormValues = CreateGameDto | UpdateGameDto;
 
 interface IGameForm {
   game?: Game;
-  isLoading?: boolean;
-  onGameFormSubmit: (data: GameFormValues) => void;
+  tags: Tag[];
+  onGameFormSubmit: (data: GameFormValues) => Promise<void>;
 }
 
 const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
   game,
-  isLoading,
+  tags,
   onGameFormSubmit,
   ...rest
 }) => {
-  const { register, handleSubmit } = useForm<GameFormValues>();
+  const currentTag = tags.find((tag) => tag.id === game?.tag_id);
 
-  const onSubmit = handleSubmit((data) => {
-    onGameFormSubmit(data);
+  const tagService = useService(TagService);
+  const { isLoading, doAction } = useLoading();
+  const { register, handleSubmit, watch } = useForm<GameFormValues>({
+    defaultValues: {
+      tag_name: currentTag?.name,
+    },
+  });
+
+  console.log(currentTag, watch("tag_name"), game);
+
+  const onSubmit = handleSubmit(async (data) => {
+    let tag = tags.find((tag) => tag.name === data.tag_name);
+
+    if (!tag) {
+      tag = await doAction(
+        toast.promise(tagService.create({ name: data.tag_name }), {
+          loading: "Creating tag...",
+          success: "Tag created!",
+          error: "Failed to create tag.",
+        })
+      );
+    }
+
+    data.tag_id = tag.id;
+
+    const createMessages = {
+      loading: "Creating game...",
+      success: "Game created!",
+      error: "Failed to create game.",
+    };
+
+    const updateMessages = {
+      loading: "Updating game...",
+      success: "Game saved!",
+      error: "Failed to save game.",
+    };
+
+    await doAction(
+      toast.promise(
+        onGameFormSubmit(data),
+        game ? updateMessages : createMessages
+      )
+    );
   });
 
   return (
@@ -77,19 +123,31 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
 
           <section className="form-control w-full">
             <label className="label">
-              <span className="label-text">Tags</span>
+              <span className="label-text">Tag</span>
             </label>
             <input
               list="tags"
-              {...register("tag_id")}
+              {...register("tag_name")}
               type="text"
               disabled={isLoading}
               className="input input-bordered w-full"
-              // defaultValue={game?.name}
+              defaultValue={currentTag?.name}
               required
             />
+            <label className="label">
+              <span className="label-text-alt">
+                To view all available tags, please clear then click the input
+                field.
+              </span>
+            </label>
 
-            <datalist id="tags"></datalist>
+            <datalist id="tags">
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.name}>
+                  {tag.name}
+                </option>
+              ))}
+            </datalist>
           </section>
 
           <section className="form-control w-full">
