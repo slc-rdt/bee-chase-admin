@@ -1,14 +1,17 @@
+import { ArrowDownOnSquareIcon } from "@heroicons/react/20/solid";
 import { AxiosError } from "axios";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage,
+  NextPage
 } from "next";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../components/common/skeleton";
+import useDownloadBlob from "../libs/hooks/common/use-download-blob";
+import useLoading from "../libs/hooks/common/use-loading";
 import useService from "../libs/hooks/common/use-service";
 import Tag from "../libs/models/tag";
 import TagService from "../libs/services/tag-service";
@@ -31,9 +34,21 @@ export const getServerSideProps: GetServerSideProps<{ tags: Tag[] }> = async (
 const GlobalLeaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ tags }) => {
-  const { status } = useSession();
   const tagService = useService(TagService);
+  const downloadBlob = useDownloadBlob();
+  const { status } = useSession();
+  const { isLoading, doAction } = useLoading();
   const [tag, setTag] = useState<Tag | null>(tags[0]);
+
+  const onExport = async () => {
+    if (!tag) {
+      toast.error("Please select a tag first.");
+      return;
+    }
+
+    const exported = await doAction(tagService.exportGlobalLeaderboard(tag));
+    downloadBlob(...exported);
+  };
 
   const { data, error } = useSWR(
     tag && status === "authenticated" ? ["global-leaderboard", tag] : null,
@@ -55,7 +70,20 @@ const GlobalLeaderboard: NextPage<
 
   return (
     <div className="mx-auto max-w-screen-md">
-      <section className="form-control w-full">
+      <header className="flex flex-wrap justify-between">
+        <h2 className="mb-4 text-3xl font-bold">Global Leaderboard</h2>
+
+        <button
+          onClick={onExport}
+          disabled={isLoading}
+          className={`btn btn-secondary gap-2 ${isLoading && "loading"}`}
+        >
+          {!isLoading && <ArrowDownOnSquareIcon className="h-5 w-5" />}
+          Export global leaderboard
+        </button>
+      </header>
+
+      <section className="form-control mb-4 w-full">
         <label className="label">
           <span className="label-text">Leaderboard Tag</span>
         </label>
@@ -76,7 +104,7 @@ const GlobalLeaderboard: NextPage<
         </label>
       </section>
 
-      <section className="mt-4 grid grid-cols-1 gap-4">
+      <section className="grid grid-cols-1 gap-4">
         {!data &&
           Array.from({ length: 15 }).map((_, idx) => (
             <Skeleton key={idx} className="h-16 w-full" />
@@ -102,7 +130,9 @@ const GlobalLeaderboard: NextPage<
                       {rankSuffix} {item.name}
                     </section>
 
-                    <section>{item.total_point.toLocaleString()} points</section>
+                    <section>
+                      {item.total_point.toLocaleString()} points
+                    </section>
                   </div>
                 </div>
               </div>
