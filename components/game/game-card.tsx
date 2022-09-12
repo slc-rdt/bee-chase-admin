@@ -47,24 +47,24 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
   };
 
   useEffect(() => {
-    if (!startTime) return;
+    if (!game.start_time) return;
     setStartTime(
-      DateTime.fromISO(startTime.toString())
+      DateTime.fromISO(game.start_time.toString())
         .toUTC()
         .toLocal()
         .toFormat("yyyy LLL dd 'at' HH:mm")
     );
-  }, [startTime]);
+  }, [game.start_time]);
 
   useEffect(() => {
-    if (!endTime) return;
+    if (!game.end_time) return;
     setEndTime(
-      DateTime.fromISO(endTime.toString())
+      DateTime.fromISO(game.end_time.toString())
         .toUTC()
         .toLocal()
         .toFormat("yyyy LLL dd 'at' HH:mm")
     );
-  }, [endTime]);
+  }, [game.end_time]);
 
   return (
     <div className="card w-full bg-base-100 shadow-xl" {...rest}>
