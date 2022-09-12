@@ -102,7 +102,7 @@ const GlobalLeaderboard: NextPage<
                       {rankSuffix} {item.name}
                     </section>
 
-                    <section>{Number(item.total_point).toLocaleString()} points</section>
+                    <section>{item.total_point.toLocaleString()} points</section>
                   </div>
                 </div>
               </div>
