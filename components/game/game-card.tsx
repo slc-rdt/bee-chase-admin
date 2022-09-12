@@ -54,7 +54,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
         .toLocal()
         .toFormat("yyyy LLL dd 'at' HH:mm")
     );
-  }, []);
+  }, [startTime]);
 
   useEffect(() => {
     if (!endTime) return;
@@ -64,7 +64,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
         .toLocal()
         .toFormat("yyyy LLL dd 'at' HH:mm")
     );
-  }, []);
+  }, [endTime]);
 
   return (
     <div className="card w-full bg-base-100 shadow-xl" {...rest}>
