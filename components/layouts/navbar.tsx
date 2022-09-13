@@ -49,9 +49,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
         )}
 
         <Link href="/games">
-          <a className="btn btn-ghost hidden gap-2 text-xl normal-case md:flex">
+          <a className="btn btn-ghost gap-2 text-xl normal-case">
             <HomeIcon className="h-5 w-5" />
-            BeeChase
+            <span className="hidden md:block">BeeChase</span>
           </a>
         </Link>
       </div>
