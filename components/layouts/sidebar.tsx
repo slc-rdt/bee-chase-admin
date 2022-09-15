@@ -18,9 +18,7 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
       <label htmlFor="my-drawer-3" className="drawer-overlay"></label>
 
       <div
-        className={`menu overflow-y-auto bg-base-100 p-4 ${
-          hasNoSidebarMenus ? "w-0" : "w-80"
-        }`}
+        className="menu overflow-y-auto bg-base-100 p-4 w-80"
       >
         <ul>
           {sidebarMenus.map((menu, idx) =>

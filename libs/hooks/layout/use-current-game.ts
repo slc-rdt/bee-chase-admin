@@ -1,26 +1,7 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import GameService from "../../services/game-service";
-import useService from "../common/use-service";
+import { useContext } from "react";
+import { currentlyViewedGameContext } from "../../contexts/currently-viewed-game-context";
 
 export default function useCurrentGame() {
-  const router = useRouter();
-  const { status } = useSession();
-  const gameService = useService(GameService);
-
-  const isGameDetail = router.pathname.startsWith("/games/[gameId]");
-  const gameId = router.query.gameId;
-
-  const { data, error, isValidating } = useSWR(
-    status === "authenticated" && isGameDetail && gameId
-      ? `/games/${gameId}`
-      : null,
-    async () => await gameService.getOneById(`${router.query.gameId}`)
-  );
-
-  return {
-    game: data,
-    isLoading: (!data && !error) || isValidating,
-  };
+  const game = useContext(currentlyViewedGameContext);
+  return { game, isLoading: false };
 }
