@@ -33,7 +33,7 @@ interface IMenu {
 
 type MenuItem = IMenu | null;
 
-export default function useSidebarMenus(game: Game | null): MenuItem[] {
+export default function useSidebarMenus(game?: Game): MenuItem[] {
   const router = useRouter();
 
   const fullscreenRoutes = ["/verifications/[missionId]"];
