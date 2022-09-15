@@ -81,7 +81,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 
               {game.tag && <small>Tag: {game.tag?.name}</small>}
 
-              <p className="my-4 truncate">{game.description}</p>
+              <p className="my-4">{game.description}</p>
 
               <section className="font-medium">
                 {game.start_time && (
