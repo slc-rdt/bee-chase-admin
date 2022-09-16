@@ -16,7 +16,7 @@
     "leaflet": "^1.8.0",
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "luxon": "^3.0.1",
-    "next": "12.2.4",
+    "next": "12.3.0",
     "next-auth": "^4.10.3",
     "nextjs-progressbar": "^0.0.14",
     "qrcode": "^1.5.1",

@@ -1,3 +1,4 @@
+import { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { AppProps } from "next/app";
 import dynamic from "next/dynamic";
@@ -10,7 +11,10 @@ import "../styles/globals.css";
 const NextNProgress = dynamic(() => import("nextjs-progressbar"));
 const Layout = dynamic(() => import("../components/layouts/layout"));
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps<{ session?: Session | null }>) {
   return (
     <SessionProvider
       session={session}
