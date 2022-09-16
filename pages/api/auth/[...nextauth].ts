@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
             404: "User has no admin access.",
           }[error.response?.status ?? 0];
 
-          throw new Error(message ?? "Unknown error.");
+          throw new Error(message ?? `${error.response?.data}` ?? "Unknown error.");
         }
       },
     }),
