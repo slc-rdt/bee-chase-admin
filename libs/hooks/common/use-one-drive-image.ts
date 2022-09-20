@@ -1,23 +1,17 @@
-import axios, { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
+import axios from "axios";
 import toast from "react-hot-toast";
 import useSWR from "swr";
-import AuthService from "../../services/auth-service";
-import useService from "./use-service";
-
-interface OneDriveTokenApiDto {
-  token?: string;
-  error?: string;
-}
+import useOneDriveToken from "./use-one-drive-token";
 
 export default function useOneDriveImage(downloadUrl?: string) {
-  const { status } = useSession();
-  const authService = useService(AuthService);
+  const onedriveToken = useOneDriveToken();
 
-  const { data, error } = useSWR<string, AxiosError<OneDriveTokenApiDto>>(
-    status === "authenticated" ? downloadUrl : null,
+  const { data, error } = useSWR(
+    onedriveToken ? downloadUrl : null,
     async (url) => {
-      const { token } = await authService.getOnedriveToken();
+      if (!onedriveToken) return null;
+
+      const { token } = onedriveToken;
 
       const { data } = await axios.get(url, {
         headers: {
