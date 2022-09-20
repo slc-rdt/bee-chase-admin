@@ -4,6 +4,7 @@ import PaginateResponseDto from "../dtos/paginate-response-dto";
 import { AnswerTypes } from "../enums";
 import GameTeam from "../models/game-team";
 import Submission from "../models/submission";
+import User from "../models/user";
 import AbstractService from "./abstract-service";
 
 export default class GameTeamService extends AbstractService {
@@ -60,6 +61,13 @@ export default class GameTeamService extends AbstractService {
   public async delete(payload: GameTeam) {
     const { data } = await this.axios.delete<GameTeam>(
       `${this.apiUrl}/games/${payload.game_id}/game_teams/${payload.id}`
+    );
+    return data;
+  }
+
+  public async deleteMember(gameTeam: GameTeam, member: User) {
+    const { data } = await this.axios.delete<GameTeam>(
+      `${this.apiUrl}/games/${gameTeam.game_id}/game_teams/${gameTeam.id}/users/${member.id}`
     );
     return data;
   }
