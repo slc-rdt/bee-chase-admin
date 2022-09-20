@@ -6,19 +6,27 @@ import {
   NextPage,
 } from "next";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../components/common/skeleton";
-import GlobalLeaderboardExportButton from "../components/global-leaderboard/global-leaderboard-export-button";
-import GlobalLeaderboardFilterForm from "../components/global-leaderboard/global-leaderboard-filter-form";
 import useService from "../libs/hooks/common/use-service";
 import Tag from "../libs/models/tag";
 import TagService from "../libs/services/tag-service";
 import createServerSideService from "../libs/utils/create-server-side-service";
 import getRankSuffix from "../libs/utils/get-rank-suffix";
 import handleServerSideError from "../libs/utils/handle-server-side-error";
+
+const GlobalLeaderboardExportButton = dynamic(
+  () =>
+    import("../components/global-leaderboard/global-leaderboard-export-button")
+);
+const GlobalLeaderboardFilterForm = dynamic(
+  () =>
+    import("../components/global-leaderboard/global-leaderboard-filter-form")
+);
 
 export const getServerSideProps: GetServerSideProps<{
   tags: Tag[];
@@ -106,7 +114,8 @@ const GlobalLeaderboard: NextPage<
             </div>
             <div className="stat-desc">
               Students who had accessed BeeChase, did activities, and receive
-              points (as of {now.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}).
+              points (as of{" "}
+              {now.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}).
             </div>
           </div>
         </div>
