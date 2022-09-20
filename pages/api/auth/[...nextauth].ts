@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
+        // @ts-ignore https://github.com/nextauthjs/next-auth/discussions/2762#discussioncomment-1332952
         token.user = user;
         await validateAccessToken(token.user);
       }
