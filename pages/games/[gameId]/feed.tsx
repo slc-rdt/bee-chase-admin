@@ -21,7 +21,7 @@ const GameActivityFeed = () => {
 
   const gameId = router.query.gameId?.toString() ?? "";
 
-  const { data, mutate, size, setSize } = useSWRInfinite(
+  const { data, mutate, size, setSize, isValidating } = useSWRInfinite(
     (pageIndex, previousPageData: PaginateResponseDto<Submission> | null) => {
       if (status !== "authenticated") return null;
 
@@ -33,7 +33,7 @@ const GameActivityFeed = () => {
         if (page > lastPage) return null;
       }
 
-      return ["feeds", pageIndex + 1];
+      return [`feeds:${gameId}`, pageIndex + 1];
     },
     async (_, page) => {
       return await doAction(
@@ -45,9 +45,19 @@ const GameActivityFeed = () => {
     }
   );
 
+  const isNoData = data?.flatMap((d) => d.data).length === 0;
+
   return (
     <div className="mx-auto max-w-screen-md">
       <h2 className="mb-4 text-3xl font-bold">Activity Feed</h2>
+
+      {isNoData && !isValidating && (
+        <section className="card shadow-xl">
+          <div className="card-body">
+            <h3 className="card-title justify-center">No data.</h3>
+          </div>
+        </section>
+      )}
 
       {data?.map((pagination) => {
         const onDelete = (submission: Submission) => {
@@ -78,7 +88,7 @@ const GameActivityFeed = () => {
         <button
           onClick={() => setSize(size + 1)}
           className={`btn btn-primary ${isLoading && "loading"}`}
-          disabled={isLoading}
+          disabled={isLoading || isNoData}
         >
           Load More
         </button>
