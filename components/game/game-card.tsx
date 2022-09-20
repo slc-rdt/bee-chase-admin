@@ -79,7 +79,17 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
                 </div>
               </header>
 
-              {game.tag && <small>Tag: {game.tag?.name}</small>}
+              {game.tag && (
+                <p>
+                  <small>Tag: {game.tag?.name}</small>
+                </p>
+              )}
+
+              {game.max_obtainable_points && (
+                <p>
+                  <small>Maximum points: {game.max_obtainable_points}</small>
+                </p>
+              )}
 
               <p className="my-4">{game.description}</p>
 

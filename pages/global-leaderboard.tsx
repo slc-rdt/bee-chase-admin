@@ -3,9 +3,10 @@ import { AxiosError } from "axios";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
@@ -118,26 +119,25 @@ const GlobalLeaderboard: NextPage<
           </div>
         )}
 
-        {data &&
-          data.map((item) => {
-            const rankSuffix = getRankSuffix(item.rank);
-            return (
-              <div key={item.id} className="card shadow-xl">
-                <div className="card-body">
-                  <div className="flex flex-wrap justify-between text-lg font-bold">
-                    <section>
-                      #{item.rank}
-                      {rankSuffix} {item.name}
-                    </section>
+        {data?.map((user) => {
+          const rankSuffix = getRankSuffix(user.rank);
+          return (
+            <div key={user.id} className="card shadow-xl">
+              <div className="card-body">
+                <div className="flex flex-wrap justify-between text-lg font-bold">
+                  <Link href={`/users/${user.id}/games`}>
+                    <a className="link link-primary">
+                      #{user.rank}
+                      {rankSuffix} {user.name}
+                    </a>
+                  </Link>
 
-                    <section>
-                      {item.total_point.toLocaleString()} points
-                    </section>
-                  </div>
+                  <section>{user.total_point.toLocaleString()} points</section>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
       </section>
     </div>
   );

@@ -1,7 +1,7 @@
 import "next-auth";
 import "next-auth/jwt";
 import { DefaultJWT } from "next-auth/jwt";
-import User from "../dtos/login-dto";
+import User from "../models/user";
 
 declare module "next-auth" {
   /**

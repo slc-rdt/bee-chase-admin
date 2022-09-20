@@ -14,4 +14,5 @@ export default interface Game extends BaseModel {
   admins?: User[];
   tag_id: string | null;
   tag?: Tag;
+  max_obtainable_points?: number;
 }
