@@ -2,7 +2,6 @@ import { AxiosError } from "axios";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../../../components/common/skeleton";

@@ -20,13 +20,24 @@ import createServerSideService from "../libs/utils/create-server-side-service";
 import getRankSuffix from "../libs/utils/get-rank-suffix";
 import handleServerSideError from "../libs/utils/handle-server-side-error";
 
-export const getServerSideProps: GetServerSideProps<{ tags: Tag[] }> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<{
+  tags: Tag[];
+  usersWithPointsMoreThan500Count: number;
+}> = async (context) => {
   try {
     const tagService = await createServerSideService(context.req, TagService);
+
     const tags = await tagService.getAll();
-    return { props: { tags } };
+
+    const globalLeaderboards = await Promise.all(
+      tags.map((tag) => tagService.getGlobalLeaderboard(tag, { limit: -1 }))
+    ).then((result) => result.flatMap((x) => x));
+
+    const usersWithPointsMoreThan500Count = globalLeaderboards.filter(
+      (leaderboard) => leaderboard.total_point >= 500
+    ).length;
+
+    return { props: { tags, usersWithPointsMoreThan500Count } };
   } catch (error) {
     return handleServerSideError(error);
   }
@@ -34,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<{ tags: Tag[] }> = async (
 
 const GlobalLeaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ tags }) => {
+> = ({ tags, usersWithPointsMoreThan500Count }) => {
   const tagService = useService(TagService);
   const downloadBlob = useDownloadBlob();
   const { status } = useSession();
@@ -83,6 +94,25 @@ const GlobalLeaderboard: NextPage<
           Export global leaderboard
         </button>
       </header>
+
+      <div className="divider" />
+
+      <section className="flex justify-center">
+        <div className="stats my-4 shadow">
+          <div className="stat place-items-center">
+            <div className="stat-title">Users with score &gt;= 500</div>
+            <div className="stat-value">
+              {usersWithPointsMoreThan500Count.toLocaleString()}
+            </div>
+            <div className="stat-desc">
+              Students who had accessed BeeChase, did activities, and receive
+              points.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="divider" />
 
       <section className="form-control mb-4 w-full">
         <label className="label">
