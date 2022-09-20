@@ -70,8 +70,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
         )}
 
         <Link href="/global-leaderboard">
-          <a className="btn btn-square btn-ghost">
+          <a className="btn gap-2 btn-ghost">
             <GlobeAltIcon className="h-6 w-6" />
+            <span className="hidden md:block">Global Leaderboard</span>
           </a>
         </Link>
 
