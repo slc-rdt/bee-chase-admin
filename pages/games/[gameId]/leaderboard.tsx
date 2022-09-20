@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps<
   try {
     const gameId = context.params?.gameId ?? "";
     const gameService = await createServerSideService(context.req, GameService);
-    const leaderboard = await gameService.getLeaderboard(gameId);
+    const leaderboard = await gameService.getLeaderboard(gameId, {});
     return { props: { gameId, leaderboard } };
   } catch (error) {
     return handleServerSideError(error, {
