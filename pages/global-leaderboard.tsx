@@ -1,5 +1,5 @@
-import { ArrowDownOnSquareIcon } from "@heroicons/react/20/solid";
 import { AxiosError } from "axios";
+import { DateTime } from "luxon";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -7,12 +7,12 @@ import {
 } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../components/common/skeleton";
-import useDownloadBlob from "../libs/hooks/common/use-download-blob";
-import useLoading from "../libs/hooks/common/use-loading";
+import GlobalLeaderboardExportButton from "../components/global-leaderboard/global-leaderboard-export-button";
+import GlobalLeaderboardFilterForm from "../components/global-leaderboard/global-leaderboard-filter-form";
 import useService from "../libs/hooks/common/use-service";
 import Tag from "../libs/models/tag";
 import TagService from "../libs/services/tag-service";
@@ -43,38 +43,45 @@ export const getServerSideProps: GetServerSideProps<{
   }
 };
 
+export interface IGlobalLeaderboardFilterFormValues {
+  tagId?: string;
+  startDate: string;
+  endDate: string;
+}
+
 const GlobalLeaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ tags, usersWithPointsMoreThan500Count }) => {
+  const now = DateTime.now();
+
   const tagService = useService(TagService);
-  const downloadBlob = useDownloadBlob();
   const { status } = useSession();
-  const { isLoading, doAction } = useLoading();
-  const [tag, setTag] = useState<Tag | null>(tags[0]);
 
-  const onExport = async () => {
-    if (!tag) {
-      toast.error("Please select a tag first.");
-      return;
-    }
+  const { register, watch } = useForm<IGlobalLeaderboardFilterFormValues>({
+    defaultValues: {
+      tagId: tags[0]?.id,
+      startDate: now.toISODate(),
+      endDate: now.plus({ days: 1 }).toISODate(),
+    },
+  });
 
-    const exported = await doAction(tagService.exportGlobalLeaderboard(tag));
-    downloadBlob(...exported);
-  };
+  const tagId = watch("tagId");
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+
+  const tag = tags.find((tag) => tag.id === tagId);
 
   const { data, error } = useSWR(
-    tag && status === "authenticated" ? ["global-leaderboard", tag] : null,
-    async (_, tag) => await tagService.getGlobalLeaderboard(tag, { page: 1 })
+    tag && status === "authenticated"
+      ? ["global-leaderboard", tag, startDate, endDate]
+      : null,
+    async (_, tag, startDate, endDate) =>
+      await tagService.getGlobalLeaderboard(tag, {
+        page: 1,
+        start_date: startDate,
+        end_date: endDate,
+      })
   );
-
-  const onSelectTag = (tagId: string) => {
-    const selectedTag = tags.find((tag) => tag.id === tagId);
-    if (selectedTag) {
-      setTag(selectedTag);
-    } else {
-      toast.error(`Tag not found [tagId: ${tagId}].`);
-    }
-  };
 
   if (error instanceof AxiosError) {
     toast.error(error.message, { id: `global-leaderboard:${tag?.id}` });
@@ -85,14 +92,7 @@ const GlobalLeaderboard: NextPage<
       <header className="flex flex-wrap justify-between">
         <h2 className="mb-4 text-3xl font-bold">Global Leaderboard</h2>
 
-        <button
-          onClick={onExport}
-          disabled={isLoading}
-          className={`btn btn-secondary gap-2 ${isLoading && "loading"}`}
-        >
-          {!isLoading && <ArrowDownOnSquareIcon className="h-5 w-5" />}
-          Export global leaderboard
-        </button>
+        <GlobalLeaderboardExportButton tag={tag} />
       </header>
 
       <div className="divider" />
@@ -114,26 +114,9 @@ const GlobalLeaderboard: NextPage<
 
       <div className="divider" />
 
-      <section className="form-control mb-4 w-full">
-        <label className="label">
-          <span className="label-text">Leaderboard Tag</span>
-        </label>
-        <select
-          className="select select-bordered"
-          onChange={(e) => onSelectTag(e.target.value)}
-        >
-          {tags.map((tag) => (
-            <option key={tag.id} value={tag.id}>
-              {tag.name}
-            </option>
-          ))}
-        </select>
-        <label className="label">
-          <span className="label-text-alt">
-            Choose a tag to filter the leaderboard.
-          </span>
-        </label>
-      </section>
+      <GlobalLeaderboardFilterForm {...{ register, tags }} />
+
+      <div className="divider" />
 
       <section className="grid grid-cols-1 gap-4">
         {!data &&

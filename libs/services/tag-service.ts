@@ -5,7 +5,10 @@ import Tag from "../models/tag";
 import AbstractService from "./abstract-service";
 
 export default class TagService extends AbstractService {
-  public async getGlobalLeaderboard(tag: Tag, params: PaginateRequestDto) {
+  public async getGlobalLeaderboard(
+    tag: Tag,
+    params: PaginateRequestDto & { start_date?: string; end_date?: string }
+  ) {
     const { data } = await this.axios.get<GlobalLeaderboardItem[]>(
       `${this.apiUrl}/tags/${tag.id}/leaderboard`,
       { params }
@@ -24,6 +27,8 @@ export default class TagService extends AbstractService {
   }
 
   public async exportGlobalLeaderboard(tag: Tag) {
-    return await this.getBlob(`${this.apiUrl}/tags/${tag.id}/leaderboard/export_excel`);
+    return await this.getBlob(
+      `${this.apiUrl}/tags/${tag.id}/leaderboard/export_excel`
+    );
   }
 }
