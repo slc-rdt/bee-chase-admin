@@ -100,7 +100,7 @@ const GlobalLeaderboard: NextPage<
       <section className="flex justify-center">
         <div className="stats my-4 shadow">
           <div className="stat place-items-center">
-            <div className="stat-title">Users with score &gt;= 500</div>
+            <div className="stat-title">Users with score ≥ 500</div>
             <div className="stat-value">
               {usersWithPointsMoreThan500Count.toLocaleString()}
             </div>
