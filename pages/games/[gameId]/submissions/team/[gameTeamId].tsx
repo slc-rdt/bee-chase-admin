@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps<
 
     const [gameTeam, members, ...submissionsPaginations] = await Promise.all([
       gameService
-        .getLeaderboard(gameId)
+        .getLeaderboard(gameId, { limit: -1 })
         .then((leaderboard) =>
           leaderboard.find((gameTeam) => gameTeam.id === gameTeamId)
         ),

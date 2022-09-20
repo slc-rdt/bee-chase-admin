@@ -4,7 +4,6 @@ import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Game from "../models/game";
 import GameTeam from "../models/game-team";
 import User from "../models/user";
-import getFilenameFromAxiosHeader from "../utils/get-filename-from-axios-header";
 import AbstractService from "./abstract-service";
 
 export default class GameService extends AbstractService {
@@ -28,9 +27,10 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async getLeaderboard(gameId: string) {
+  public async getLeaderboard(gameId: string, params: PaginateRequestDto) {
     const { data } = await this.axios.get<GameTeam[]>(
-      `${this.apiUrl}/games/${gameId}/leaderboard`
+      `${this.apiUrl}/games/${gameId}/leaderboard`,
+      { params }
     );
     return data;
   }
