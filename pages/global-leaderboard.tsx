@@ -106,7 +106,7 @@ const GlobalLeaderboard: NextPage<
             </div>
             <div className="stat-desc">
               Students who had accessed BeeChase, did activities, and receive
-              points.
+              points (as of {now.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}).
             </div>
           </div>
         </div>
