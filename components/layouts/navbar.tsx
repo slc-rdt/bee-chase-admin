@@ -1,4 +1,9 @@
-import { Bars3Icon, HomeIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowLeftOnRectangleIcon,
+  Bars3Icon,
+  ChatBubbleLeftRightIcon,
+  ClipboardDocumentCheckIcon, HomeIcon
+} from "@heroicons/react/20/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -86,7 +91,22 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
             className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
           >
             <li>
-              <button onClick={onLogout}>Logout</button>
+              <a href="https://forms.office.com/r/rZXEV215a5" target="_blank" rel="noreferrer noopener">
+                <ClipboardDocumentCheckIcon className="h-5 w-5" />
+                Feedback
+              </a>
+            </li>
+            <li>
+              <a href="http://line.me/ti/p/~@045wptvx" target="_blank" rel="noreferrer noopener">
+                <ChatBubbleLeftRightIcon className="h-5 w-5" />
+                Chat Support
+              </a>
+            </li>
+            <li>
+              <button onClick={onLogout}>
+                <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                Logout
+              </button>
             </li>
           </ul>
         </div>
