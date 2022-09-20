@@ -73,7 +73,8 @@ const SubmissionFeedCard: ComponentType<
             </Link>{" "}
             completed{" "}
             <span className="font-bold">{submission.mission?.name}</span> for{" "}
-            {submission.mission?.point_value} points
+            {submission.is_accepted ? submission.mission?.point_value : 0}{" "}
+            points
           </h2>
         </header>
 
