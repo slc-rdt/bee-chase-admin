@@ -6,11 +6,12 @@ interface IConfirmationModal {
   modalKey: string;
   onConfirm: () => void;
   isLoading: boolean;
+  title?: string;
 }
 
 const ConfirmationModal: ComponentType<
   ComponentProps<"label"> & IConfirmationModal
-> = ({ modalKey, onConfirm, isLoading, children, className, ...rest }) => {
+> = ({ modalKey, onConfirm, isLoading, children, className, title, ...rest }) => {
   return (
     <>
       <label
@@ -21,7 +22,7 @@ const ConfirmationModal: ComponentType<
         {children}
       </label>
 
-      <Modal modalKey={modalKey} title="Are you sure to delete?">
+      <Modal modalKey={modalKey} title={title ?? "Are you sure to delete?"}>
         <section className="modal-action">
           <button
             onClick={onConfirm}

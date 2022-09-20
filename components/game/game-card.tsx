@@ -124,6 +124,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 
           <ConfirmationModal
             className="btn btn-error gap-2"
+            title="Are you sure to delete this game?"
             modalKey={game.id}
             isLoading={isLoading}
             onConfirm={() => onDelete(game)}
