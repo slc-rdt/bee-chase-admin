@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useFormattedDate from "../../libs/hooks/common/use-formatted-date";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
@@ -22,8 +23,8 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 }) => {
   const gameService = useService(GameService);
   const router = useRouter();
-  const [startTime, setStartTime] = useState(game.start_time);
-  const [endTime, setEndTime] = useState(game.end_time);
+  const startTime = useFormattedDate(game.start_time, "yyyy LLL dd 'at' HH:mm");
+  const endTime = useFormattedDate(game.end_time, "yyyy LLL dd 'at' HH:mm");
   const { isLoading, doAction } = useLoading();
 
   const onShare = async (game: Game) => {
@@ -45,26 +46,6 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
     });
     router.push(router.asPath);
   };
-
-  useEffect(() => {
-    if (!game.start_time) return;
-    setStartTime(
-      DateTime.fromISO(game.start_time.toString())
-        .toUTC()
-        .toLocal()
-        .toFormat("yyyy LLL dd 'at' HH:mm")
-    );
-  }, [game.start_time]);
-
-  useEffect(() => {
-    if (!game.end_time) return;
-    setEndTime(
-      DateTime.fromISO(game.end_time.toString())
-        .toUTC()
-        .toLocal()
-        .toFormat("yyyy LLL dd 'at' HH:mm")
-    );
-  }, [game.end_time]);
 
   return (
     <div className="card w-full bg-base-100 shadow-xl" {...rest}>

@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../components/common/skeleton";
+import useFormattedDate from "../libs/hooks/common/use-formatted-date";
 import useService from "../libs/hooks/common/use-service";
 import Tag from "../libs/models/tag";
 import TagService from "../libs/services/tag-service";
@@ -65,6 +66,11 @@ const GlobalLeaderboard: NextPage<
   const tagService = useService(TagService);
   const { status } = useSession();
 
+  const nowFormattedDate = useFormattedDate(
+    now.toISO(),
+    DateTime.DATETIME_MED_WITH_WEEKDAY
+  );
+
   const { register, watch } = useForm<IGlobalLeaderboardFilterFormValues>({
     defaultValues: {
       tagId: tags[0]?.id,
@@ -114,8 +120,7 @@ const GlobalLeaderboard: NextPage<
             </div>
             <div className="stat-desc">
               Students who had accessed BeeChase, did activities, and receive
-              points (as of{" "}
-              {now.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}).
+              points (as of {nowFormattedDate}).
             </div>
           </div>
         </div>
@@ -154,7 +159,10 @@ const GlobalLeaderboard: NextPage<
                     </a>
                   </Link>
 
-                  <section>{user.total_point.toLocaleString()} points</section>
+                  <section>
+                    {user.total_point.toLocaleString()} PTS in{" "}
+                    {user.total_game.toLocaleString()} games
+                  </section>
                 </div>
               </div>
             </div>
