@@ -74,7 +74,7 @@ const GlobalLeaderboard: NextPage<
   const { register, watch } = useForm<IGlobalLeaderboardFilterFormValues>({
     defaultValues: {
       tagId: tags[0]?.id,
-      startDate: now.toISODate(),
+      startDate: process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE ?? now.toISODate(),
       endDate: now.plus({ days: 1 }).toISODate(),
     },
   });
