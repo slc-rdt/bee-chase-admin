@@ -4,4 +4,5 @@ export default interface CreateGameDto {
   password: string;
   tag_id: string | null;
   tag_name: string;
+  group: string;
 }

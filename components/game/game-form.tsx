@@ -149,6 +149,28 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
 
           <section className="form-control w-full">
             <label className="label">
+              <span className="label-text">Group (Optional)</span>
+            </label>
+            <input
+              {...register("group")}
+              type="text"
+              disabled={isLoading}
+              className="input input-bordered w-full"
+              defaultValue={game?.group}
+              required
+            />
+            <label className="label">
+              <span className="label-text-alt">
+                If group is set, student cannot join two games with the same
+                group. Example: Game CS and Cyber under group
+                &quot;Kemanggisan&quot; means that student can only join one
+                of them.
+              </span>
+            </label>
+          </section>
+
+          <section className="form-control w-full">
+            <label className="label">
               <span className="label-text">Password (Optional)</span>
             </label>
             <input

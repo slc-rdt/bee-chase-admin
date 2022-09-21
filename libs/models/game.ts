@@ -15,4 +15,5 @@ export default interface Game extends BaseModel {
   tag_id: string | null;
   tag?: Tag;
   max_obtainable_points?: number;
+  group: string;
 }
