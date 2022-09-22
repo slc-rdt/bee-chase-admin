@@ -10,6 +10,7 @@ import {
 import { ComponentProps, ComponentType } from "react";
 import { AnswerTypes, AvailabilityTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
+import MissionIcon from "../mission-icon";
 import MissionCardCloneAction from "./mission-card-clone-action";
 import MissionCardDeleteAction from "./mission-card-delete-action";
 import MissionCardEditAction from "./mission-card-edit-action";
@@ -78,7 +79,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
               type="button"
               onClick={onPressDown}
               disabled={isLoading}
-              className={`btn btn-square btn-ghost ${isLoading && "loading"}`}
+              className={`btn btn-ghost btn-square ${isLoading && "loading"}`}
             >
               {!isLoading && <ChevronDownIcon />}
             </button>
@@ -89,21 +90,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
       <div className="card-body">
         <header className="card-title flex flex-wrap items-center justify-between capitalize">
           <h2 className="flex items-center gap-2">
-            <span>
-              {
-                {
-                  [AnswerTypes.IMAGE]: <CameraIcon className="h-6 w-6" />,
-                  [AnswerTypes.TEXT]: <DocumentTextIcon className="h-6 w-6" />,
-                  [AnswerTypes.GPS]: <MapPinIcon className="h-6 w-6" />,
-                  [AnswerTypes.MULTIPLE_CHOICE]: (
-                    <ListBulletIcon className="h-6 w-6" />
-                  ),
-                  [AnswerTypes.VERIFICATION]: (
-                    <ShieldCheckIcon className="h-6 w-6" />
-                  ),
-                }[mission.answer_type]
-              }
-            </span>
+            <MissionIcon mission={mission} />
             <span>{mission.name}</span>
           </h2>
 
