@@ -23,6 +23,15 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
         }`}
       >
         <ul>
+          <li className="rounded-box">
+            <div
+              className="tooltip tooltip-bottom tooltip-primary"
+              data-tip="Game name"
+            >
+              <span className="font-bold">{game?.name}</span>
+            </div>
+          </li>
+          <div className="divider" />
           {sidebarMenus.map((menu, idx) =>
             menu ? (
               <li
