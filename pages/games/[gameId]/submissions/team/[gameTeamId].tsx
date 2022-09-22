@@ -4,10 +4,10 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import ConfirmationModal from "../../../../../components/common/confirmation-modal";
-import SubmissionsViewByTeam from "../../../../../components/submission/by-team/submissions-view-by-team";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
 import { AnswerTypes } from "../../../../../libs/enums";
 import useLoading from "../../../../../libs/hooks/common/use-loading";
@@ -20,6 +20,13 @@ import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../../../libs/utils/handle-server-side-error";
 import normalizeConstantCase from "../../../../../libs/utils/normalize-constant-case";
+
+const SubmissionsViewByTeam = dynamic(
+  () =>
+    import(
+      "../../../../../components/submission/by-team/submissions-view-by-team"
+    )
+);
 
 export const getServerSideProps: GetServerSideProps<
   {

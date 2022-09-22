@@ -1,9 +1,9 @@
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
-import SubmissionsViewByMission from "../../../../../components/submission/by-mission/submissions-view-by-mission";
+import dynamic from "next/dynamic";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
 import Mission from "../../../../../libs/models/mission";
 import Submission from "../../../../../libs/models/submission";
@@ -11,6 +11,13 @@ import MissionService from "../../../../../libs/services/mission-service";
 import SubmissionService from "../../../../../libs/services/submission-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../../../libs/utils/handle-server-side-error";
+
+const SubmissionsViewByMission = dynamic(
+  () =>
+    import(
+      "../../../../../components/submission/by-mission/submissions-view-by-mission"
+    )
+);
 
 export const getServerSideProps: GetServerSideProps<
   {
