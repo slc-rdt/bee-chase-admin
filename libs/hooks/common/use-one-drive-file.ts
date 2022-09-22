@@ -7,19 +7,21 @@ export default function useOneDriveFile(downloadUrl?: string) {
   const onedriveToken = useOneDriveToken();
 
   const { data, error } = useSWR(
-    onedriveToken ? downloadUrl : null,
-    async (url) => {
-      if (!onedriveToken) return null;
-
+    onedriveToken && downloadUrl ? [onedriveToken, downloadUrl] : null,
+    async (onedriveToken, downloadUrl) => {
       const { token } = onedriveToken;
 
-      const { data } = await axios.get(url, {
+      const { data } = await axios.get(downloadUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       return data["@microsoft.graph.downloadUrl"];
+    },
+    {
+      // Prevent refresh because video is restarted when SWR is re-validating.
+      isPaused: () => true,
     }
   );
 
