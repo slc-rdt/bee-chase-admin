@@ -65,9 +65,7 @@ const ImageSubmissionItem: ComponentType<
       {...rest}
     >
       {answerData.mime_type?.includes("video") ? (
-        <div>
-          <video src={data} controls></video>
-        </div>
+        <video src={data} controls></video>
       ) : (
         <figure>
           {/* eslint-disable-next-line @next/next/no-img-element */}
