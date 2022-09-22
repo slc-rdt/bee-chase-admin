@@ -1,4 +1,9 @@
 import { AxiosError } from "axios";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -8,10 +13,27 @@ import Skeleton from "../../../components/common/skeleton";
 import useService from "../../../libs/hooks/common/use-service";
 import Game from "../../../libs/models/game";
 import UserService from "../../../libs/services/user-service";
+import createServerSideService from "../../../libs/utils/create-server-side-service";
+import handleServerSideError from "../../../libs/utils/handle-server-side-error";
 
 const GameCard = dynamic(() => import("../../../components/game/game-card"));
 
-const UserGamesPage = () => {
+export const getServerSideProps: GetServerSideProps<{
+  username: string;
+}> = async (context) => {
+  try {
+    const userId = `${context.params?.userId}`;
+    const userService = await createServerSideService(context.req, UserService);
+    const user = await userService.getOneById(userId);
+    return { props: { username: user.name } };
+  } catch (error) {
+    return handleServerSideError(error);
+  }
+};
+
+const UserGamesPage: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ username }) => {
   const router = useRouter();
   const { status } = useSession();
   const userService = useService(UserService);
@@ -29,7 +51,10 @@ const UserGamesPage = () => {
 
   return (
     <section className="mx-auto max-w-screen-md">
-      <h2 className="mb-4 text-3xl font-bold">User&apos;s Games</h2>
+      <h2 className="mb-4 text-3xl font-bold">
+        <span className="capitalize">{username.toLowerCase()}</span>&apos;s
+        Games
+      </h2>
 
       <section className="grid grid-cols-1 gap-4">
         {!data &&
