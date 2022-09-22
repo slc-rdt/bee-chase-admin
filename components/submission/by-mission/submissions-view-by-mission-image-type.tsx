@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
 import useLoading from "../../../libs/hooks/common/use-loading";
-import useOneDriveImage from "../../../libs/hooks/common/use-one-drive-image";
+import useOneDriveFile from "../../../libs/hooks/common/use-one-drive-file";
 import Submission from "../../../libs/models/submission";
 import SubmissionAnswerData from "../../../libs/models/submission-answer-data";
 import parseJsonIfString from "../../../libs/utils/parse-json-if-string";
@@ -53,7 +53,7 @@ const ImageSubmissionItem: ComponentType<
     submission.answer_data
   );
 
-  const { data } = useOneDriveImage(answerData.download_url);
+  const { data } = useOneDriveFile(answerData.download_url);
 
   const onDeleteClicked = (submission: Submission) => {
     doAction(onDelete(submission));
@@ -65,10 +65,16 @@ const ImageSubmissionItem: ComponentType<
       className={`card bg-base-100 shadow-xl ${isLoading && "animate-pulse"}`}
       {...rest}
     >
-      <figure>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={data} alt="submission image" />
-      </figure>
+      {answerData.mime_type?.includes("video") ? (
+        <div>
+          <video src={data} controls></video>
+        </div>
+      ) : (
+        <figure>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={data} alt="submission image" />
+        </figure>
+      )}
 
       <div className="card-body">
         <Link

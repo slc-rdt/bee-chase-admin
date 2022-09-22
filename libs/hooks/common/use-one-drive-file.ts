@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import useSWR from "swr";
 import useOneDriveToken from "./use-one-drive-token";
 
-export default function useOneDriveImage(downloadUrl?: string) {
+export default function useOneDriveFile(downloadUrl?: string) {
   const onedriveToken = useOneDriveToken();
 
   const { data, error } = useSWR(
