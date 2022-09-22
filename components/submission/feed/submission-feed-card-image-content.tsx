@@ -13,7 +13,7 @@ const SubmissionFeedCardImageContent: ComponentType<
 > = ({ submission, answerData, ...rest }) => {
   const { data } = useOneDriveFile(answerData.download_url);
   return (
-    <div {...rest}>
+    <div className="grid place-items-center" {...rest}>
       {data && (
         <>
           {answerData.mime_type?.includes("video") ? (
