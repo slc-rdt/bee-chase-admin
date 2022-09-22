@@ -8,10 +8,12 @@ import {
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useForm, UseFormWatch } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../components/common/skeleton";
+import useDebounce from "../libs/hooks/common/use-debouce";
 import useFormattedDate from "../libs/hooks/common/use-formatted-date";
 import useService from "../libs/hooks/common/use-service";
 import Tag from "../libs/models/tag";
@@ -71,19 +73,21 @@ const GlobalLeaderboard: NextPage<
     DateTime.DATETIME_MED_WITH_WEEKDAY
   );
 
+  const defaultValues = {
+    tagId: tags[0]?.id,
+    startDate:
+      process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE ?? now.toISODate(),
+    endDate: now.plus({ days: 1 }).toISODate(),
+  };
+
   const { register, watch } = useForm<IGlobalLeaderboardFilterFormValues>({
-    defaultValues: {
-      tagId: tags[0]?.id,
-      startDate: process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE ?? now.toISODate(),
-      endDate: now.plus({ days: 1 }).toISODate(),
-    },
+    defaultValues,
   });
 
   const tagId = watch("tagId");
-  const startDate = watch("startDate");
-  const endDate = watch("endDate");
-
   const tag = tags.find((tag) => tag.id === tagId);
+
+  const [startDate, endDate] = useDebouncedDateRange(defaultValues, watch);
 
   const { data, error } = useSWR(
     tag && status === "authenticated"
@@ -172,5 +176,27 @@ const GlobalLeaderboard: NextPage<
     </div>
   );
 };
+
+function useDebouncedDateRange(
+  defaultValues: IGlobalLeaderboardFilterFormValues,
+  watch: UseFormWatch<IGlobalLeaderboardFilterFormValues>
+) {
+  const debounce = useDebounce();
+
+  const [startDate, setStartDate] = useState(defaultValues.startDate);
+  const [endDate, setEndDate] = useState(defaultValues.endDate);
+
+  useEffect(() => {
+    const { unsubscribe } = watch((value) => {
+      debounce(() => {
+        if (value.startDate) setStartDate(value.startDate);
+        if (value.endDate) setEndDate(value.endDate);
+      });
+    });
+    return () => unsubscribe();
+  }, [debounce, watch]);
+
+  return [startDate, endDate];
+}
 
 export default GlobalLeaderboard;
