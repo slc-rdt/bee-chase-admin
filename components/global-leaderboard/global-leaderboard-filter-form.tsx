@@ -1,7 +1,4 @@
-import {
-  ComponentProps,
-  ComponentType
-} from "react";
+import { ComponentProps, ComponentType } from "react";
 import { UseFormRegister } from "react-hook-form";
 import Tag from "../../libs/models/tag";
 import { IGlobalLeaderboardFilterFormValues } from "../../pages/global-leaderboard";
@@ -9,11 +6,12 @@ import { IGlobalLeaderboardFilterFormValues } from "../../pages/global-leaderboa
 interface IGlobalLeaderboardFilterForm {
   register: UseFormRegister<IGlobalLeaderboardFilterFormValues>;
   tags: Tag[];
+  defaultValues: IGlobalLeaderboardFilterFormValues;
 }
 
 const GlobalLeaderboardFilterForm: ComponentType<
   ComponentProps<"section"> & IGlobalLeaderboardFilterForm
-> = ({ register, tags }) => {
+> = ({ register, tags, defaultValues }) => {
   return (
     <section>
       <section className="form-control mb-4 w-full">
@@ -41,8 +39,10 @@ const GlobalLeaderboardFilterForm: ComponentType<
           </label>
           <input
             {...register("startDate")}
-            type="date"
+            type="datetime-local"
             className="input input-bordered"
+            min={defaultValues.startDate}
+            max={defaultValues.endDate}
           />
           <label className="label">
             <span className="label-text-alt">
@@ -57,8 +57,10 @@ const GlobalLeaderboardFilterForm: ComponentType<
           </label>
           <input
             {...register("endDate")}
-            type="date"
+            type="datetime-local"
             className="input input-bordered"
+            min={defaultValues.startDate}
+            max={defaultValues.endDate}
           />
           <label className="label">
             <span className="label-text-alt">

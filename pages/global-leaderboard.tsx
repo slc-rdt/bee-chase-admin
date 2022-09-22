@@ -13,6 +13,7 @@ import { useForm, UseFormWatch } from "react-hook-form";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import Skeleton from "../components/common/skeleton";
+import { LuxonFormatForInputDateTimeLocal } from "../libs/constants";
 import useDebounce from "../libs/hooks/common/use-debouce";
 import useFormattedDate from "../libs/hooks/common/use-formatted-date";
 import useService from "../libs/hooks/common/use-service";
@@ -63,21 +64,27 @@ export interface IGlobalLeaderboardFilterFormValues {
 const GlobalLeaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ tags, usersWithPointsMoreThan500Count }) => {
-  const now = DateTime.now();
+  const beechaseStartDate = process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE;
+  const beechaseEndDate = process.env.NEXT_PUBLIC_BEECHASE_CURRENT_END_DATE;
+
+  const startDateTime = beechaseStartDate
+    ? DateTime.fromISO(beechaseStartDate)
+    : DateTime.now();
+  const endDateTime = beechaseEndDate
+    ? DateTime.fromISO(beechaseEndDate)
+    : startDateTime.plus({ days: 1 });
 
   const tagService = useService(TagService);
   const { status } = useSession();
-
-  const nowFormattedDate = useFormattedDate(
-    now.toISO(),
+  const startFormattedDate = useFormattedDate(
+    startDateTime.toISO(),
     DateTime.DATETIME_MED_WITH_WEEKDAY
   );
 
   const defaultValues = {
     tagId: tags[0]?.id,
-    startDate:
-      process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE ?? now.toISODate(),
-    endDate: now.plus({ days: 1 }).toISODate(),
+    startDate: startDateTime.toFormat(LuxonFormatForInputDateTimeLocal),
+    endDate: endDateTime.toFormat(LuxonFormatForInputDateTimeLocal),
   };
 
   const { register, watch } = useForm<IGlobalLeaderboardFilterFormValues>({
@@ -96,8 +103,8 @@ const GlobalLeaderboard: NextPage<
     async (_, tag, startDate, endDate) =>
       await tagService.getGlobalLeaderboard(tag, {
         page: 1,
-        start_date: startDate,
-        end_date: endDate,
+        start_date: DateTime.fromISO(startDate).toSQL(),
+        end_date: DateTime.fromISO(endDate).toSQL(),
       })
   );
 
@@ -124,7 +131,7 @@ const GlobalLeaderboard: NextPage<
             </div>
             <div className="stat-desc">
               Students who had accessed BeeChase, did activities, and receive
-              points (as of {nowFormattedDate}).
+              points (as of {startFormattedDate}).
             </div>
           </div>
         </div>
@@ -132,7 +139,7 @@ const GlobalLeaderboard: NextPage<
 
       <div className="divider" />
 
-      <GlobalLeaderboardFilterForm {...{ register, tags }} />
+      <GlobalLeaderboardFilterForm {...{ register, tags, defaultValues }} />
 
       <div className="divider" />
 
