@@ -18,10 +18,6 @@ export default function useOneDriveFile(downloadUrl?: string) {
       });
 
       return data["@microsoft.graph.downloadUrl"];
-    },
-    {
-      // Prevent refresh because video is restarted when SWR is re-validating.
-      isPaused: () => true,
     }
   );
 
