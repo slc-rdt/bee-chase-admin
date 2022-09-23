@@ -151,7 +151,6 @@ function useWatchDateRange(
 
         if (startDate) {
           const it = DateTime.fromISO(startDate);
-          console.log(minDateTime > it, maxDateTime < it);
           if (minDateTime > it) return;
           if (maxDateTime < it) return;
           setStartDate(startDate);
