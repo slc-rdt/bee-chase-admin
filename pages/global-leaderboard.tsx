@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
-  NextPage
+  NextPage,
 } from "next";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -111,7 +111,7 @@ const GlobalLeaderboard: NextPage<
       <header className="flex flex-wrap justify-between">
         <h2 className="mb-4 text-3xl font-bold">Global Leaderboard</h2>
 
-        <GlobalLeaderboardExportButton tag={tag} />
+        <GlobalLeaderboardExportButton {...{ tag, startDate, endDate }} />
       </header>
 
       <div className="divider" />

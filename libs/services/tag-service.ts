@@ -26,9 +26,13 @@ export default class TagService extends AbstractService {
     return data;
   }
 
-  public async exportGlobalLeaderboard(tag: Tag) {
+  public async exportGlobalLeaderboard(
+    tag: Tag,
+    params: { start_date: string; end_date: string }
+  ) {
     return await this.getBlob(
-      `${this.apiUrl}/tags/${tag.id}/leaderboard/export_excel`
+      `${this.apiUrl}/tags/${tag.id}/leaderboard/export_excel`,
+      { params }
     );
   }
 }

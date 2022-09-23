@@ -9,11 +9,13 @@ import TagService from "../../libs/services/tag-service";
 
 interface IGlobalLeaderboardExportButton {
   tag?: Tag;
+  startDate: string;
+  endDate: string;
 }
 
 const GlobalLeaderboardExportButton: ComponentType<
   ComponentProps<"button"> & IGlobalLeaderboardExportButton
-> = ({ tag }) => {
+> = ({ tag, startDate, endDate }) => {
   const tagService = useService(TagService);
   const downloadBlob = useDownloadBlob();
   const { isLoading, doAction } = useLoading();
@@ -24,7 +26,13 @@ const GlobalLeaderboardExportButton: ComponentType<
       return;
     }
 
-    const exported = await doAction(tagService.exportGlobalLeaderboard(tag));
+    const exported = await doAction(
+      tagService.exportGlobalLeaderboard(tag, {
+        start_date: startDate,
+        end_date: endDate,
+      })
+    );
+
     downloadBlob(...exported);
   };
 

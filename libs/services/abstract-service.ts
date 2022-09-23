@@ -20,8 +20,12 @@ export default abstract class AbstractService {
     return `${process.env.NEXT_PUBLIC_APP_URL}/backend`;
   }
 
-  protected async getBlob(url: string): Promise<[string, Blob]> {
+  protected async getBlob(
+    url: string,
+    config: AxiosRequestConfig
+  ): Promise<[string, Blob]> {
     const { headers, data } = await this.axios.get<Blob>(url, {
+      ...config,
       responseType: "blob",
     });
     const filename = getFilenameFromAxiosHeader(headers);
