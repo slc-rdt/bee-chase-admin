@@ -63,29 +63,10 @@ export interface IGlobalLeaderboardFilterFormValues {
 const GlobalLeaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ tags, usersWithPointsMoreThan500Count }) => {
-  const beechaseStartDate = process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE;
-  const beechaseEndDate = process.env.NEXT_PUBLIC_BEECHASE_CURRENT_END_DATE;
-
-  const startDateTime = beechaseStartDate
-    ? DateTime.fromISO(beechaseStartDate)
-    : DateTime.now();
-  const endDateTime = beechaseEndDate
-    ? DateTime.fromISO(beechaseEndDate)
-    : startDateTime.plus({ days: 1 });
+  const { defaultStartDate, defaultEndDate } = getDefaultStartAndEndDate();
 
   const tagService = useService(TagService);
   const { status } = useSession();
-
-  const startFormattedDate = useFormattedDate(
-    startDateTime.toISO(),
-    DateTime.DATETIME_MED_WITH_WEEKDAY
-  );
-
-  const defaultStartDate = startDateTime.toFormat(
-    LuxonFormatForInputDateTimeLocal
-  );
-  const defaultEndDate = endDateTime.toFormat(LuxonFormatForInputDateTimeLocal);
-
   const [tag, setTag] = useState<Tag | undefined>();
   const [startDate, setStartDate] = useState(defaultStartDate);
   const [endDate, setEndDate] = useState(defaultEndDate);
@@ -125,7 +106,7 @@ const GlobalLeaderboard: NextPage<
             </div>
             <div className="stat-desc">
               Students who had accessed BeeChase, did activities, and receive
-              points (as of {startFormattedDate}).
+              points.
             </div>
           </div>
         </div>
@@ -186,5 +167,24 @@ const GlobalLeaderboard: NextPage<
     </div>
   );
 };
+
+function getDefaultStartAndEndDate() {
+  const beechaseStartDate = process.env.NEXT_PUBLIC_BEECHASE_CURRENT_START_DATE;
+  const beechaseEndDate = process.env.NEXT_PUBLIC_BEECHASE_CURRENT_END_DATE;
+
+  const startDateTime = beechaseStartDate
+    ? DateTime.fromISO(beechaseStartDate)
+    : DateTime.now();
+  const endDateTime = beechaseEndDate
+    ? DateTime.fromISO(beechaseEndDate)
+    : startDateTime.plus({ days: 1 });
+
+  const defaultStartDate = startDateTime.toFormat(
+    LuxonFormatForInputDateTimeLocal
+  );
+  const defaultEndDate = endDateTime.toFormat(LuxonFormatForInputDateTimeLocal);
+
+  return { defaultStartDate, defaultEndDate };
+}
 
 export default GlobalLeaderboard;
