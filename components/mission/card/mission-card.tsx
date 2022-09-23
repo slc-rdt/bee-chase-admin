@@ -68,7 +68,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
               type="button"
               onClick={onPressUp}
               disabled={isLoading}
-              className={`btn btn-ghost btn-square ${isLoading && "loading"}`}
+              className={`btn btn-square btn-ghost ${isLoading && "loading"}`}
             >
               {!isLoading && <ChevronUpIcon />}
             </button>
@@ -79,7 +79,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
               type="button"
               onClick={onPressDown}
               disabled={isLoading}
-              className={`btn btn-ghost btn-square ${isLoading && "loading"}`}
+              className={`btn btn-square btn-ghost ${isLoading && "loading"}`}
             >
               {!isLoading && <ChevronDownIcon />}
             </button>
@@ -97,7 +97,7 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
           <small>({mission.point_value}) Points</small>
         </header>
 
-        <p>{mission.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: mission.description }} />
 
         {showAvailability && (
           <>
