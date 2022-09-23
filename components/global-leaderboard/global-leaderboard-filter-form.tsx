@@ -153,14 +153,14 @@ function useWatchDateRange(
           const it = DateTime.fromISO(startDate);
           if (minDateTime > it) return;
           if (maxDateTime < it) return;
-          setStartDate(startDate);
+          setStartDate(it.toSQL());
         }
 
         if (endDate) {
           const it = DateTime.fromISO(endDate);
           if (minDateTime > it) return;
           if (maxDateTime < it) return;
-          setEndDate(endDate);
+          setEndDate(it.toSQL());
         }
       });
     });

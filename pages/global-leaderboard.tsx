@@ -97,8 +97,8 @@ const GlobalLeaderboard: NextPage<
     async (_, tag, startDate, endDate) =>
       await tagService.getGlobalLeaderboard(tag, {
         page: 1,
-        start_date: DateTime.fromISO(startDate).toSQL(),
-        end_date: DateTime.fromISO(endDate).toSQL(),
+        start_date: startDate,
+        end_date: endDate,
       })
   );
 
