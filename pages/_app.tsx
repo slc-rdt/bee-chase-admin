@@ -5,12 +5,13 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ComponentType } from "react";
+import Layout from "../components/layouts/layout";
 import "../styles/globals.css";
 
 // @ts-ignore No error from linter/development/production, but error when build. Don't know why.
 const Toaster = dynamic(() => import("react-hot-toast").then((m) => m.Toaster));
 const NextNProgress = dynamic(() => import("nextjs-progressbar"));
-const Layout = dynamic(() => import("../components/layouts/layout"));
+// const Layout = dynamic(() => import("../components/layouts/layout"));
 
 function MyApp({
   Component,
