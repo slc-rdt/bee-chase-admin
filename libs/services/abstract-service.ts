@@ -22,10 +22,10 @@ export default abstract class AbstractService {
 
   protected async getBlob(
     url: string,
-    config: AxiosRequestConfig
+    config?: AxiosRequestConfig
   ): Promise<[string, Blob]> {
     const { headers, data } = await this.axios.get<Blob>(url, {
-      ...config,
+      ...(config ?? {}),
       responseType: "blob",
     });
     const filename = getFilenameFromAxiosHeader(headers);
