@@ -29,7 +29,8 @@ const GlobalLeaderboardExportButton = dynamic(
 );
 const GlobalLeaderboardFilterForm = dynamic(
   () =>
-    import("../components/global-leaderboard/global-leaderboard-filter-form")
+    import("../components/global-leaderboard/global-leaderboard-filter-form"),
+  { ssr: false } // Filter form contains date time parsing, hence SSR is disabled because server and client time are different.
 );
 
 export const getServerSideProps: GetServerSideProps<{
@@ -76,25 +77,20 @@ const GlobalLeaderboard: NextPage<
 
   const tagService = useService(TagService);
   const { status } = useSession();
+
   const startFormattedDate = useFormattedDate(
     startDateTime.toISO(),
     DateTime.DATETIME_MED_WITH_WEEKDAY
   );
 
-  const defaultValues = {
-    tagId: tags[0]?.id,
-    startDate: startDateTime.toFormat(LuxonFormatForInputDateTimeLocal),
-    endDate: endDateTime.toFormat(LuxonFormatForInputDateTimeLocal),
-  };
+  const defaultStartDate = startDateTime.toFormat(
+    LuxonFormatForInputDateTimeLocal
+  );
+  const defaultEndDate = endDateTime.toFormat(LuxonFormatForInputDateTimeLocal);
 
-  const { register, watch } = useForm<IGlobalLeaderboardFilterFormValues>({
-    defaultValues,
-  });
-
-  const tagId = watch("tagId");
-  const tag = tags.find((tag) => tag.id === tagId);
-
-  const [startDate, endDate] = useDebouncedDateRange(defaultValues, watch);
+  const [tag, setTag] = useState<Tag | undefined>();
+  const [startDate, setStartDate] = useState(defaultStartDate);
+  const [endDate, setEndDate] = useState(defaultEndDate);
 
   const { data, error } = useSWR(
     tag && status === "authenticated"
@@ -139,7 +135,16 @@ const GlobalLeaderboard: NextPage<
 
       <div className="divider" />
 
-      <GlobalLeaderboardFilterForm {...{ register, tags, defaultValues }} />
+      <GlobalLeaderboardFilterForm
+        {...{
+          tags,
+          defaultStartDate,
+          defaultEndDate,
+          setTag,
+          setStartDate,
+          setEndDate,
+        }}
+      />
 
       <div className="divider" />
 
@@ -183,27 +188,5 @@ const GlobalLeaderboard: NextPage<
     </div>
   );
 };
-
-function useDebouncedDateRange(
-  defaultValues: IGlobalLeaderboardFilterFormValues,
-  watch: UseFormWatch<IGlobalLeaderboardFilterFormValues>
-) {
-  const debounce = useDebounce();
-
-  const [startDate, setStartDate] = useState(defaultValues.startDate);
-  const [endDate, setEndDate] = useState(defaultValues.endDate);
-
-  useEffect(() => {
-    const { unsubscribe } = watch((value) => {
-      debounce(() => {
-        if (value.startDate) setStartDate(value.startDate);
-        if (value.endDate) setEndDate(value.endDate);
-      });
-    });
-    return () => unsubscribe();
-  }, [debounce, watch]);
-
-  return [startDate, endDate];
-}
 
 export default GlobalLeaderboard;
