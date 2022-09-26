@@ -28,7 +28,7 @@ const Sidebar: ComponentType<ComponentProps<"nav">> = ({ ...rest }) => {
               className="tooltip tooltip-bottom tooltip-primary"
               data-tip="Game name"
             >
-              <span className="font-bold">{game?.name}</span>
+              <span className="select-all font-bold">{game?.name}</span>
             </div>
           </li>
           <div className="divider" />
