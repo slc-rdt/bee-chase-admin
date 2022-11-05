@@ -1,5 +1,5 @@
 export default interface PaginateRequestDto {
-  page: number;
+  page?: number;
   q?: string;
   limit?: number;
 }

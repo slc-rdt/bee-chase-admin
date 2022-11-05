@@ -16,6 +16,7 @@ import Mission from "../../libs/models/mission";
 import GameService from "../../libs/services/game-service";
 import MissionService from "../../libs/services/mission-service";
 import createServerSideService from "../../libs/utils/create-server-side-service";
+import getCurrentPageIndexFromPagination from "../../libs/utils/get-current-page-index-from-pagination";
 import handleServerSideError from "../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<{
@@ -92,9 +93,17 @@ const GameCopyPage: NextPage<
         <Pagination
           currentPage={page}
           pagination={missionsPaginated}
-          render={(mission) => (
-            <MissionCard key={mission.id} mission={mission} />
-          )}
+          render={(mission, idx) => {
+            const currentPageIdx = getCurrentPageIndexFromPagination(
+              idx,
+              missionsPaginated
+            );
+            const number = currentPageIdx + 1;
+
+            return (
+              <MissionCard key={mission.id} mission={mission} number={number} />
+            );
+          }}
         />
       </section>
     </div>

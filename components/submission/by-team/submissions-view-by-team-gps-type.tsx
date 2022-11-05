@@ -1,8 +1,10 @@
 import { TrashIcon } from "@heroicons/react/20/solid";
+import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ComponentProps, ComponentType } from "react";
 import PaginateResponseDto from "../../../libs/dtos/paginate-response-dto";
+import useFormattedDate from "../../../libs/hooks/common/use-formatted-date";
 import useLoading from "../../../libs/hooks/common/use-loading";
 import Submission from "../../../libs/models/submission";
 import ConfirmationModal from "../../common/confirmation-modal";
@@ -26,6 +28,7 @@ const SubmissionsViewByTeamGpsType: ComponentType<
               <th>Mission</th>
               <th>Caption</th>
               <th>Points</th>
+              <th>Submitted At</th>
               <th></th>
             </tr>
           </thead>
@@ -75,6 +78,11 @@ const GpsSubmissionItem: ComponentType<
   const router = useRouter();
   const { isLoading, doAction } = useLoading();
 
+  const createdAtFormatted = useFormattedDate(
+    submission.created_at,
+    DateTime.DATETIME_HUGE_WITH_SECONDS
+  );
+
   const gameId = router.query.gameId ?? "";
 
   const onDeleteClicked = (submission: Submission) => {
@@ -96,6 +104,7 @@ const GpsSubmissionItem: ComponentType<
       </th>
       <td>{submission.caption}</td>
       <td>{submission.mission?.point_value}</td>
+      <td>{createdAtFormatted}</td>
       <td>
         <ConfirmationModal
           className="btn btn-error gap-2"

@@ -10,6 +10,7 @@ import useService from "../../../../libs/hooks/common/use-service";
 import Mission from "../../../../libs/models/mission";
 import MissionService from "../../../../libs/services/mission-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
+import getCurrentPageIndexFromPagination from "../../../../libs/utils/get-current-page-index-from-pagination";
 import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
@@ -57,13 +58,15 @@ const MissionsPage = ({
   const missionService = useService(MissionService);
   const { isLoading, doAction } = useLoading();
 
-  const perPage =
-    paginatedMissions.per_page ?? paginatedMissions.meta?.per_page ?? -1;
   const total = paginatedMissions.total ?? paginatedMissions.meta?.total ?? -1;
 
   const swapMissionIndex = async (mission: Mission, targetIndex: number) => {
-    await doAction(missionService.swapMissionIndex(mission, targetIndex));
-    router.push(router.asPath);
+    await doAction(
+      Promise.all([
+        missionService.swapMissionIndex(mission, targetIndex),
+        router.push(router.asPath),
+      ])
+    );
   };
 
   return (
@@ -93,9 +96,11 @@ const MissionsPage = ({
         pagination={paginatedMissions}
         currentPage={page}
         render={(mission, idx) => {
-          // start from 16 if page 2, etc...
-          const pageOffset = (page - 1) * perPage;
-          const number = idx + 1 + pageOffset;
+          const currentPageIdx = getCurrentPageIndexFromPagination(
+            idx,
+            paginatedMissions
+          );
+          const number = currentPageIdx + 1;
 
           return (
             <MissionCard
@@ -105,12 +110,12 @@ const MissionsPage = ({
               isLoading={isLoading}
               onPressUp={
                 number > 1
-                  ? () => swapMissionIndex(mission, idx - 1)
+                  ? () => swapMissionIndex(mission, currentPageIdx - 1)
                   : undefined
               }
               onPressDown={
                 number < total
-                  ? () => swapMissionIndex(mission, idx + 1)
+                  ? () => swapMissionIndex(mission, currentPageIdx + 1)
                   : undefined
               }
               editable

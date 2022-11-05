@@ -6,6 +6,7 @@ import {
 } from "next";
 import Link from "next/link";
 import Pagination from "../../../../components/common/pagination";
+import MissionIcon from "../../../../components/mission/mission-icon";
 import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import useDownloadBlob from "../../../../libs/hooks/common/use-download-blob";
 import useLoading from "../../../../libs/hooks/common/use-loading";
@@ -90,7 +91,10 @@ const SubmissionsPage: NextPage<
           >
             <a className="card shadow-xl">
               <div className="card-body">
-                <div className="card-title">{mission.name}</div>
+                <h3 className="card-title">
+                  <MissionIcon mission={mission} />
+                  <span>{mission.name}</span>
+                  </h3>
 
                 <p className="grid grid-cols-1 items-center gap-4 xl:grid-cols-2">
                   <span className="badge badge-primary">

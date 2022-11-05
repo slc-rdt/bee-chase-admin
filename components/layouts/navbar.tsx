@@ -1,4 +1,11 @@
-import { Bars3Icon, HomeIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowLeftOnRectangleIcon,
+  Bars3Icon,
+  ChatBubbleLeftRightIcon,
+  ClipboardDocumentCheckIcon,
+  HomeIcon,
+} from "@heroicons/react/20/solid";
+import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +24,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
   const user = data?.user;
 
   const isLogin = router.pathname.startsWith("/auth/login");
-  const isVerificationDetail = router.pathname.endsWith("/verifications/[missionId]");
+  const isVerificationDetail = router.pathname.endsWith(
+    "/verifications/[missionId]"
+  );
   const shouldShowNavbar =
     status === "authenticated" && !isLogin && !isVerificationDetail;
 
@@ -35,7 +44,7 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
   }
 
   return (
-    <nav className="navbar bg-base-100 shadow-xl">
+    <nav className="navbar sticky top-0 z-50 bg-base-100 shadow-xl">
       <div className="flex-1">
         {sidebarMenus.length > 0 && (
           <div className="flex-none lg:hidden">
@@ -46,9 +55,9 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
         )}
 
         <Link href="/games">
-          <a className="btn btn-ghost hidden gap-2 text-xl normal-case md:flex">
+          <a className="btn btn-ghost gap-2 text-xl normal-case">
             <HomeIcon className="h-5 w-5" />
-            BeeChase
+            <span className="hidden md:block">BeeChase</span>
           </a>
         </Link>
       </div>
@@ -60,6 +69,18 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
             <div className="divider divider-horizontal" />
           </>
         )}
+
+        <div
+          className="tooltip tooltip-bottom tooltip-primary"
+          data-tip="Global leaderboard"
+        >
+          <Link href="/global-leaderboard">
+            <a className="btn btn-ghost gap-2">
+              <GlobeAltIcon className="h-6 w-6" />
+              <span className="hidden md:block">Global Leaderboard</span>
+            </a>
+          </Link>
+        </div>
 
         <div className="dropdown-end dropdown">
           <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
@@ -77,7 +98,30 @@ const Navbar: ComponentType<ComponentProps<"nav">> = () => {
             className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
           >
             <li>
-              <button onClick={onLogout}>Logout</button>
+              <a
+                href="https://forms.office.com/r/rZXEV215a5"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <ClipboardDocumentCheckIcon className="h-5 w-5" />
+                Feedback
+              </a>
+            </li>
+            <li>
+              <a
+                href="http://line.me/ti/p/~@045wptvx"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <ChatBubbleLeftRightIcon className="h-5 w-5" />
+                Chat Support
+              </a>
+            </li>
+            <li>
+              <button onClick={onLogout}>
+                <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                Logout
+              </button>
             </li>
           </ul>
         </div>

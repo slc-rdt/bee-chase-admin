@@ -2,8 +2,9 @@ import { ShareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useFormattedDate from "../../libs/hooks/common/use-formatted-date";
 import useLoading from "../../libs/hooks/common/use-loading";
 import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
@@ -22,6 +23,8 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 }) => {
   const gameService = useService(GameService);
   const router = useRouter();
+  const startTime = useFormattedDate(game.start_time, "yyyy LLL dd 'at' HH:mm");
+  const endTime = useFormattedDate(game.end_time, "yyyy LLL dd 'at' HH:mm");
   const { isLoading, doAction } = useLoading();
 
   const onShare = async (game: Game) => {
@@ -57,26 +60,30 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
                 </div>
               </header>
 
-              <p className="my-4 truncate">{game.description}</p>
+              {game.tag && (
+                <p>
+                  <small>Tag: {game.tag?.name}</small>
+                </p>
+              )}
+
+              {game.max_obtainable_points && (
+                <p>
+                  <small>Maximum points: {game.max_obtainable_points}</small>
+                </p>
+              )}
+
+              <p className="my-4">{game.description}</p>
 
               <section className="font-medium">
                 {game.start_time && (
                   <p>
-                    Start:{" "}
-                    {DateTime.fromISO(game.start_time.toString())
-                      .toUTC()
-                      .toLocal()
-                      .toFormat("yyyy LLL dd 'at' HH:mm")}
+                    <>Start: {startTime}</>
                   </p>
                 )}
 
                 {game.end_time && (
                   <p>
-                    End:{" "}
-                    {DateTime.fromISO(game.end_time.toString())
-                      .toUTC()
-                      .toLocal()
-                      .toFormat("yyyy LLL dd 'at' HH:mm")}
+                    <>End: {endTime}</>
                   </p>
                 )}
               </section>
@@ -98,6 +105,7 @@ const GameCard: ComponentType<ComponentProps<"div"> & IGameCard> = ({
 
           <ConfirmationModal
             className="btn btn-error gap-2"
+            title="Are you sure to delete this game?"
             modalKey={game.id}
             isLoading={isLoading}
             onConfirm={() => onDelete(game)}

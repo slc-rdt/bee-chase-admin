@@ -1,11 +1,17 @@
+import { TrashIcon } from "@heroicons/react/20/solid";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import SubmissionsViewByTeam from "../../../../../components/submission/by-team/submissions-view-by-team";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import ConfirmationModal from "../../../../../components/common/confirmation-modal";
 import PaginateResponseDto from "../../../../../libs/dtos/paginate-response-dto";
 import { AnswerTypes } from "../../../../../libs/enums";
+import useLoading from "../../../../../libs/hooks/common/use-loading";
+import useService from "../../../../../libs/hooks/common/use-service";
 import GameTeam from "../../../../../libs/models/game-team";
 import Submission from "../../../../../libs/models/submission";
 import User from "../../../../../libs/models/user";
@@ -14,6 +20,13 @@ import GameTeamService from "../../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../../../libs/utils/handle-server-side-error";
 import normalizeConstantCase from "../../../../../libs/utils/normalize-constant-case";
+
+const SubmissionsViewByTeam = dynamic(
+  () =>
+    import(
+      "../../../../../components/submission/by-team/submissions-view-by-team"
+    )
+);
 
 export const getServerSideProps: GetServerSideProps<
   {
@@ -52,7 +65,7 @@ export const getServerSideProps: GetServerSideProps<
 
     const [gameTeam, members, ...submissionsPaginations] = await Promise.all([
       gameService
-        .getLeaderboard(gameId)
+        .getLeaderboard(gameId, { limit: -1 })
         .then((leaderboard) =>
           leaderboard.find((gameTeam) => gameTeam.id === gameTeamId)
         ),
@@ -89,6 +102,25 @@ export const getServerSideProps: GetServerSideProps<
 const SubmissionsByGameTeamPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ gameTeam, members, submissionsPaginationsGroupedByAnswerTypes }) => {
+  const router = useRouter();
+  const gameTeamService = useService(GameTeamService);
+  const { isLoading, doAction } = useLoading();
+
+  const onDeleteMember = async (member: User) => {
+    if (!gameTeam) return;
+    await toast.promise(
+      Promise.all([
+        doAction(gameTeamService.deleteMember(gameTeam, member)),
+        router.push(router.asPath),
+      ]),
+      {
+        loading: "Deleting member...",
+        success: "Member deleted!",
+        error: "Failed to delete member",
+      }
+    );
+  };
+
   return (
     <>
       <header className="text-center">
@@ -103,8 +135,20 @@ const SubmissionsByGameTeamPage: NextPage<
         <h3 className="mb-4 text-2xl font-bold">Members</h3>
         <ol className="list-inside list-decimal">
           {members.map((member) => (
-            <li key={member.id}>
-              {member.username} - {member.name}
+            <li key={member.id} className="flex flex-wrap items-center gap-2">
+              <div>
+                {member.username} - {member.name}
+              </div>
+              <div>
+                <ConfirmationModal
+                  className="btn btn-error btn-square"
+                  modalKey={`${gameTeam?.id}:${member.id}`}
+                  isLoading={isLoading}
+                  onConfirm={() => onDeleteMember(member)}
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </ConfirmationModal>
+              </div>
             </li>
           ))}
         </ol>

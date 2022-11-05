@@ -1,8 +1,13 @@
 import { ComponentProps, ComponentType } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import CreateGameDto from "../../libs/dtos/create-game-dto";
 import UpdateGameDto from "../../libs/dtos/update-game-dto";
+import useLoading from "../../libs/hooks/common/use-loading";
+import useService from "../../libs/hooks/common/use-service";
 import Game from "../../libs/models/game";
+import Tag from "../../libs/models/tag";
+import TagService from "../../libs/services/tag-service";
 
 type GameFormValues = CreateGameDto | UpdateGameDto;
 
@@ -15,58 +20,65 @@ type GameFormValues = CreateGameDto | UpdateGameDto;
 
 interface IGameForm {
   game?: Game;
-  isLoading?: boolean;
-  onGameFormSubmit: (data: GameFormValues) => void;
+  tags: Tag[];
+  onGameFormSubmit: (data: GameFormValues) => Promise<void>;
 }
 
 const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
   game,
-  isLoading,
+  tags,
   onGameFormSubmit,
   ...rest
 }) => {
-  // const [photo, setPhoto] = useState<File | null>(null);
-  const { register, handleSubmit } = useForm<GameFormValues>();
-  // const openFileChooser = useFileChooser();
+  const currentTag = tags.find((tag) => tag.id === game?.tag_id);
 
-  // const onAddPhoto = async () => {
-  //   const files = await openFileChooser();
-  //   const photo = files?.item(0);
-  //   if (photo) setPhoto(photo);
-  // };
+  const tagService = useService(TagService);
+  const { isLoading, doAction } = useLoading();
+  const { register, handleSubmit, watch } = useForm<GameFormValues>({
+    defaultValues: {
+      tag_name: currentTag?.name,
+    },
+  });
 
-  const onSubmit = handleSubmit((data) => {
-    // if (photo) data.photo = photo;
-    onGameFormSubmit(data);
+  const onSubmit = handleSubmit(async (data) => {
+    let tag = tags.find((tag) => tag.name === data.tag_name);
+
+    if (!tag && data.tag_name) {
+      tag = await doAction(
+        toast.promise(tagService.create({ name: data.tag_name }), {
+          loading: "Creating tag...",
+          success: "Tag created!",
+          error: "Failed to create tag.",
+        })
+      );
+    }
+
+    data.tag_id = tag?.id ?? null;
+
+    const createMessages = {
+      loading: "Creating game...",
+      success: "Game created!",
+      error: "Failed to create game.",
+    };
+
+    const updateMessages = {
+      loading: "Updating game...",
+      success: "Game saved!",
+      error: "Failed to save game.",
+    };
+
+    await doAction(
+      toast.promise(
+        onGameFormSubmit(data),
+        game ? updateMessages : createMessages
+      )
+    );
   });
 
   return (
     <div className="card w-full bg-base-100 shadow-xl" {...rest}>
       <form onSubmit={onSubmit} className="card-body">
         <div className="grid grid-cols-1 gap-4">
-          {/* <section>
-            <h3 className="mb-2 font-medium">Photo</h3>
-
-            <div className="flex flex-wrap gap-4">
-              <div className="avatar">
-                <div className="h-24 w-24 rounded-xl">
-                  <img src="https://placeimg.com/192/192/people" />
-                </div>
-              </div>
-
-              <div>
-                <button onClick={onAddPhoto} className="btn btn-primary gap-2">
-                  <PlusIcon className="h-5 w-5" /> Add a photo
-                </button>
-
-                <p className="mt-2 w-full max-w-xs">
-                  Add a photo to set your Experience apart and help participants
-                  find it!
-                </p>
-              </div>
-            </div>
-          </section> */}
-
           <section className="form-control w-full">
             <label className="label">
               <span className="label-text">Name</span>
@@ -103,6 +115,56 @@ const GameForm: ComponentType<ComponentProps<"div"> & IGameForm> = ({
                 Use this space to describe and build excitement for your
                 Experience. You can add information on rules or prizes here,
                 too.
+              </span>
+            </label>
+          </section>
+
+          <section className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Tag</span>
+            </label>
+            <input
+              list="tags"
+              {...register("tag_name")}
+              type="text"
+              disabled={isLoading}
+              className="input input-bordered w-full"
+              defaultValue={currentTag?.name}
+            />
+            <label className="label">
+              <span className="label-text-alt">
+                To view all available tags, please clear then click the input
+                field.
+              </span>
+            </label>
+
+            <datalist id="tags">
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.name}>
+                  {tag.name}
+                </option>
+              ))}
+            </datalist>
+          </section>
+
+          <section className="form-control w-full">
+            <label className="label">
+              <span className="label-text">Group (Optional)</span>
+            </label>
+            <input
+              {...register("group")}
+              type="text"
+              disabled={isLoading}
+              className="input input-bordered w-full"
+              defaultValue={game?.group}
+              required
+            />
+            <label className="label">
+              <span className="label-text-alt">
+                If group is set, student cannot join two games with the same
+                group. Example: Game CS and Cyber under group
+                &quot;Kemanggisan&quot; means that student can only join one
+                of them.
               </span>
             </label>
           </section>

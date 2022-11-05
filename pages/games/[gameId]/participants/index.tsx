@@ -1,23 +1,27 @@
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/20/solid";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import Pagination from "../../../../components/common/pagination";
 import GameParticipantsAllowUserCreateTeamForm from "../../../../components/participants/game-participants-allow-user-create-team-form";
 import GameParticipantsTeamOrSoloModeForm from "../../../../components/participants/game-participants-team-or-solo-mode-form";
 import GameTeamCard from "../../../../components/participants/game-team-card";
+import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
 import Game from "../../../../libs/models/game";
 import GameTeam from "../../../../libs/models/game-team";
 import GameService from "../../../../libs/services/game-service";
 import GameTeamService from "../../../../libs/services/game-team-service";
 import createServerSideService from "../../../../libs/utils/create-server-side-service";
 import handleServerSideError from "../../../../libs/utils/handle-server-side-error";
-import PaginateResponseDto from "../../../../libs/dtos/paginate-response-dto";
-import Pagination from "../../../../components/common/pagination";
-import SearchBar from "../../../../components/common/search-bar";
+
+const SearchBar = dynamic(
+  () => import("../../../../components/common/search-bar")
+);
 
 export const getServerSideProps: GetServerSideProps<
   {

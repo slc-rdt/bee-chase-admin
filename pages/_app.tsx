@@ -1,16 +1,21 @@
+import { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ComponentType } from "react";
-import { Toaster } from "react-hot-toast";
 import "../styles/globals.css";
 
+// @ts-ignore No error from linter/development/production, but error when build. Don't know why.
+const Toaster = dynamic(() => import("react-hot-toast").then((m) => m.Toaster));
 const NextNProgress = dynamic(() => import("nextjs-progressbar"));
 const Layout = dynamic(() => import("../components/layouts/layout"));
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps<{ session?: Session | null }>) {
   return (
     <SessionProvider
       session={session}

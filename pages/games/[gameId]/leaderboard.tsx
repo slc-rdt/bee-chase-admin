@@ -11,6 +11,7 @@ import useService from "../../../libs/hooks/common/use-service";
 import GameTeam from "../../../libs/models/game-team";
 import GameService from "../../../libs/services/game-service";
 import createServerSideService from "../../../libs/utils/create-server-side-service";
+import getRankSuffix from "../../../libs/utils/get-rank-suffix";
 import handleServerSideError from "../../../libs/utils/handle-server-side-error";
 
 export const getServerSideProps: GetServerSideProps<
@@ -20,7 +21,7 @@ export const getServerSideProps: GetServerSideProps<
   try {
     const gameId = context.params?.gameId ?? "";
     const gameService = await createServerSideService(context.req, GameService);
-    const leaderboard = await gameService.getLeaderboard(gameId);
+    const leaderboard = await gameService.getLeaderboard(gameId, {});
     return { props: { gameId, leaderboard } };
   } catch (error) {
     return handleServerSideError(error, {
@@ -29,12 +30,6 @@ export const getServerSideProps: GetServerSideProps<
     });
   }
 };
-
-const rankSuffixMapping = new Map([
-  [1, "st"],
-  [2, "nd"],
-  [3, "rd"],
-]);
 
 const Leaderboard: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -73,9 +68,7 @@ const Leaderboard: NextPage<
         )}
 
         {leaderboard.map((gameTeam) => {
-          const rank = gameTeam.rank ?? 0;
-          const lastDigit = rank % 10;
-          const rankSuffix = rankSuffixMapping.get(lastDigit) ?? "th";
+          const rankSuffix = getRankSuffix(gameTeam.rank ?? 0);
 
           return (
             <div key={gameTeam.id} className="card shadow-xl">

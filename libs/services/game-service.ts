@@ -4,7 +4,6 @@ import PaginateResponseDto from "../dtos/paginate-response-dto";
 import Game from "../models/game";
 import GameTeam from "../models/game-team";
 import User from "../models/user";
-import getFilenameFromAxiosHeader from "../utils/get-filename-from-axios-header";
 import AbstractService from "./abstract-service";
 
 export default class GameService extends AbstractService {
@@ -13,7 +12,9 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async getAllPaginated(payload: PaginateRequestDto) {
+  public async getAllPaginated(
+    payload: PaginateRequestDto & { withTag?: boolean }
+  ) {
     const { data } = await this.axios.get<PaginateResponseDto<Game>>(
       `${this.apiUrl}/games`,
       { params: payload }
@@ -26,9 +27,10 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async getLeaderboard(gameId: string) {
+  public async getLeaderboard(gameId: string, params: PaginateRequestDto) {
     const { data } = await this.axios.get<GameTeam[]>(
-      `${this.apiUrl}/games/${gameId}/leaderboard`
+      `${this.apiUrl}/games/${gameId}/leaderboard`,
+      { params }
     );
     return data;
   }
@@ -78,30 +80,19 @@ export default class GameService extends AbstractService {
     return data;
   }
 
-  public async exportGames(): Promise<[string, Blob]> {
-    const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/export_excel`,
-      { responseType: "blob" }
-    );
-    const filename = getFilenameFromAxiosHeader(headers);
-    return [filename, data];
+  public async exportGames() {
+    return await this.getBlob(`${this.apiUrl}/games/export_excel`);
   }
 
-  public async exportLeaderboard(gameId: string): Promise<[string, Blob]> {
-    const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/${gameId}/leaderboard/export_excel`,
-      { responseType: "blob" }
+  public async exportLeaderboard(gameId: string) {
+    return await this.getBlob(
+      `${this.apiUrl}/games/${gameId}/leaderboard/export_excel`
     );
-    const filename = getFilenameFromAxiosHeader(headers);
-    return [filename, data];
   }
 
-  public async exportSubmissions(gameId: string): Promise<[string, Blob]> {
-    const { headers, data } = await this.axios.get<Blob>(
-      `${this.apiUrl}/games/${gameId}/submissions/export_excel`,
-      { responseType: "blob" }
+  public async exportSubmissions(gameId: string) {
+    return await this.getBlob(
+      `${this.apiUrl}/games/${gameId}/submissions/export_excel`
     );
-    const filename = getFilenameFromAxiosHeader(headers);
-    return [filename, data];
   }
 }

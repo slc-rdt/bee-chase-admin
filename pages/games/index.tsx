@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps<{
     const gameService = await createServerSideService(context.req, GameService);
     const page = Number(context.query.page ?? 1);
     const q = context.query.q?.toString() ?? "";
-    const paginatedGames = await gameService.getAllPaginated({ page, q });
+    const paginatedGames = await gameService.getAllPaginated({ page, q, withTag: true });
 
     return {
       props: {

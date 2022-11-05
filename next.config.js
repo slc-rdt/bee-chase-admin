@@ -13,11 +13,6 @@ const nextConfig = {
         destination: "/auth/login",
         permanent: true,
       },
-      {
-        source: "/games/:id",
-        destination: "/games/:id/missions",
-        permanent: true,
-      },
     ];
   },
   async rewrites() {

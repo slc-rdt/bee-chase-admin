@@ -10,6 +10,7 @@ import {
 import { ComponentProps, ComponentType } from "react";
 import { AnswerTypes, AvailabilityTypes } from "../../../libs/enums";
 import Mission from "../../../libs/models/mission";
+import MissionIcon from "../mission-icon";
 import MissionCardCloneAction from "./mission-card-clone-action";
 import MissionCardDeleteAction from "./mission-card-delete-action";
 import MissionCardEditAction from "./mission-card-edit-action";
@@ -66,9 +67,10 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             <button
               type="button"
               onClick={onPressUp}
-              className="btn btn-ghost btn-square"
+              disabled={isLoading}
+              className={`btn btn-square btn-ghost ${isLoading && "loading"}`}
             >
-              <ChevronUpIcon />
+              {!isLoading && <ChevronUpIcon />}
             </button>
           )}
           <p className="text-xl font-bold">#{number}</p>
@@ -76,9 +78,10 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
             <button
               type="button"
               onClick={onPressDown}
-              className="btn btn-ghost btn-square"
+              disabled={isLoading}
+              className={`btn btn-square btn-ghost ${isLoading && "loading"}`}
             >
-              <ChevronDownIcon />
+              {!isLoading && <ChevronDownIcon />}
             </button>
           )}
         </section>
@@ -87,28 +90,14 @@ const MissionCard: ComponentType<ComponentProps<"div"> & IMissionCard> = ({
       <div className="card-body">
         <header className="card-title flex flex-wrap items-center justify-between capitalize">
           <h2 className="flex items-center gap-2">
-            <span>
-              {
-                {
-                  [AnswerTypes.IMAGE]: <CameraIcon className="h-6 w-6" />,
-                  [AnswerTypes.TEXT]: <DocumentTextIcon className="h-6 w-6" />,
-                  [AnswerTypes.GPS]: <MapPinIcon className="h-6 w-6" />,
-                  [AnswerTypes.MULTIPLE_CHOICE]: (
-                    <ListBulletIcon className="h-6 w-6" />
-                  ),
-                  [AnswerTypes.VERIFICATION]: (
-                    <ShieldCheckIcon className="h-6 w-6" />
-                  ),
-                }[mission.answer_type]
-              }
-            </span>
+            <MissionIcon mission={mission} />
             <span>{mission.name}</span>
           </h2>
 
           <small>({mission.point_value}) Points</small>
         </header>
 
-        <p>{mission.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: mission.description }} />
 
         {showAvailability && (
           <>
