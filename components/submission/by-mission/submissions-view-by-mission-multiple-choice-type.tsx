@@ -106,7 +106,7 @@ const MultipleChoiceSubmissionItem: ComponentType<
           )}
         </div>
       </td>
-      <td>{submission.mission?.point_value}</td>
+      <td>{submission.is_accepted ? submission.mission?.point_value : 0}</td>
       <td>
         <ConfirmationModal
           className="btn btn-error gap-2"
